@@ -48,8 +48,8 @@ public class JournalEntryService {
             JournalDetail detail = new JournalDetail();
 
             // 找出 Account（若找不到會拋錯）
-            Account account = accountRepository.findById(dto.getAccountId())
-                    .orElseThrow(() -> new IllegalArgumentException("找不到帳號 ID: " + dto.getAccountId()));
+            Account account = accountRepository.findByCode(dto.getAccountCode())
+                    .orElseThrow(() -> new IllegalArgumentException("找不到科目編號: " + dto.getAccountCode()));
 
             detail.setAccount(account);
             detail.setDebit(dto.getDebit());

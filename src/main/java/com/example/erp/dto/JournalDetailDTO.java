@@ -3,15 +3,16 @@ package com.example.erp.dto;
 import java.math.BigDecimal;
 
 public class JournalDetailDTO {
-    private Long accountId;
+	private String AccountCode;
+
     private BigDecimal debit;
     private BigDecimal credit;
 
-    public Long getAccountId() {
-        return accountId;
+    public String getAccountCode() {
+        return AccountCode;
     }
-    public void setAccountId(Long accountId) {
-        this.accountId = accountId;
+    public void setAccountCode(String accountCode) {
+        this.AccountCode = accountCode;
     }
 
     public BigDecimal getDebit() {
