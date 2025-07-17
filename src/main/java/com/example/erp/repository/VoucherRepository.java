@@ -19,12 +19,14 @@ public interface VoucherRepository extends JpaRepository<JournalDetail, Long> {
            "from JournalDetail d " +
            "join d.journalEntry e " +
            "join d.account a " +
-           "where e.voucherNumber = :voucherNumber")
+           "where e.voucherNumber = :voucherNumber " +
+           "AND d.isActive = true")
     List<VoucherDTO> findVoucherDetails(@Param("voucherNumber") String voucherNumber);
     
     @Query("select new com.example.erp.dto.VoucherDTO(e.voucherNumber, a.name, a.code, d.debit, d.credit, e.description) " +
             "from JournalDetail d " +
             "join d.journalEntry e " +
-            "join d.account a")
+            "join d.account a " +
+            "Where d.isActive = true")
      List<VoucherDTO> findAllVoucherDetails();
 }

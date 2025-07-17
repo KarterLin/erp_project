@@ -21,8 +21,31 @@ public class JournalDetail {
 
     private BigDecimal debit;
 
-    private BigDecimal credit;
 
+	private BigDecimal credit;
+    
+    @Column(name = "is_active")
+    private Boolean isActive = true;
+    
+    @Column(name = "is_system_generated")
+    private Boolean isSystemGenerated = false;
+
+    public Boolean getIsActive() {
+    	return isActive;
+    }
+    
+    public void setIsActive(Boolean isActive) {
+    	this.isActive = isActive;
+    }
+    
+    public Boolean getIsSystemGenerated() {
+    	return isSystemGenerated;
+    }
+    
+    public void setIsSystemGenerated(Boolean isSystemGenerated) {
+    	this.isSystemGenerated = isSystemGenerated;
+    }
+    
 	public Long getId() {
 		return id;
 	}

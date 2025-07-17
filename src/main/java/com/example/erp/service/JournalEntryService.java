@@ -7,6 +7,7 @@ import com.example.erp.entity.JournalDetail;
 import com.example.erp.entity.JournalEntry;
 import com.example.erp.repository.AccountRepository;
 import com.example.erp.repository.JournalEntryRepository;
+import com.example.erp.util.VouchernumberGenerator;
 
 import jakarta.transaction.Transactional;
 
@@ -39,7 +40,10 @@ public class JournalEntryService {
         entry.setCreatedAt(LocalDateTime.now());
         
         // 自動產生傳票號碼
-        String voucherNumber = generateVoucherNumber(request.getEntryDate());
+        LocalDate today = LocalDate.now();
+        long count = journalEntryRepository.countByEntryDate(today);
+
+        String voucherNumber = VouchernumberGenerator.generate(today,count+1);
         entry.setVoucherNumber(voucherNumber);
 
         // 處理明細
@@ -63,19 +67,7 @@ public class JournalEntryService {
         journalEntryRepository.save(entry); 
     }  
     
-    /**
-     * 自動產生傳票編號，例如 1140712001（民國年月日 + 編號）
-     */
-    private String generateVoucherNumber(LocalDate entryDate) {
-        String rocYear = String.valueOf(entryDate.getYear() - 1911); // 民國年
-        String monthDay = String.format("%02d%02d", entryDate.getMonthValue(), entryDate.getDayOfMonth());
-        String base = rocYear + monthDay;
 
-        long count = journalEntryRepository.countByEntryDate(entryDate);
-        String sequence = String.format("%03d", count + 1);
-
-        return base + sequence;
-    }
 
 
     public List<JournalEntry> getAllEntries() {

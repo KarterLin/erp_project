@@ -12,7 +12,6 @@ CREATE TABLE journal_entry (
   id BIGINT PRIMARY KEY AUTO_INCREMENT,
   entry_date DATE NOT NULL,                      -- 分錄日期
   description VARCHAR(255),                      -- 分錄描述
-  voucher_number VARCHAR(50) UNIQUE,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP -- 建立時間
 );
 
@@ -23,10 +22,7 @@ CREATE TABLE journal_detail (
   account_id BIGINT NOT NULL,                    -- 對應科目
   debit DECIMAL(12,2) DEFAULT 0.00,              -- 借方金額
   credit DECIMAL(12,2) DEFAULT 0.00,             -- 貸方金額
-  is_active BOOLEAN NOT NULL DEFAULT TRUE,
-  is_system_generated BOOLEAN NOT NULL DEFAULT FALSE;
 
   FOREIGN KEY (journal_entry_id) REFERENCES journal_entry(id),
   FOREIGN KEY (account_id) REFERENCES account(id)
 );
-
