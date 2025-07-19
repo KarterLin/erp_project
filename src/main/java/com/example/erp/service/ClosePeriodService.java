@@ -52,7 +52,6 @@ public class ClosePeriodService {
         String voucherNumber = VouchernumberGenerator.generate(today,vCount+1);
         entry.setVoucherNumber(voucherNumber);
         entry.setEntryDate(today);
-        entry.setDescription("結帳:"+ start +"~" + end);
         jer.save(entry);
         
         JournalDetail retained = new JournalDetail();
@@ -60,6 +59,8 @@ public class ClosePeriodService {
         account.setId(65L);
         retained.setJournalEntry(entry);
         retained.setAccount(account);
+
+        retained.setDescription("結帳:"+ start +"~" + end);
         if(retainedEarning.compareTo(BigDecimal.ZERO)>0) {
         	retained.setDebit(BigDecimal.ZERO);
         	retained.setCredit(retainedEarning);

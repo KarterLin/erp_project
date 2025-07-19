@@ -8,6 +8,8 @@ public class JournalDetailDTO {
     private BigDecimal debit;
     private BigDecimal credit;
 
+    private String description;
+
     public String getAccountCode() {
         return AccountCode;
     }
@@ -27,5 +29,12 @@ public class JournalDetailDTO {
     }
     public void setCredit(BigDecimal credit) {
         this.credit = credit;
+    }
+    
+    public String getDescription() {
+        return description;
+    }
+    public void setDescription(String description) {
+        this.description = description;
     }
 }

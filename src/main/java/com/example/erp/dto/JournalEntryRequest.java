@@ -5,7 +5,6 @@ import java.util.List;
 
 public class JournalEntryRequest {
     private LocalDate entryDate;
-    private String description;
     private List<JournalDetailDTO> details;
 
     public LocalDate getEntryDate() {
@@ -15,12 +14,6 @@ public class JournalEntryRequest {
         this.entryDate = entryDate;
     }
 
-    public String getDescription() {
-        return description;
-    }
-    public void setDescription(String description) {
-        this.description = description;
-    }
 
     public List<JournalDetailDTO> getDetails() {
         return details;

@@ -15,7 +15,7 @@ import java.util.List;
 @Repository
 public interface VoucherRepository extends JpaRepository<JournalDetail, Long> {
 
-    @Query("select new com.example.erp.dto.VoucherDTO(e.voucherNumber, a.name, a.code, d.debit, d.credit, e.description) " +
+    @Query("select new com.example.erp.dto.VoucherDTO(e.voucherNumber, a.name, a.code, d.debit, d.credit, d.description) " +
            "from JournalDetail d " +
            "join d.journalEntry e " +
            "join d.account a " +
@@ -23,7 +23,7 @@ public interface VoucherRepository extends JpaRepository<JournalDetail, Long> {
            "AND d.isActive = true")
     List<VoucherDTO> findVoucherDetails(@Param("voucherNumber") String voucherNumber);
     
-    @Query("select new com.example.erp.dto.VoucherDTO(e.voucherNumber, a.name, a.code, d.debit, d.credit, e.description) " +
+    @Query("select new com.example.erp.dto.VoucherDTO(e.voucherNumber, a.name, a.code, d.debit, d.credit, d.description) " +
             "from JournalDetail d " +
             "join d.journalEntry e " +
             "join d.account a " +

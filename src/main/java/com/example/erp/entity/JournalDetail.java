@@ -29,6 +29,8 @@ public class JournalDetail {
     
     @Column(name = "is_system_generated")
     private Boolean isSystemGenerated = false;
+    
+    private String description;
 
     public Boolean getIsActive() {
     	return isActive;
@@ -84,6 +86,14 @@ public class JournalDetail {
 
 	public void setCredit(BigDecimal credit) {
 		this.credit = credit;
+	}
+	
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
 	}
 
     // getters and setters

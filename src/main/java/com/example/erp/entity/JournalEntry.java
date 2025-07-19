@@ -16,7 +16,6 @@ public class JournalEntry {
     @Column(name = "entry_date", nullable = false)
     private LocalDate entryDate;
 
-    private String description;
 
     @Column(name = "created_at")
     private LocalDateTime createdAt;
@@ -43,13 +42,6 @@ public class JournalEntry {
 		this.entryDate = entryDate;
 	}
 
-	public String getDescription() {
-		return description;
-	}
-
-	public void setDescription(String description) {
-		this.description = description;
-	}
 
 	public LocalDateTime getCreatedAt() {
 		return createdAt;

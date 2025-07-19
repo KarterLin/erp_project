@@ -36,7 +36,6 @@ public class JournalEntryService {
         // 建立主表
         JournalEntry entry = new JournalEntry();
         entry.setEntryDate(request.getEntryDate());
-        entry.setDescription(request.getDescription());
         entry.setCreatedAt(LocalDateTime.now());
         
         // 自動產生傳票號碼
@@ -58,6 +57,8 @@ public class JournalEntryService {
             detail.setAccount(account);
             detail.setDebit(dto.getDebit());
             detail.setCredit(dto.getCredit());
+
+            detail.setDescription(dto.getDescription());
             detail.setJournalEntry(entry); // 設定反向關聯
 
             details.add(detail);
