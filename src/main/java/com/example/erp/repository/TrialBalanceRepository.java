@@ -23,7 +23,7 @@ public interface TrialBalanceRepository  extends JpaRepository<JournalDetail, Lo
 		       "WHERE d.isSystemGenerated = false AND (" +
 		       "  (a.type IN ('revenue', 'expense') AND e.entryDate BETWEEN :start AND :end) " +
 		       "  OR (a.type IN ('asset', 'liability', 'equity') AND a.id <> 65) " +
-		       "  OR (a.id = 65 AND e.entryDate <= :end)" +
+		       "  OR (a.id = 65 AND e.entryDate < :end)" +
 		       ") " +
 		       "GROUP BY a.code, a.name " +
 		       "ORDER BY a.code")
