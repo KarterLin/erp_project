@@ -12,8 +12,11 @@ import com.example.erp.util.VouchernumberGenerator;
 import jakarta.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -33,6 +36,8 @@ public class JournalEntryService {
      */
     @Transactional
     public void createEntryWithDetails(JournalEntryRequest request) {
+    	BigDecimal totalDebit = BigDecimal.ZERO;
+    	BigDecimal totalCredit = BigDecimal.ZERO;
         // 建立主表
         JournalEntry entry = new JournalEntry();
         entry.setEntryDate(request.getEntryDate());
@@ -47,8 +52,12 @@ public class JournalEntryService {
 
         // 處理明細
         List<JournalDetail> details = new ArrayList<>();
-        for (JournalDetailDTO dto : request.getDetails()) {
+        
+        for (JournalDetailDTO dto : request.getDetails()) {        	
+        	
             JournalDetail detail = new JournalDetail();
+            
+            validateDetail(dto);
 
             // 找出 Account（若找不到會拋錯）
             Account account = accountRepository.findByCode(dto.getAccountCode())
@@ -57,11 +66,20 @@ public class JournalEntryService {
             detail.setAccount(account);
             detail.setDebit(dto.getDebit());
             detail.setCredit(dto.getCredit());
+            
+            totalDebit = totalDebit.add(dto.getDebit() != null ? dto.getDebit() : BigDecimal.ZERO);
+            totalCredit = totalCredit.add(dto.getCredit() != null ? dto.getCredit() : BigDecimal.ZERO);
+
 
             detail.setDescription(dto.getDescription());
             detail.setJournalEntry(entry); // 設定反向關聯
 
             details.add(detail);
+        }
+        
+        if (totalDebit.compareTo(totalCredit) != 0) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, 
+                "借方總額與貸方總額不平衡，請檢查分錄！");
         }
         
         entry.setDetails(details);
@@ -78,4 +96,27 @@ public class JournalEntryService {
     public JournalEntry save(JournalEntry journalEntry) {
         return journalEntryRepository.save(journalEntry);
     }
+    
+    
+    private void validateDetail(JournalDetailDTO dto) {
+        if (dto.getDebit() != null && dto.getDebit().compareTo(BigDecimal.ZERO) < 0) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "借方金額不可為負數");
+        }
+
+        if (dto.getCredit() != null && dto.getCredit().compareTo(BigDecimal.ZERO) < 0) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "貸方金額不可為負數");
+        }
+
+        if ((dto.getDebit() == null || dto.getDebit().compareTo(BigDecimal.ZERO) == 0) &&
+            (dto.getCredit() == null || dto.getCredit().compareTo(BigDecimal.ZERO) == 0)) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "借貸金額不得皆為 0");
+        }
+
+        if (dto.getDebit() != null && dto.getCredit() != null &&
+            dto.getDebit().compareTo(BigDecimal.ZERO) > 0 &&
+            dto.getCredit().compareTo(BigDecimal.ZERO) > 0) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "不能同時填寫借方與貸方");
+        }
+    }
+
 }
