@@ -3,6 +3,7 @@ package com.example.erp.service;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Objects;
 
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
@@ -11,8 +12,10 @@ import org.springframework.transaction.annotation.Transactional;
 import com.example.erp.entity.Account;
 import com.example.erp.entity.JournalDetail;
 import com.example.erp.entity.JournalEntry;
+import com.example.erp.repository.ClosePeriodRepository;
 import com.example.erp.repository.JournalDetailRepository;
 import com.example.erp.repository.JournalEntryRepository;
+import com.example.erp.util.OpenDateValidator;
 import com.example.erp.util.VouchernumberGenerator;
 
 
@@ -20,13 +23,16 @@ import com.example.erp.util.VouchernumberGenerator;
 @Transactional
 public class ClosePeriodService {
 	
+	private ClosePeriodRepository cpr;
 	private final JournalDetailRepository jdr;
 	private final JournalEntryRepository jer;
 	private final JdbcTemplate jt;
 	
-	public ClosePeriodService(JournalEntryRepository jer,
+	public ClosePeriodService(ClosePeriodRepository cpr,
+			                  JournalEntryRepository jer,
 			                  JournalDetailRepository jdr,
 			                  JdbcTemplate jt) {
+		this.cpr = cpr;
 		this.jer = jer;
 		this.jdr = jdr;
 		this.jt = jt;
@@ -35,13 +41,26 @@ public class ClosePeriodService {
 	
 	public void closePeriod(LocalDate start, LocalDate end) {
 		
-		List<JournalEntry> locked = jer.lockEntries(start, end);
+		OpenDateValidator.validateRange(start, end);
 		
-		//檢查是否以結帳
-		long count = jdr.countSystemGeneratedInPeriod(start, end);
-		if(count > 0) {
+		
+		if(Objects.isNull(start)) {
+			start = determineStartDate(end);
+		}
+		
+		LocalDate lastClosed = cpr.findLatestClosingTime();
+		if(lastClosed !=null && start.isBefore(lastClosed.plusDays(1))) {
 			throw new IllegalStateException("該期已結帳");
 		}
+		
+		
+		//檢查是否以結帳
+//		long count = jdr.countSystemGeneratedInPeriod(start, end);
+//		if(count > 0) {
+//			throw new IllegalStateException("該期已結帳");
+//		}
+		
+		List<JournalEntry> locked = jer.lockEntries(start, end);
 		
 		BigDecimal retainedEarning = jdr.calcRetainedEarning(start, end);
 		
@@ -77,6 +96,17 @@ public class ClosePeriodService {
         
 	}
 	
+	 private LocalDate determineStartDate(LocalDate endDate) {
+	        LocalDate lastClosedDate = cpr.findLatestClosingTime();
+
+	        if (lastClosedDate == null || endDate.isBefore(lastClosedDate)) {
+	            // 如果沒找到上次結帳日 → 該年 1/1
+	            return LocalDate.of(endDate.getYear(), 1, 1);
+	        } else {
+	            // 有找到 → 上次結帳日 + 1 天
+	            return lastClosedDate.plusDays(1);
+	        }
+	    }
 	
 	
 }

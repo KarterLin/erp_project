@@ -7,6 +7,7 @@ import com.example.erp.entity.JournalDetail;
 import com.example.erp.entity.JournalEntry;
 import com.example.erp.repository.AccountRepository;
 import com.example.erp.repository.JournalEntryRepository;
+import com.example.erp.util.OpenDateValidator;
 import com.example.erp.util.VouchernumberGenerator;
 
 import jakarta.transaction.Transactional;
@@ -42,6 +43,9 @@ public class JournalEntryService {
         JournalEntry entry = new JournalEntry();
         entry.setEntryDate(request.getEntryDate());
         entry.setCreatedAt(LocalDateTime.now());
+        
+        OpenDateValidator.validate(request.getEntryDate());
+        
         
         // 自動產生傳票號碼
         LocalDate today = LocalDate.now();

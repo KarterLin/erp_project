@@ -23,12 +23,12 @@ public interface JournalDetailRepository extends JpaRepository<JournalDetail, Lo
 		BigDecimal calcRetainedEarning(@Param("start") LocalDate start,
 	            @Param("end") LocalDate end);
 		
-		@Query("SELECT COUNT(d) FROM JournalDetail d " +
-			       "JOIN d.journalEntry e " +
-			       "WHERE e.entryDate BETWEEN :start AND :end " +
-			       "AND d.isSystemGenerated = true")
-			long countSystemGeneratedInPeriod(@Param("start") LocalDate start,
-			                                   @Param("end") LocalDate end);
+//		@Query("SELECT COUNT(d) FROM JournalDetail d " +
+//			       "JOIN d.journalEntry e " +
+//			       "WHERE e.entryDate BETWEEN :start AND :end " +
+//			       "AND d.isSystemGenerated = true")
+//			long countSystemGeneratedInPeriod(@Param("start") LocalDate start,
+//			                                   @Param("end") LocalDate end);
 		
 		
 
