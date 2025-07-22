@@ -13,7 +13,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface AccountRepository extends JpaRepository<Account, Long> {
 	Optional<Account> findByCode(String code);
-	@Query("SELECT new com.example.erp.dto.AccountDTO(a.code, a.name) FROM Account a")
+	@Query("SELECT new com.example.erp.dto.AccountDTO(a.code, a.name) FROM Account a WHERE a.id <> 65")
 	List<AccountDTO> findAllToDTO();
 
 }
