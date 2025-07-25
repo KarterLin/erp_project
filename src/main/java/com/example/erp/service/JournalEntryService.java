@@ -6,6 +6,7 @@ import com.example.erp.entity.Account;
 import com.example.erp.entity.JournalDetail;
 import com.example.erp.entity.JournalEntry;
 import com.example.erp.repository.AccountRepository;
+import com.example.erp.repository.ClosePeriodRepository;
 import com.example.erp.repository.JournalEntryRepository;
 import com.example.erp.util.OpenDateValidator;
 import com.example.erp.util.VouchernumberGenerator;
@@ -30,6 +31,9 @@ public class JournalEntryService {
     private JournalEntryRepository journalEntryRepository;
     
     @Autowired
+    private ClosePeriodRepository cpr;
+    
+    @Autowired
     private AccountRepository  accountRepository;
 
     /**
@@ -39,12 +43,17 @@ public class JournalEntryService {
     public void createEntryWithDetails(JournalEntryRequest request) {
     	BigDecimal totalDebit = BigDecimal.ZERO;
     	BigDecimal totalCredit = BigDecimal.ZERO;
+    	LocalDate closeDate = cpr.findLatestClosingTime();
         // 建立主表
         JournalEntry entry = new JournalEntry();
         entry.setEntryDate(request.getEntryDate());
         entry.setCreatedAt(LocalDateTime.now());
         
         OpenDateValidator.validate(request.getEntryDate());
+        
+        if(closeDate != null && request.getEntryDate().isBefore(closeDate.plusDays(1))) {
+        	 throw new IllegalArgumentException("日期不可早於上次結帳日：" + closeDate);
+        }
         
         
         // 自動產生傳票號碼
@@ -90,16 +99,6 @@ public class JournalEntryService {
         journalEntryRepository.save(entry); 
     }  
     
-
-
-
-    public List<JournalEntry> getAllEntries() {
-        return journalEntryRepository.findAll();
-    }
-
-    public JournalEntry save(JournalEntry journalEntry) {
-        return journalEntryRepository.save(journalEntry);
-    }
     
     
     private void validateDetail(JournalDetailDTO dto) {
