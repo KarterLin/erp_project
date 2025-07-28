@@ -13,7 +13,7 @@ import java.util.List;
  * Repository for retrieving voucher details.
  */
 @Repository
-public interface VoucherRepository extends JpaRepository<JournalDetail, Long> {
+public interface VoucherRepository extends JpaRepository<JournalDetail, Long>{
 
     @Query("select new com.example.erp.dto.VoucherDTO(e.voucherNumber, a.name, a.code, d.debit, d.credit, d.description) " +
            "from JournalDetail d " +

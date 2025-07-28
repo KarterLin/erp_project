@@ -8,6 +8,7 @@ public class VoucherSearchRequest {
 	private String voucherNumber;
 	private String description;
 	private String account;
+	
 	public LocalDate getStartDate() {
 		return startDate;
 	}
