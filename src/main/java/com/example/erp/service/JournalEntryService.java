@@ -57,10 +57,10 @@ public class JournalEntryService {
         
         
         // 自動產生傳票號碼
-        LocalDate today = LocalDate.now();
-        long count = journalEntryRepository.countByEntryDate(today);
+        LocalDate date = entry.getEntryDate();
+        long count = journalEntryRepository.countByEntryDate(date);
 
-        String voucherNumber = VouchernumberGenerator.generate(today,count+1);
+        String voucherNumber = VouchernumberGenerator.generate(date,count+1);
         entry.setVoucherNumber(voucherNumber);
 
         // 處理明細
