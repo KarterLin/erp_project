@@ -28,7 +28,7 @@ CREATE TABLE journal_detail (
   
   FULLTEXT KEY description (description),
 
-  FOREIGN KEY (journal_entry_id) REFERENCES journal_entry(id),
+  FOREIGN KEY (journal_entry_id) REFERENCES journal_entry(id) ON DELETE CASCADE,
   FOREIGN KEY (account_id) REFERENCES account(id)
 );
 
