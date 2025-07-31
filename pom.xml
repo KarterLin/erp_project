@@ -56,6 +56,19 @@
 			<scope>test</scope>
 		</dependency>
 		
+		<!-- Redis Core（可選） -->
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-data-redis</artifactId>
+</dependency>
+
+<!-- Redisson for 分布式鎖 -->
+<dependency>
+    <groupId>org.redisson</groupId>
+    <artifactId>redisson-spring-boot-starter</artifactId>
+    <version>3.27.2</version> <!-- 用最新穩定版本 -->
+</dependency>
+
 
 	</dependencies>
 

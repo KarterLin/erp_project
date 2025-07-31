@@ -2,9 +2,13 @@ package com.example.erp.service;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.List;
 import java.util.Objects;
+import java.util.concurrent.TimeUnit;
 
+import org.redisson.api.RLock;
+import org.redisson.api.RedissonClient;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,30 +20,52 @@ import com.example.erp.repository.ClosePeriodRepository;
 import com.example.erp.repository.JournalDetailRepository;
 import com.example.erp.repository.JournalEntryRepository;
 import com.example.erp.util.OpenDateValidator;
-import com.example.erp.util.VouchernumberGenerator;
 
 
 @Service
 @Transactional
 public class ClosePeriodService {
+
+	private static final Logger log = LoggerFactory.getLogger(ClosePeriodService.class);
 	
 	private ClosePeriodRepository cpr;
 	private final JournalDetailRepository jdr;
 	private final JournalEntryRepository jer;
 	private final JdbcTemplate jt;
+	private RedissonClient redissonClient;
+	private VoucherNumberService voucherNumberService;
+
 	
 	public ClosePeriodService(ClosePeriodRepository cpr,
 			                  JournalEntryRepository jer,
 			                  JournalDetailRepository jdr,
-			                  JdbcTemplate jt) {
+			                  JdbcTemplate jt,
+			                  RedissonClient redissonClient,
+			                  VoucherNumberService voucherNumberService) {
 		this.cpr = cpr;
 		this.jer = jer;
 		this.jdr = jdr;
 		this.jt = jt;
+		this.redissonClient = redissonClient;
+		this.voucherNumberService = voucherNumberService;
 	}
 	
 	
 	public void closePeriod(LocalDate start, LocalDate end) {
+		
+		String lockKey = "lock:close-period:global";
+        RLock lock = redissonClient.getLock(lockKey);
+
+        boolean locked = false;
+        try {
+            // 最多等 5 秒取得鎖，鎖定 15 秒（預防長時間操作）
+            locked = lock.tryLock(5, 15, TimeUnit.SECONDS);
+
+            if (!locked) {
+                throw new IllegalStateException("⚠️ 結帳鎖定中，請稍後再試");
+            }
+
+            log.info("🔒 成功取得結帳鎖 for period: {} ~ {}", start, end);                 
 		
 		OpenDateValidator.validateRange(start, end);
 		
@@ -53,22 +79,15 @@ public class ClosePeriodService {
 			throw new IllegalStateException("該期已結帳");
 		}
 		
-		
-		//檢查是否以結帳
-//		long count = jdr.countSystemGeneratedInPeriod(start, end);
-//		if(count > 0) {
-//			throw new IllegalStateException("該期已結帳");
-//		}
-		
-		List<JournalEntry> locked = jer.lockEntries(start, end);
+//		List<JournalEntry> locked = jer.lockEntries(start, end);
 		
 		BigDecimal retainedEarning = jdr.calcRetainedEarning(start, end);
 		
 		JournalEntry entry = new JournalEntry();
 		LocalDate today = LocalDate.now();
-        long vCount = jer.countByEntryDate(today);
 
-        String voucherNumber = VouchernumberGenerator.generate(today,vCount+1);
+        String voucherNumber = voucherNumberService.generateTodayVoucherNumber(today);
+        
         entry.setVoucherNumber(voucherNumber);
         entry.setEntryDate(today);
         jer.save(entry);
@@ -94,6 +113,15 @@ public class ClosePeriodService {
         
         jt.update("CALL proc_reverse_virtual_entries(?, ?, ?)", start, end, entry.getId());
         
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            throw new RuntimeException("取得結帳鎖時被中斷", e);
+        } finally {
+            if (locked) {
+                lock.unlock();
+                log.info("🔓 結帳鎖已釋放");
+            }
+        }
 	}
 	
 	 private LocalDate determineStartDate(LocalDate endDate) {

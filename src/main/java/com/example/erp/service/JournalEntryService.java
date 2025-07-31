@@ -9,8 +9,6 @@ import com.example.erp.repository.AccountRepository;
 import com.example.erp.repository.ClosePeriodRepository;
 import com.example.erp.repository.JournalEntryRepository;
 import com.example.erp.util.OpenDateValidator;
-import com.example.erp.util.VouchernumberGenerator;
-
 import jakarta.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,6 +33,9 @@ public class JournalEntryService {
     
     @Autowired
     private AccountRepository  accountRepository;
+    
+    @Autowired
+    private VoucherNumberService voucherNumberService;
 
     /**
      * 儲存整筆會計分錄（主表 + 明細）
@@ -55,12 +56,7 @@ public class JournalEntryService {
         	 throw new IllegalArgumentException("日期不可早於上次結帳日：" + closeDate);
         }
         
-        
-        // 自動產生傳票號碼
-        LocalDate date = entry.getEntryDate();
-        long count = journalEntryRepository.countByEntryDate(date);
-
-        String voucherNumber = VouchernumberGenerator.generate(date,count+1);
+        String voucherNumber = voucherNumberService.generateTodayVoucherNumber(request.getEntryDate());
         entry.setVoucherNumber(voucherNumber);
 
         // 處理明細
