@@ -14,26 +14,36 @@ public class VoucherNumberService {
 	        this.redissonClient = redissonClient;
 	    }
 
-	    public String generateTodayVoucherNumber(LocalDate entryDate) {
-	        // 計算 ROC 年月日，如 1140803
-	        String rocYear = String.valueOf(entryDate.getYear() - 1911);
-	        String monthDay = String.format("%02d%02d", entryDate.getMonthValue(), entryDate.getDayOfMonth());
-	        String base = rocYear + monthDay;
+	    public String generateSequenceNumber(String keyPrefix,LocalDate entryDate) {
+	    	 String rocYear = String.valueOf(entryDate.getYear() - 1911);
+	         String monthDay = String.format("%02d%02d", entryDate.getMonthValue(), entryDate.getDayOfMonth());
+	         String base = rocYear + monthDay;
 
-	        // Redis key 設為 voucher:seq:1140803
-	        String redisKey = "voucher:seq:" + base;
-	        RAtomicLong counter = redissonClient.getAtomicLong(redisKey);
+	         String redisKey = keyPrefix + ":" + base;
+	         RAtomicLong counter = redissonClient.getAtomicLong(redisKey);
+	         counter.expire(Duration.ofDays(1));
 
-	        // 設定自動過期 1 天（保證隔日重新編號）
-	        counter.expire(Duration.ofDays(1));
+	         long sequence = counter.incrementAndGet();
+	         String sequenceStr = String.format("%03d", sequence);
 
-	        // 遞增並取得編號（保證唯一）
-	        long sequence = counter.incrementAndGet();
-	        String sequenceStr = String.format("%03d", sequence);
+	         return base + sequenceStr;
+	     }
 
-	        return base + sequenceStr;
-	    }
-    }
+	     // 原本的憑證編號
+	     public String generateTodayVoucherNumber(LocalDate date) {
+	         return generateSequenceNumber("voucher:seq", date);
+	     }
+
+	     // 固定資產編號（FA）
+	     public String generateFixedAssetNumber(LocalDate date) {
+	         return "FA" + generateSequenceNumber("asset:FA", date);
+	     }
+
+	     // 無形資產編號（IA）
+	     public String generateIntangibleAssetNumber(LocalDate date) {
+	         return "IA" + generateSequenceNumber("asset:IA", date);
+	     }
+	 }
 
 
 

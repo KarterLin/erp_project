@@ -41,7 +41,7 @@ public class JournalEntryService {
      * 儲存整筆會計分錄（主表 + 明細）
      */
     @Transactional
-    public void createEntryWithDetails(JournalEntryRequest request) {
+    public JournalEntry createEntryWithDetails(JournalEntryRequest request) {
     	BigDecimal totalDebit = BigDecimal.ZERO;
     	BigDecimal totalCredit = BigDecimal.ZERO;
     	LocalDate closeDate = cpr.findLatestClosingTime();
@@ -92,7 +92,7 @@ public class JournalEntryService {
         }
         
         entry.setDetails(details);
-        journalEntryRepository.save(entry); 
+        return journalEntryRepository.save(entry); 
     }  
     
     

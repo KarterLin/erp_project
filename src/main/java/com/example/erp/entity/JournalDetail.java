@@ -2,6 +2,8 @@ package com.example.erp.entity;
 
 import jakarta.persistence.*;
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "journal_detail")
@@ -31,8 +33,19 @@ public class JournalDetail {
     private Boolean isSystemGenerated = false;
     
     private String description;
+    
+    @OneToMany(mappedBy = "journalDetail", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<AmortizationSchedule> amortizationSchedules = new ArrayList<>();
 
-    public Boolean getIsActive() {
+    public List<AmortizationSchedule> getAmortizationSchedules() {
+		return amortizationSchedules;
+	}
+
+	public void setAmortizationSchedules(List<AmortizationSchedule> amortizationSchedules) {
+		this.amortizationSchedules = amortizationSchedules;
+	}
+
+	public Boolean getIsActive() {
     	return isActive;
     }
     

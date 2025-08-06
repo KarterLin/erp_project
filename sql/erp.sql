@@ -32,3 +32,25 @@ CREATE TABLE journal_detail (
   FOREIGN KEY (account_id) REFERENCES account(id)
 );
 
+CREATE TABLE amortization_schedule (
+    id BIGINT PRIMARY KEY AUTO_INCREMENT,
+    journal_detail_id BIGINT NOT NULL,  -- 原始資產明細
+    category ENUM('PREPAID_EXPENSE', 'AMORTIZATION', 'FIXED_ASSET', 'INTANGIBLE_ASSET') NOT NULL,
+    asset_code VARCHAR(50),
+    asset_name VARCHAR(255),
+    start_date DATE NOT NULL,
+    end_date DATE NOT NULL,
+    total_amount DECIMAL(18,2) NOT NULL,
+    monthly_amount DECIMAL(18,2) NOT NULL,
+    months INT NOT NULL,
+    residual_value DECIMAL(18,2) DEFAULT 0,
+    depreciation_account_id BIGINT, -- 折舊費用科目
+    status ENUM('ACTIVE', 'FINISHED', 'CANCELLED') DEFAULT 'ACTIVE',
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    
+    FOREIGN KEY (journal_detail_id) REFERENCES journal_detail(id),
+    FOREIGN KEY (depreciation_account_id) REFERENCES account(id)
+);
+
+
