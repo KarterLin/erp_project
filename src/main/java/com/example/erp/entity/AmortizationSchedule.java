@@ -55,12 +55,25 @@ public class AmortizationSchedule {
     @Column(name = "residual_value", precision = 18, scale = 2)
     private BigDecimal residualValue = BigDecimal.ZERO;
 
-    // 折舊費用科目
+    // 借方帳戶（折舊費用、攤銷費用)
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "depreciation_account_id")
     private Account depreciationAccount;
+    
+    // 貸方帳戶（累積折舊、累積攤銷等）
+    @ManyToOne
+    @JoinColumn(name = "credit_account_id")
+    private Account assetAccount;
 
-    // 狀態
+    public Account getAssetAccount() {
+		return assetAccount;
+	}
+
+	public void setAssetAccount(Account assetAccount) {
+		this.assetAccount = assetAccount;
+	}
+
+	// 狀態
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 20)
     private ScheduleStatus status = ScheduleStatus.ACTIVE;

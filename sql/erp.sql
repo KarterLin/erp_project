@@ -45,12 +45,14 @@ CREATE TABLE amortization_schedule (
     months INT NOT NULL,
     residual_value DECIMAL(18,2) DEFAULT 0,
     depreciation_account_id BIGINT, -- 折舊費用科目
+    credit_account_id BIGINT,
     status ENUM('ACTIVE', 'FINISHED', 'CANCELLED') DEFAULT 'ACTIVE',
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     
     FOREIGN KEY (journal_detail_id) REFERENCES journal_detail(id),
-    FOREIGN KEY (depreciation_account_id) REFERENCES account(id)
+    FOREIGN KEY (depreciation_account_id) REFERENCES account(id),
+    FOREIGN KEY (credit_account_id) REFERENCES account(id)
 );
 
 
