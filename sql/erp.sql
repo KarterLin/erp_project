@@ -1,6 +1,6 @@
 CREATE TABLE account (
   id BIGINT PRIMARY KEY AUTO_INCREMENT,
-  code VARCHAR(10) NOT NULL UNIQUE,              -- 科目代碼（如1001）
+  code VARCHAR(255) NOT NULL UNIQUE,              -- 科目代碼（如1001）
   name VARCHAR(100) NOT NULL,                    -- 科目名稱（如：銀行存款）
   type ENUM('asset', 'liability', 'equity', 'revenue', 'expense') NOT NULL,  -- 科目分類
   parent_id BIGINT DEFAULT NULL,                 -- 父科目（樹狀用，可為NULL）
