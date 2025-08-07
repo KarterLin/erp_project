@@ -60,7 +60,7 @@ public class AmortizationService {
             request.setDetails(Arrays.asList(debitDetail, creditDetail));
 
             // 建立分錄
-            journalEntryService.createEntryWithDetails(request);
+            journalEntryService.createEntryWithDetails(request,true);
 
             // 更新最後攤提日期
             schedule.setLastGeneratedDate(runDate);

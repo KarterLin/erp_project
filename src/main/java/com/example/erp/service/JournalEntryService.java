@@ -41,7 +41,7 @@ public class JournalEntryService {
      * 儲存整筆會計分錄（主表 + 明細）
      */
     @Transactional
-    public JournalEntry createEntryWithDetails(JournalEntryRequest request) {
+    public JournalEntry createEntryWithDetails(JournalEntryRequest request, boolean isSystemGenerated) {
     	BigDecimal totalDebit = BigDecimal.ZERO;
     	BigDecimal totalCredit = BigDecimal.ZERO;
     	LocalDate closeDate = cpr.findLatestClosingTime();
@@ -79,9 +79,13 @@ public class JournalEntryService {
             totalDebit = totalDebit.add(dto.getDebit() != null ? dto.getDebit() : BigDecimal.ZERO);
             totalCredit = totalCredit.add(dto.getCredit() != null ? dto.getCredit() : BigDecimal.ZERO);
 
-
             detail.setDescription(dto.getDescription());
             detail.setJournalEntry(entry); // 設定反向關聯
+
+            if(isSystemGenerated) {
+            	detail.setIsSystemGenerated(true);
+            }
+
 
             details.add(detail);
         }

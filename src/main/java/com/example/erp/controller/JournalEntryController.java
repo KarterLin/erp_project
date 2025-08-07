@@ -17,7 +17,7 @@ public class JournalEntryController {
     
     @PostMapping
     public ResponseEntity<String> createEntry(@RequestBody JournalEntryRequest request) {
-        journalEntryService.createEntryWithDetails(request);
+        journalEntryService.createEntryWithDetails(request,false);
         return ResponseEntity.ok("分錄已成功新增！");
     }
     

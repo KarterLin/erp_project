@@ -40,6 +40,7 @@ CREATE TABLE amortization_schedule (
     asset_name VARCHAR(255),
     start_date DATE NOT NULL,
     end_date DATE NOT NULL,
+    last_generated_date DATE ,
     total_amount DECIMAL(18,2) NOT NULL,
     monthly_amount DECIMAL(18,2) NOT NULL,
     months INT NOT NULL,
