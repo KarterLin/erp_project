@@ -37,7 +37,21 @@ public class JournalDetail {
     @OneToMany(mappedBy = "journalDetail", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<AmortizationSchedule> amortizationSchedules = new ArrayList<>();
 
-    public List<AmortizationSchedule> getAmortizationSchedules() {
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "amortization_schedule_id") // 可為 NULL；只有系統攤提的明細會填
+    private AmortizationSchedule amortizationSchedule;
+
+    
+    
+    public AmortizationSchedule getAmortizationSchedule() {
+		return amortizationSchedule;
+	}
+
+	public void setAmortizationSchedule(AmortizationSchedule amortizationSchedule) {
+		this.amortizationSchedule = amortizationSchedule;
+	}
+
+	public List<AmortizationSchedule> getAmortizationSchedules() {
 		return amortizationSchedules;
 	}
 

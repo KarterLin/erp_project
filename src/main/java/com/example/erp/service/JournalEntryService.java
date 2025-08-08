@@ -3,9 +3,11 @@ package com.example.erp.service;
 import com.example.erp.dto.JournalDetailDTO;
 import com.example.erp.dto.JournalEntryRequest;
 import com.example.erp.entity.Account;
+import com.example.erp.entity.AmortizationSchedule;
 import com.example.erp.entity.JournalDetail;
 import com.example.erp.entity.JournalEntry;
 import com.example.erp.repository.AccountRepository;
+import com.example.erp.repository.AmortizationScheduleRepository;
 import com.example.erp.repository.ClosePeriodRepository;
 import com.example.erp.repository.JournalEntryRepository;
 import com.example.erp.util.OpenDateValidator;
@@ -36,12 +38,15 @@ public class JournalEntryService {
     
     @Autowired
     private VoucherNumberService voucherNumberService;
+    
+    @Autowired
+    AmortizationScheduleRepository amortizationScheduleRepo;
 
     /**
      * 儲存整筆會計分錄（主表 + 明細）
      */
     @Transactional
-    public JournalEntry createEntryWithDetails(JournalEntryRequest request, boolean isSystemGenerated) {
+    public JournalEntry createEntryWithDetails(JournalEntryRequest request, boolean isSystemGenerated,Long scheduleId) {
     	BigDecimal totalDebit = BigDecimal.ZERO;
     	BigDecimal totalCredit = BigDecimal.ZERO;
     	LocalDate closeDate = cpr.findLatestClosingTime();
@@ -84,6 +89,11 @@ public class JournalEntryService {
 
             if(isSystemGenerated) {
             	detail.setIsSystemGenerated(true);
+            }
+            
+            if (scheduleId != null) {
+                AmortizationSchedule sch = amortizationScheduleRepo.getReferenceById(scheduleId);
+                detail.setAmortizationSchedule(sch);
             }
 
 

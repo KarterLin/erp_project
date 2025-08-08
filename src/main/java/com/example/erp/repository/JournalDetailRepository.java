@@ -22,6 +22,16 @@ public interface JournalDetailRepository extends JpaRepository<JournalDetail, Lo
 		       "AND a.type IN('revenue','expense')")
 		BigDecimal calcRetainedEarning(@Param("start") LocalDate start,
 	            @Param("end") LocalDate end);
+	
+	 @Query("SELECT COALESCE(SUM(d.debit), 0) " +
+	           "FROM JournalDetail d " +
+	           "WHERE d.amortizationSchedule.id = :scheduleId " +
+	           "AND d.isSystemGenerated = true")
+	    BigDecimal sumSystemGeneratedAmountByScheduleId(@Param("scheduleId") Long scheduleId);
+
+	 @Query("SELECT COUNT(d) FROM JournalDetail d WHERE d.isSystemGenerated = true AND d.amortizationSchedule.id = :scheduleId")
+	 long countSystemGeneratedDetailsByScheduleId(@Param("scheduleId") Long scheduleId);
+
 		
 //		@Query("SELECT COUNT(d) FROM JournalDetail d " +
 //			       "JOIN d.journalEntry e " +
