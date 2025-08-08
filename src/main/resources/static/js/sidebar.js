@@ -5,6 +5,12 @@ document.addEventListener("DOMContentLoaded", () => {
     .then(html => {
       document.getElementById("sidebar-container").innerHTML = html;
       // 插入sidebar後再判斷active
+      if (window.onSidebarLoaded) window.onSidebarLoaded();
+
+      // 初始化
+      handleResize();
+      window.addEventListener('resize', handleResize);
+
       const hamburger = document.querySelector('.hamburger');
       if (hamburger) {
         hamburger.addEventListener('click', toggleSidebar);
@@ -34,7 +40,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
 
-  if (window.onSidebarLoaded) window.onSidebarLoaded();
+
 })
 
 function toggleSidebar() {
@@ -95,6 +101,4 @@ function handleResize() {
   }
 }
 
-// 初始化
-handleResize();
-window.addEventListener('resize', handleResize);
+
