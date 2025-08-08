@@ -21,6 +21,7 @@ public class AmortizationScheduler {
 
         if (today.equals(lastDayOfMonth)) {
             amortizationService.generateMonthlyEntries(today);
+            System.out.println(today + " 執行攤提");
         }
     }
 }

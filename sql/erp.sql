@@ -27,9 +27,12 @@ CREATE TABLE journal_detail (
   is_system_generated BOOLEAN NOT NULL DEFAULT FALSE,
   
   FULLTEXT KEY description (description),
+  
+  amortization_schedule_id BIGINT NULL,
 
   FOREIGN KEY (journal_entry_id) REFERENCES journal_entry(id) ON DELETE CASCADE,
   FOREIGN KEY (account_id) REFERENCES account(id)
+  FOREIGN KEY (amortization_schedule_id) REFERENCES amortization_schedule(id)
 );
 
 CREATE TABLE amortization_schedule (

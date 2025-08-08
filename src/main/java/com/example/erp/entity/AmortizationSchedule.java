@@ -5,6 +5,8 @@ import jakarta.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "amortization_schedule")
@@ -64,8 +66,21 @@ public class AmortizationSchedule {
     @ManyToOne
     @JoinColumn(name = "credit_account_id")
     private Account assetAccount;
+    
+    @OneToMany(mappedBy = "amortizationSchedule")
+    private List<JournalDetail> generatedDetails = new ArrayList<>();
+    
+    
 
-    public Account getAssetAccount() {
+    public List<JournalDetail> getGeneratedDetails() {
+		return generatedDetails;
+	}
+
+	public void setGeneratedDetails(List<JournalDetail> generatedDetails) {
+		this.generatedDetails = generatedDetails;
+	}
+
+	public Account getAssetAccount() {
 		return assetAccount;
 	}
 

@@ -14,10 +14,20 @@ public class AmortizationScheduleRequest {
     
     private BigDecimal totalAmount; // 總金額（攤提總額）
 
-    private String debitAccountCode; // 使用者選的「借方」費用科目（像保險費用）
+    private String creditAccountCode;
+
+	private String debitAccountCode; // 使用者選的「借方」費用科目（像保險費用）
     
     private Category category; // 類別：固定資產、無形資產、預付費用（用 enum 控制）
 
+    public String getCreditAccountCode() {
+    	return creditAccountCode;
+    }
+    
+    public void setCreditAccountCode(String creditAccountCode) {
+    	this.creditAccountCode = creditAccountCode;
+    }
+    
 	public Long getJournalDetailId() {
 		return journalDetailId;
 	}
