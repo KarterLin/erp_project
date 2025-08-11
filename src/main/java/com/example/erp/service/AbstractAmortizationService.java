@@ -72,6 +72,7 @@ public abstract class AbstractAmortizationService<R> {
         s.setJournalDetail(sourceDetail);                // 來源明細
         s.setCategory(getCategory(r));
         s.setAssetName(getAssetName(r));
+        s.setAssetCode(getAssetCode());
         s.setStartDate(getEntryDate(r));
         s.setEndDate(getEntryDate(r).plusMonths(months - 1));
         s.setTotalAmount(base);                          // 注意：存可攤金額（已扣殘值）
@@ -90,6 +91,7 @@ public abstract class AbstractAmortizationService<R> {
     protected abstract BigDecimal getAmount(R r);
     protected abstract String getDescription(R r);
     protected abstract String getAssetName(R r);
+    protected abstract String getAssetCode(); 
     protected abstract int getUsageMonths(R r);
     protected abstract BigDecimal getResidualValue(R r);           // 預付費用回傳 BigDecimal.ZERO
     protected abstract String getOriginalDebitAccountCode(R r);    // 原始分錄 借

@@ -28,6 +28,7 @@ public class PrepaidExpenseService extends AbstractAmortizationService<PrepaidEx
     @Override protected BigDecimal getAmount(PrepaidExpenseRequest r) { return r.getAmount(); }
     @Override protected String getDescription(PrepaidExpenseRequest r) { return r.getDescription(); }
     @Override protected String getAssetName(PrepaidExpenseRequest r) { return r.getExpenseName(); }
+    @Override protected String getAssetCode() {return "None";}
 
     @Override protected int getUsageMonths(PrepaidExpenseRequest r) { return r.getUsageMonth(); }
     @Override protected BigDecimal getResidualValue(PrepaidExpenseRequest r) { return BigDecimal.ZERO; }
