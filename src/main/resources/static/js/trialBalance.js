@@ -158,3 +158,119 @@ function renderTable(data) {
   initTableToggle();
 }
 
+
+
+//-下方為匯出excel功能---
+//---------------------------------------------
+
+
+// 全域變數存儲當前資料和日期
+let currentTrialBalanceData = null;
+let currentSelectedDate = null;
+
+// 修改你現有的 fetchAndRenderTrialBalance 函數
+function fetchAndRenderTrialBalance(date) {
+  console.log("fetch資料，日期:", date);
+  currentSelectedDate = date; // 儲存當前選擇的日期
+  
+  fetch(`http://localhost:8080/api/trial-balance/${date}`)
+    .then(response => {
+      if (!response.ok) throw new Error('取得資料失敗');
+      return response.json();
+    })
+    .then(data => {
+      currentTrialBalanceData = data; // 儲存當前資料
+      renderTable(data);
+    })
+    .catch(err => {
+      alert(err.message);
+    });
+}
+
+// 匯出Excel功能
+function exportToExcel() {
+  if (!currentTrialBalanceData || !currentTrialBalanceData.details) {
+    alert('沒有資料可以匯出，請先選擇日期載入資料');
+    return;
+  }
+
+  // 準備Excel資料
+  const excelData = [];
+  
+  // 加入標題行
+  excelData.push([
+    '日期',
+    '科目代碼', 
+    '會計科目名稱',
+    'FIN LEAD REF.',
+    '上期餘額',
+    '本期餘額'
+  ]);
+
+  // 加入資料行
+  currentTrialBalanceData.details.forEach(item => {
+    excelData.push([
+      currentSelectedDate, // 日期
+      item.accountCode, // 科目代碼
+      item.accountName, // 會計科目名稱
+      item.parentId !== undefined && item.parentId !== null ? item.parentId : '', // FIN LEAD REF.
+      '', // 上期餘額 (目前為空，如果你的API有提供可以加入)
+      item.balance // 本期餘額
+    ]);
+  });
+
+  // 建立工作簿
+  const wb = XLSX.utils.book_new();
+  const ws = XLSX.utils.aoa_to_sheet(excelData);
+
+  // 設定欄位寬度
+  const colWidths = [
+    { wch: 12 }, // 日期
+    { wch: 15 }, // 科目代碼
+    { wch: 25 }, // 會計科目名稱
+    { wch: 15 }, // FIN LEAD REF.
+    { wch: 15 }, // 上期餘額
+    { wch: 15 }  // 本期餘額
+  ];
+  ws['!cols'] = colWidths;
+
+  // 設定數字格式 (金額欄位)
+  const range = XLSX.utils.decode_range(ws['!ref']);
+  for (let R = 1; R <= range.e.r; ++R) { // 從第二行開始 (跳過標題)
+    // 上期餘額欄位 (第5欄, index 4)
+    const cellAddress4 = XLSX.utils.encode_cell({ r: R, c: 4 });
+    if (ws[cellAddress4] && typeof ws[cellAddress4].v === 'number') {
+      ws[cellAddress4].z = '#,##0.00';
+    }
+    
+    // 本期餘額欄位 (第6欄, index 5)
+    const cellAddress5 = XLSX.utils.encode_cell({ r: R, c: 5 });
+    if (ws[cellAddress5] && typeof ws[cellAddress5].v === 'number') {
+      ws[cellAddress5].z = '#,##0.00';
+    }
+  }
+
+  // 加入工作表到工作簿
+  XLSX.utils.book_append_sheet(wb, ws, "試算表");
+
+  // 產生檔案名稱
+  const fileName = `試算表_${currentSelectedDate}.xlsx`;
+
+  // 匯出檔案
+  XLSX.writeFile(wb, fileName);
+}
+
+// 在 DOMContentLoaded 事件中綁定匯出按鈕
+document.addEventListener("DOMContentLoaded", () => {
+  initTableToggle();
+  
+  // 綁定匯出按鈕事件
+  const exportBtn = document.querySelector('.btn1');
+  if (exportBtn) {
+    exportBtn.addEventListener('click', exportToExcel);
+  }
+  
+  // 載入今天的資料
+  const today = new Date().toISOString().slice(0, 10);
+  fetchAndRenderTrialBalance(today);
+});
