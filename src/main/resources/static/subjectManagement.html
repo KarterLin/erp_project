@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="./css/sidebar.css">
+    <link rel="stylesheet" href="./css/subjectManagement.css">
+</head>
+
+<body>
+    <!-- Sidebar -->
+    <div id="sidebar-container"></div>
+
+    <div class="page-wrapper">
+        <div class="title-bar">
+            <h1 class="title">科目管理</h1>
+        </div>
+        <div class="btn-bar">
+            <button id="trialBalanceBtn" class="add-btn">新增科目</button>
+        </div>
+
+        <div class="accordion-container">
+            <div class="accordion-item">
+                <div class="accordion-header">資產</div>
+                <div class="accordion-content">
+                    <ul>
+                        <li>現金</li>
+                        <li>應收帳款</li>
+                        <li>存貨</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="accordion-item">
+                <div class="accordion-header">負債</div>
+                <div class="accordion-content">
+                    <ul>
+                        <li>應付帳款</li>
+                        <li>短期借款</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="accordion-item">
+                <div class="accordion-header">權益</div>
+                <div class="accordion-content">
+                    <ul>
+                        <li>普通股</li>
+                        <li>保留盈餘</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="trialBalanceModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>新增會計子科目</h2>
+            <hr>
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="parentAccount">選擇母科目：</label>
+                    <span>類別：</span>
+                    <select id="parentAccount">
+                        <option value="">請選擇</option>
+                        <option value="1">資產</option>
+                        <option value="2">負債</option>
+                        <option value="3">權益</option>
+                    </select>
+                    <span>科目：</span>
+                    <select id="parentSubject">
+                        <option value="">請選擇</option>
+                        <option value="1">現金</option>
+                        <option value="2">銀行存款</option>
+                        <option value="3">應收帳款</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="childAccount">新增子科目：</label>
+                    <span>子科目名稱</span>
+                    <input type="text" id="childAccount" placeholder="請輸入子科目名稱">
+                </div>
+            </div>
+            <div class="form-btn">
+                <button id="saveChildAccountBtn" class="add-btn">儲存</button>
+                <button id="cancelChildAccountBtn" class="add-btn">取消</button>
+            </div>
+        </div>
+    </div>
+
+    <script src='./js/subjectManagement.js'></script>
+    <script src="js/sidebar.js"></script>
+</body>
+
+</html>
