@@ -21,15 +21,26 @@ public class AssetAmortizationRequest {
     private BigDecimal salvageValue;        // 殘值（可為 0）
 
     private Integer usageYears;             // 使用年限（後端轉換為月）
+    private Integer month;
     private String description;             // 摘要
 
     // === Getter / Setter ===
 
+    
+    
     public LocalDate getEntryDate() {
         return entryDate;
     }
 
-    public void setEntryDate(LocalDate entryDate) {
+    public Integer getMonth() {
+		return month;
+	}
+
+	public void setMonth(Integer month) {
+		this.month = month;
+	}
+
+	public void setEntryDate(LocalDate entryDate) {
         this.entryDate = entryDate;
     }
 

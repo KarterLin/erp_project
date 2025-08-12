@@ -1,8 +1,10 @@
 package com.example.erp.service;
 
 import com.example.erp.entity.Category;
+import com.example.erp.entity.ScheduleStatus;
 import com.example.erp.repository.AccountRepository;
 import com.example.erp.repository.AmortizationScheduleRepository;
+import com.example.erp.util.AssetAccountMapper;
 import com.example.erp.dto.AssetAmortizationRequest;
 import org.springframework.stereotype.Service;
 
@@ -41,7 +43,9 @@ public class IntangibleAssetService extends AbstractAmortizationService<AssetAmo
 
 
     @Override protected int getUsageMonths(AssetAmortizationRequest r) {
-        return r.getUsageYears() * 12;
+    	int years = r.getUsageYears() != null ? r.getUsageYears() : 0;
+        int months = r.getMonth() != null ? r.getMonth() : 0;
+        return years * 12 + months;
     }
 
     @Override protected BigDecimal getResidualValue(AssetAmortizationRequest r) {
@@ -49,7 +53,7 @@ public class IntangibleAssetService extends AbstractAmortizationService<AssetAmo
     }
 
     @Override protected String getOriginalDebitAccountCode(AssetAmortizationRequest r) {
-        return r.getAssetAccountCode(); // 借方 = 資產帳戶
+        return AssetAccountMapper.getIAByAssetName(r.getAssetName()).assetCode(); // 借方 = 資產帳戶
     }
 
     @Override protected String getOriginalCreditAccountCode(AssetAmortizationRequest r) {
@@ -57,14 +61,18 @@ public class IntangibleAssetService extends AbstractAmortizationService<AssetAmo
     }
 
     @Override protected String getScheduleDebitAccountCode(AssetAmortizationRequest r) {
-        return r.getAmortizeExpenseCode(); // 每期 借：折舊/攤銷費用
+        return AssetAccountMapper.getIAByAssetName(r.getAssetName()).expenseCode(); // 每期 借：折舊/攤銷費用
     }
 
     @Override protected String getScheduleCreditAccountCode(AssetAmortizationRequest r) {
-        return r.getAccumulatedAccountCode(); // 每期 貸：累積折舊/攤銷
+        return AssetAccountMapper.getIAByAssetName(r.getAssetName()).accumulatedCode(); // 每期 貸：累積折舊/攤銷
     }
 
     @Override protected Category getCategory(AssetAmortizationRequest r) {
         return this.category; // 可設定為 FIXED_ASSET 或 INTANGIBLE_ASSET
     }
+    
+    @Override protected ScheduleStatus getScheduleStatus(AssetAmortizationRequest r) {
+    		return ScheduleStatus.ACTIVE;
+    	}
 }

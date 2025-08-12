@@ -1,8 +1,10 @@
 package com.example.erp.service;
 
 import com.example.erp.entity.Category;
+import com.example.erp.entity.ScheduleStatus;
 import com.example.erp.repository.AccountRepository;
 import com.example.erp.repository.AmortizationScheduleRepository;
+import com.example.erp.util.AssetAccountMapper;
 import com.example.erp.dto.PrepaidExpenseRequest;
 import org.springframework.stereotype.Service;
 
@@ -34,13 +36,14 @@ public class PrepaidExpenseService extends AbstractAmortizationService<PrepaidEx
     @Override protected BigDecimal getResidualValue(PrepaidExpenseRequest r) { return BigDecimal.ZERO; }
 
     // 原始分錄：借 預付費用、貸 現金/應付
-    @Override protected String getOriginalDebitAccountCode(PrepaidExpenseRequest r) { return r.getPrepaidAccountCode(); }
+    @Override protected String getOriginalDebitAccountCode(PrepaidExpenseRequest r) { return  AssetAccountMapper.getByAssetName(r.getExpenseName()).assetCode();}
     @Override protected String getOriginalCreditAccountCode(PrepaidExpenseRequest r) { return r.getCreditAccountCode(); }
 
     // 每期攤提：借 費用、貸 預付費用
     @Override protected String getScheduleDebitAccountCode(PrepaidExpenseRequest r) { return r.getAmortizeExpenseCode(); }
-    @Override protected String getScheduleCreditAccountCode(PrepaidExpenseRequest r) { return r.getPrepaidAccountCode(); }
+    @Override protected String getScheduleCreditAccountCode(PrepaidExpenseRequest r) { return AssetAccountMapper.getByAssetName(r.getExpenseName()).assetCode(); }
 
     @Override protected Category getCategory(PrepaidExpenseRequest r) { return Category.PREPAID_EXPENSE; }
+    @Override protected ScheduleStatus getScheduleStatus(PrepaidExpenseRequest r) {return ScheduleStatus.ACTIVE; }
 }
 
