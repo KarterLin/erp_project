@@ -72,10 +72,6 @@ public class FixedAssetService extends AbstractAmortizationService<AssetAmortiza
     }
     
     @Override protected ScheduleStatus getScheduleStatus(AssetAmortizationRequest r) {
-    	if(AssetAccountMapper.getFAByAssetName(r.getAssetName()).assetCode().equals("1411000")) {
-    		return ScheduleStatus.CANCELLED;
-    	}else {
-    		return ScheduleStatus.ACTIVE;
-    	}
+    	return ScheduleStatus.ACTIVE;
     }
 }
