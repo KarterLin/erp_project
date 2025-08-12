@@ -126,3 +126,62 @@ window.onSidebarLoaded = () => {
 if (typeof window.onSidebarLoaded === 'function') {
   window.onSidebarLoaded();
 }
+
+flatpickr("#dateRange", {
+    locale: "zh", // 中文
+    dateFormat: "Y-m-d", // 日期格式：年-月-日
+    allowInput: true
+  });
+
+  // 假設你的 API URL
+const API_URL = 'http://localhost:8080/api/balance-sheet/summary';
+
+fetch(API_URL)
+  .then(res => res.json())
+  .then(data => {
+    // 先把所有 balance 累加求總和 (for 計算百分比用)
+    let totalBalance = 0;
+    data.forEach(item => {
+      totalBalance += Number(item.balance);
+    });
+
+    data.forEach(item => {
+      // 找到有這個 parentId 的 <td>
+      const subjectTd = document.querySelector(`td[data-parent-id="${item.parentId}"]`);
+      if (subjectTd) {
+        const tr = subjectTd.parentElement; // 找到整列<tr>
+        // 找出「小計」欄位 (假設是第三個 <td>，index 2)
+        const subtotalTd = tr.children[2];
+        subtotalTd.textContent = Number(item.balance).toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2});
+
+        // 找出「百分比」欄位 (假設是第四個 <td>，index 3)
+        const percentTd = tr.children[3];
+        let percent = totalBalance !== 0 ? (item.balance / totalBalance) * 100 : 0;
+        percentTd.textContent = percent.toFixed(2) + '%';
+      }
+    });
+
+    // 你可以另外寫函式更新「合計」列，依你的表格結構決定
+    updateTotals();
+  })
+  .catch(console.error);
+
+
+// 這裡寫個簡單更新合計欄的函式範例
+function updateTotals() {
+  // 流動資產合計
+  const flowAssetsTotalTd = [...document.querySelectorAll('td')]
+    .find(td => td.textContent.includes('流動資產合計'))?.nextElementSibling?.nextElementSibling;
+
+  if (flowAssetsTotalTd) {
+    // 簡單範例：加總 group1 裡所有小計欄的值
+    let sum = 0;
+    document.querySelectorAll('tr.sub-row.group1.show').forEach(tr => {
+      const val = tr.children[2].textContent.replace(/,/g, '');
+      sum += Number(val);
+    });
+    flowAssetsTotalTd.textContent = sum.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2});
+  }
+
+  // 其他合計可用類似方法做
+}

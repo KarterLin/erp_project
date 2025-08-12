@@ -7,6 +7,7 @@
     <title>Document</title>
     <link rel="stylesheet" href="./css/balanceSheet.css">
     <link rel="stylesheet" href="./css/sidebar.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 
@@ -16,18 +17,17 @@
     <div class="page-wrapper">
         <div class="d1">
             <div class="left-group">
-                <h1 class="title">資產負債表</h1>
+                <h1 class="title">資產負債表</h1>   
             </div>
             <div class="d2">
                 <button class="btn1">匯入檔案</button>
             </div>
         </div>
         <div class="d3">
-            <div id="toggleSwitch" class="switch-container" onclick="toggleItems()">
-                <div class="switch-circle"></div>
-                <span id="switchText">顯示全部項目</span>
+            <div class="field">
+                <label for="dateRange" class="l1">日期選擇：</label>
+                <input type="text" class="form-control" id="dateRange" placeholder="請選擇日期區間" autocomplete="off">
             </div>
-            <button class="btn2">選擇時間範圍或比較類型</button>
         </div>
         <div class="table-container">
             <div class="tableFixHead">
@@ -54,55 +54,55 @@
                         <!-- 子列 -->
                         <tr class="sub-row group1 show">
                             <td></td>
-                            <td>現金及約當現金</td>
+                            <td data-parent-id="1100">現金及約當現金</td>
                             <td class="text-end">0</td>
                             <td class="text-end">0%</td>
                         </tr>
                         <tr class="sub-row group1 show">
                             <td></td>
-                            <td>按攤銷後成本衡量之金融資產-流動</td>
+                            <td data-parent-id="1132">按攤銷後成本衡量之金融資產-流動</td>
                             <td class="text-end">0</td>
                             <td class="text-end">0%</td>
                         </tr>
                         <tr class="sub-row group1 show">
                             <td></td>
-                            <td>應收票據</td>
+                            <td data-parent-id="1150">應收票據</td>
                             <td class="text-end">0</td>
                             <td class="text-end">0%</td>
                         </tr>
                         <tr class="sub-row group1 show">
                             <td></td>
-                            <td>應收帳款</td>
+                            <td data-parent-id="1170">應收帳款</td>
                             <td class="text-end">0</td>
                             <td class="text-end">0%</td>
                         </tr>
                         <tr class="sub-row group1 show">
                             <td></td>
-                            <td>應收帳款-關係人</td>
+                            <td data-parent-id="1180">應收帳款-關係人</td>
                             <td class="text-end">0</td>
                             <td class="text-end">0%</td>
                         </tr>
                         <tr class="sub-row group1 show">
                             <td></td>
-                            <td>其他應收款-關係人淨額</td>
+                            <td data-parent-id="1210">其他應收款-關係人淨額</td>
                             <td class="text-end">0</td>
                             <td class="text-end">0%</td>
                         </tr>
                         <tr class="sub-row group1 show">
                             <td></td>
-                            <td>本期所得稅資產</td>
+                            <td data-parent-id="1220">本期所得稅資產</td>
                             <td class="text-end">0</td>
                             <td class="text-end">0%</td>
                         </tr>
                         <tr class="sub-row group1 show">
                             <td></td>
-                            <td>存貨</td>
+                            <td data-parent-id="1300">存貨</td>
                             <td class="text-end">0</td>
                             <td class="text-end">0%</td>
                         </tr>
                         <tr class="sub-row group1 show">
                             <td></td>
-                            <td>預付款項</td>
+                            <td data-parent-id="1410">預付款項</td>
                             <td class="text-end">0</td>
                             <td class="text-end">0%</td>
                         </tr>
@@ -122,19 +122,25 @@
                         <!-- 子列 -->
                         <tr class="sub-row group2 show">
                             <td></td>
-                            <td>不動產、廠房及設備</td>
+                            <td data-parent-id="1600">不動產、廠房及設備</td>
                             <td class="text-end">0</td>
                             <td class="text-end">0%</td>
                         </tr>
                         <tr class="sub-row group2 show">
                             <td></td>
-                            <td>遞延所得稅資產</td>
+                            <td data-parent-id="1780">無形資產</td>
                             <td class="text-end">0</td>
                             <td class="text-end">0%</td>
                         </tr>
                         <tr class="sub-row group2 show">
                             <td></td>
-                            <td>其他非流動資產</td>
+                            <td data-parent-id="1840">遞延所得稅資產</td>
+                            <td class="text-end">0</td>
+                            <td class="text-end">0%</td>
+                        </tr>
+                        <tr class="sub-row group2 show">
+                            <td></td>
+                            <td data-parent-id="1900">其他非流動資產</td>
                             <td class="text-end">0</td>
                             <td class="text-end">0%</td>
                         </tr>
@@ -179,25 +185,25 @@
                         <!-- 子列 -->
                         <tr class="sub-row group1 show">
                             <td></td>
-                            <td>應付帳款</td>
+                            <td data-parent-id="2170">應付帳款</td>
                             <td class="text-end">0</td>
                             <td class="text-end">0%</td>
                         </tr>
                         <tr class="sub-row group1 show">
                             <td></td>
-                            <td>其他應付款</td>
+                            <td data-parent-id="2200">其他應付款</td>
                             <td class="text-end">0</td>
                             <td class="text-end">0%</td>
                         </tr>
                         <tr class="sub-row group1 show">
                             <td></td>
-                            <td>其他應付款-關係人</td>
+                            <td data-parent-id="2220">其他應付款-關係人</td>
                             <td class="text-end">0</td>
                             <td class="text-end">0%</td>
                         </tr>
                         <tr class="sub-row group1 show">
                             <td></td>
-                            <td>其他流動負債</td>
+                            <td data-parent-id="2300">其他流動負債</td>
                             <td class="text-end">0</td>
                             <td class="text-end">0%</td>
                         </tr>
@@ -217,19 +223,19 @@
                         <!-- 子列 -->
                         <tr class="sub-row group2 show">
                             <td></td>
-                            <td>長期借款</td>
+                            <td data-parent-id="2540">長期借款</td>
                             <td class="text-end">0</td>
                             <td class="text-end">0%</td>
                         </tr>
                         <tr class="sub-row group2 show">
                             <td></td>
-                            <td>遞延所得稅負債</td>
+                            <td data-parent-id="2570">遞延所得稅負債</td>
                             <td class="text-end">0</td>
                             <td class="text-end">0%</td>
                         </tr>
                         <tr class="sub-row group2 show">
                             <td></td>
-                            <td>其他非流動負債</td>
+                            <td data-parent-id="2600">其他非流動負債</td>
                             <td class="text-end">0</td>
                             <td class="text-end">0%</td>
                         </tr>
@@ -263,7 +269,7 @@
                         <!-- 子列 -->
                         <tr class="sub-row group2 show">
                             <td></td>
-                            <td>股本</td>
+                            <td data-parent-id="3100">股本</td>
                             <td class="text-end">0</td>
                             <td class="text-end">0%</td>
                         </tr>
@@ -283,19 +289,19 @@
                         <!-- 子列 -->
                         <tr class="sub-row group2 show">
                             <td></td>
-                            <td>保留盈餘及累積盈虧</td>
+                            <td data-parent-id="3300">保留盈餘及累積盈虧</td>
                             <td class="text-end">0</td>
                             <td class="text-end">0%</td>
                         </tr>
                         <tr class="sub-row group2 show">
                             <td></td>
-                            <td>本期盈餘及盈虧</td>
+                            <td data-parent-id="3600">本期盈餘及盈虧</td>
                             <td class="text-end">0</td>
                             <td class="text-end">0%</td>
                         </tr>
                         <tr class="sub-row group2 show">
                             <td></td>
-                            <td>法定盈餘公積</td>
+                            <td data-parent-id="3310">法定盈餘公積</td>
                             <td class="text-end">0</td>
                             <td class="text-end">0%</td>
                         </tr>
@@ -321,8 +327,8 @@
 
     </div>
 
-
-
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/zh.js"></script>
     <script src="js/sidebar.js"></script>
     <script src="./js/balanceSheet.js"></script>
 </body>

@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.erp.entity.Account;
+import com.example.erp.dto.BalanceSheetDTO;
 import com.example.erp.service.BalanceSheetService;
 
 @RestController
@@ -19,8 +19,8 @@ public class BalanceSheetController {
         this.balanceSheetService = balanceSheetService;
     }
 
-    @GetMapping("/assets")
-    public List<Account> getUsedAssets() {
-        return balanceSheetService.getUsedAssets();
+    @GetMapping("/summary")
+    public List<BalanceSheetDTO> getParentBalances() {
+        return balanceSheetService.getParentBalances();
     }
 }
