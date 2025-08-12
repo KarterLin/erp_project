@@ -84,7 +84,7 @@ public abstract class AbstractAmortizationService<R> {
         s.setAssetAccount(creditAccount);                // 每期 貸（預付或累積）
         s.setStatus(getScheduleStatus(r));
 
-        if (!"1411000".equals(getAssetCode())) {
+        if (!"1411000".equals(getOriginalDebitAccountCode(r))) {
             scheduleRepo.save(s);
         }
     }
