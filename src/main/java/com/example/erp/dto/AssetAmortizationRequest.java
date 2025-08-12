@@ -13,9 +13,6 @@ public class AssetAmortizationRequest {
     private String assetName;               // 資產名稱（顯示用）
 
     private String creditAccountCode;       // 貸方帳戶（現金/應付）
-    private String assetAccountCode;        // 資產帳戶（借方原始分錄用）
-    private String amortizeExpenseCode;     // 每期借方（折舊/攤銷費用）
-    private String accumulatedAccountCode;  // 每期貸方（累積折舊/攤銷）
 
     private BigDecimal amount;              // 資產金額（含殘值）
     private BigDecimal salvageValue;        // 殘值（可為 0）
@@ -58,30 +55,6 @@ public class AssetAmortizationRequest {
 
     public void setCreditAccountCode(String creditAccountCode) {
         this.creditAccountCode = creditAccountCode;
-    }
-
-    public String getAssetAccountCode() {
-        return assetAccountCode;
-    }
-
-    public void setAssetAccountCode(String assetAccountCode) {
-        this.assetAccountCode = assetAccountCode;
-    }
-
-    public String getAmortizeExpenseCode() {
-        return amortizeExpenseCode;
-    }
-
-    public void setAmortizeExpenseCode(String amortizeExpenseCode) {
-        this.amortizeExpenseCode = amortizeExpenseCode;
-    }
-
-    public String getAccumulatedAccountCode() {
-        return accumulatedAccountCode;
-    }
-
-    public void setAccumulatedAccountCode(String accumulatedAccountCode) {
-        this.accumulatedAccountCode = accumulatedAccountCode;
     }
 
     public BigDecimal getAmount() {
