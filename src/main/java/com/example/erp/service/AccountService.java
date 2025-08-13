@@ -28,7 +28,7 @@ public class AccountService {
      * 獲取所有科目（包含非啟用的）
      */
     public List<AccountDTO> getAllAccounts() {
-        return accountRepository.findAllToDTO();
+        return accountRepository.findAllFullToDTO();
     }
 
     /**
