@@ -126,3 +126,95 @@ window.onSidebarLoaded = () => {
 if (typeof window.onSidebarLoaded === 'function') {
   window.onSidebarLoaded();
 }
+
+// 今年年初 YYYY-01-01
+const startOfYear = new Date(new Date().getFullYear(), 0, 1)
+    .toISOString()
+    .split('T')[0];
+
+// 今天 YYYY-MM-DD
+const today = new Date().toISOString().split('T')[0];
+
+// 初始化 flatpickr
+flatpickr("#dateRange", {
+    locale: "zh",
+    dateFormat: "Y-m-d",
+    allowInput: true,
+    defaultDate: today, // 預設今天
+    onChange: function (selectedDates, dateStr) {
+        if (!dateStr) return;
+        loadBalanceSheet(startOfYear, dateStr); // 選日期後重新抓資料
+    }
+});
+
+// 初始載入：年初 ~ 今天
+loadBalanceSheet(startOfYear, today);
+
+// 呼叫 API 並更新表格
+function loadBalanceSheet(startDate, endDate) {
+    fetch(`http://localhost:8080/api/balance-sheet/summary?startDate=${startDate}&endDate=${endDate}`)
+        .then(res => res.json())
+        .then(data => {
+            updateBalanceSheet(data);
+        })
+        .catch(console.error);
+}
+
+function clearTable() {
+  document.querySelectorAll('td[data-parent-id]').forEach(td => {
+    const tr = td.parentElement;
+    tr.children[2].textContent = '0';
+    tr.children[3].textContent = '0%';
+  });
+}
+
+// 更新表格內容
+function updateBalanceSheet(data) {
+    clearTable();
+    // 計算總額 (用來算百分比)
+    let totalBalance = data.reduce((sum, item) => sum + Number(item.balance), 0);
+
+    data.forEach(item => {
+        const subjectTd = document.querySelector(`td[data-parent-id='${item.parentId}']`);
+        console.log(`查找 parentId = ${item.parentId}`);
+        if (subjectTd) {
+            const tr = subjectTd.parentElement;
+
+            // 小計欄
+            const subtotalTd = tr.children[2];
+            subtotalTd.textContent = Number(item.balance).toLocaleString(undefined, {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2
+            });
+
+            // 百分比欄
+            const percentTd = tr.children[3];
+            let percent = totalBalance !== 0 ? (item.balance / totalBalance) * 100 : 0;
+            percentTd.textContent = percent.toFixed(2) + '%';
+        }
+    });
+
+    // 更新合計列
+    updateTotals();
+}
+
+
+
+// 這裡寫個簡單更新合計欄的函式範例
+function updateTotals() {
+  // 流動資產合計
+  const flowAssetsTotalTd = [...document.querySelectorAll('td')]
+    .find(td => td.textContent.includes('流動資產合計'))?.nextElementSibling?.nextElementSibling;
+
+  if (flowAssetsTotalTd) {
+    // 簡單範例：加總 group1 裡所有小計欄的值
+    let sum = 0;
+    document.querySelectorAll('tr.sub-row.group1.show').forEach(tr => {
+      const val = tr.children[2].textContent.replace(/,/g, '');
+      sum += Number(val);
+    });
+    flowAssetsTotalTd.textContent = sum.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2});
+  }
+
+  // 其他合計可用類似方法做
+}

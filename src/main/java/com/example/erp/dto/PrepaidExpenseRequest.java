@@ -9,7 +9,6 @@ public class PrepaidExpenseRequest {
 	    private String expenseName;           // 預付費用名稱（顯示/摘要）
 
 	    private String creditAccountCode;     // 對應貸方科目（現金/應付帳款等）➡ 原始分錄用
-	    private String prepaidAccountCode;    // 預付費用科目（ex: 預付保險費）➡ 原始分錄借方 & 之後每期的貸方
 	    private String amortizeExpenseCode;   // 每期攤提科目（ex: 保險費用）➡ 之後每期的借方
 
 	    private BigDecimal amount;            // 金額（總額）
@@ -39,12 +38,7 @@ public class PrepaidExpenseRequest {
 		public void setCreditAccountCode(String creditAccountCode) {
 			this.creditAccountCode = creditAccountCode;
 		}
-		public String getPrepaidAccountCode() {
-			return prepaidAccountCode;
-		}
-		public void setPrepaidAccountCode(String prepaidAccountCode) {
-			this.prepaidAccountCode = prepaidAccountCode;
-		}
+		
 		public String getAmortizeExpenseCode() {
 			return amortizeExpenseCode;
 		}

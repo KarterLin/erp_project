@@ -64,6 +64,7 @@ public abstract class AbstractAmortizationService<R> {
         if (base.signum() < 0) throw new IllegalArgumentException("殘值不可大於金額");
 
         BigDecimal monthly = base.divide(BigDecimal.valueOf(months), 0, RoundingMode.DOWN); // 無條件捨去
+     
 
         Account debitAccount  = accountRepo.findByCode(getScheduleDebitAccountCode(r)).orElseThrow();
         Account creditAccount = accountRepo.findByCode(getScheduleCreditAccountCode(r)).orElseThrow();
@@ -81,9 +82,11 @@ public abstract class AbstractAmortizationService<R> {
         s.setResidualValue(getResidualValue(r));
         s.setDepreciationAccount(debitAccount);          // 每期 借
         s.setAssetAccount(creditAccount);                // 每期 貸（預付或累積）
-        s.setStatus(ScheduleStatus.ACTIVE);
+        s.setStatus(getScheduleStatus(r));
 
-        scheduleRepo.save(s);
+        if (!"1411000".equals(getOriginalDebitAccountCode(r))) {
+            scheduleRepo.save(s);
+        }
     }
 
     // ====== 子類提供的 getter（差異點）======
@@ -99,5 +102,6 @@ public abstract class AbstractAmortizationService<R> {
     protected abstract String getScheduleDebitAccountCode(R r);    // 每期 借
     protected abstract String getScheduleCreditAccountCode(R r);   // 每期 貸
     protected abstract Category getCategory(R r);
+    protected abstract ScheduleStatus getScheduleStatus(R r);
 }
 
