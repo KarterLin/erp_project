@@ -1,6 +1,13 @@
 package com.example.erp.entity;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "account")
@@ -10,14 +17,14 @@ public class Account {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, unique = true)
+    @Column(name = "code", nullable = false, unique = true)
     private String code;
 
-    @Column(nullable = false)
+    @Column(name = "name", nullable = false, length = 100)
     private String name;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
+    @Column(name = "type", nullable = false)
     private AccountType type;
 
     @Column(name = "parent_id")
@@ -26,53 +33,82 @@ public class Account {
     @Column(name = "is_active")
     private Boolean isActive = true;
 
-	public Long getId() {
-		return id;
-	}
+    // 枚舉定義
+    public enum AccountType {
+        asset, liability, equity, revenue, expense
+    }
 
-	public void setId(Long id) {
-		this.id = id;
-	}
+    // 無參構造器
+    public Account() {
+    }
 
-	public String getCode() {
-		return code;
-	}
+    // 全參構造器
+    public Account(String code, String name, AccountType type, Long parentId, Boolean isActive) {
+        this.code = code;
+        this.name = name;
+        this.type = type;
+        this.parentId = parentId;
+        this.isActive = isActive;
+    }
 
-	public void setCode(String code) {
-		this.code = code;
-	}
+    // Getters and Setters
+    public Long getId() {
+        return id;
+    }
 
-	public String getName() {
-		return name;
-	}
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-	public void setName(String name) {
-		this.name = name;
-	}
+    public String getCode() {
+        return code;
+    }
 
-	public AccountType getType() {
-		return type;
-	}
+    public void setCode(String code) {
+        this.code = code;
+    }
 
-	public void setType(AccountType type) {
-		this.type = type;
-	}
+    public String getName() {
+        return name;
+    }
 
-	public Long getParentId() {
-		return parentId;
-	}
+    public void setName(String name) {
+        this.name = name;
+    }
 
-	public void setParentId(Long parentId) {
-		this.parentId = parentId;
-	}
+    public AccountType getType() {
+        return type;
+    }
 
-	public Boolean getIsActive() {
-		return isActive;
-	}
+    public void setType(AccountType type) {
+        this.type = type;
+    }
 
-	public void setIsActive(Boolean isActive) {
-		this.isActive = isActive;
-	}
+    public Long getParentId() {
+        return parentId;
+    }
 
-    // getters and setters
+    public void setParentId(Long parentId) {
+        this.parentId = parentId;
+    }
+
+    public Boolean getIsActive() {
+        return isActive;
+    }
+
+    public void setIsActive(Boolean isActive) {
+        this.isActive = isActive;
+    }
+
+    @Override
+    public String toString() {
+        return "Account{"
+                + "id=" + id
+                + ", code='" + code + '\''
+                + ", name='" + name + '\''
+                + ", type=" + type
+                + ", parentId=" + parentId
+                + ", isActive=" + isActive
+                + '}';
+    }
 }
