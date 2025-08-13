@@ -102,4 +102,8 @@ public class AccountDTO {
                 ", parentName='" + parentName + '\'' +
                 '}';
     }
+    public AccountDTO(String code, String name) {
+    this.code = code;
+    this.name = name;
+}
 }
