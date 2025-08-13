@@ -44,6 +44,19 @@ public class FixedAssetService extends AbstractAmortizationService<AssetAmortiza
     @Override protected int getUsageMonths(AssetAmortizationRequest r) {
     	int years = r.getUsageYears() != null ? r.getUsageYears() : 0;
         int months = r.getMonth() != null ? r.getMonth() : 0;
+        
+        if (years < 0 || months < 0) {
+            throw new IllegalArgumentException("攤提年/月不得為負數");
+        }
+        
+        if (!"1411000".equals(getOriginalDebitAccountCode(r)) && years <=0 && months <= 0) {
+    		throw new IllegalArgumentException("請輸入攤提時間");
+        }
+        
+        if ("1411000".equals(getOriginalDebitAccountCode(r)) && (years > 0 || months > 0)) {
+        	throw new IllegalArgumentException("土地資產無須攤提");
+        }
+        
         return years * 12 + months;
     }
 
@@ -72,6 +85,10 @@ public class FixedAssetService extends AbstractAmortizationService<AssetAmortiza
     }
     
     @Override protected ScheduleStatus getScheduleStatus(AssetAmortizationRequest r) {
-    	return ScheduleStatus.ACTIVE;
+    	if ("1411000".equals(getOriginalDebitAccountCode(r))) {
+    		return ScheduleStatus.CANCELLED;
+        }else {
+    	    return ScheduleStatus.ACTIVE;
+        }        
     }
 }
