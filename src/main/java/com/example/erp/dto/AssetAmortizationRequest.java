@@ -11,6 +11,7 @@ public class AssetAmortizationRequest {
 
     private LocalDate entryDate;            // 資產入帳日期
     private String assetName;               // 資產名稱（顯示用）
+    private String intangibleType;          // 無形資產類型（專利權、商標權、電腦軟體）
 
     private String creditAccountCode;       // 貸方帳戶（現金/應付）
 
@@ -23,21 +24,11 @@ public class AssetAmortizationRequest {
 
     // === Getter / Setter ===
 
-    
-    
     public LocalDate getEntryDate() {
         return entryDate;
     }
 
-    public Integer getMonth() {
-		return month;
-	}
-
-	public void setMonth(Integer month) {
-		this.month = month;
-	}
-
-	public void setEntryDate(LocalDate entryDate) {
+    public void setEntryDate(LocalDate entryDate) {
         this.entryDate = entryDate;
     }
 
@@ -47,6 +38,14 @@ public class AssetAmortizationRequest {
 
     public void setAssetName(String assetName) {
         this.assetName = assetName;
+    }
+
+    public String getIntangibleType() {
+        return intangibleType;
+    }
+
+    public void setIntangibleType(String intangibleType) {
+        this.intangibleType = intangibleType;
     }
 
     public String getCreditAccountCode() {
@@ -81,6 +80,14 @@ public class AssetAmortizationRequest {
         this.usageYears = usageYears;
     }
 
+    public Integer getMonth() {
+        return month;
+    }
+
+    public void setMonth(Integer month) {
+        this.month = month;
+    }
+
     public String getDescription() {
         return description;
     }
@@ -88,5 +95,4 @@ public class AssetAmortizationRequest {
     public void setDescription(String description) {
         this.description = description;
     }
-} 
-
+}

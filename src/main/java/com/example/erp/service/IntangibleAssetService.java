@@ -1,15 +1,16 @@
 package com.example.erp.service;
 
+import java.math.BigDecimal;
+import java.time.LocalDate;
+
+import org.springframework.stereotype.Service;
+
+import com.example.erp.dto.AssetAmortizationRequest;
 import com.example.erp.entity.Category;
 import com.example.erp.entity.ScheduleStatus;
 import com.example.erp.repository.AccountRepository;
 import com.example.erp.repository.AmortizationScheduleRepository;
 import com.example.erp.util.AssetAccountMapper;
-import com.example.erp.dto.AssetAmortizationRequest;
-import org.springframework.stereotype.Service;
-
-import java.math.BigDecimal;
-import java.time.LocalDate;
 
 /**
  * 固定資產與無形資產共用 Service，區別在 Controller 注入時指定 Category

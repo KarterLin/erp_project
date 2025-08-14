@@ -1,85 +1,68 @@
-// 需要get 
-// 1.後端 科目編號 為 "accountCode" 
-// 2.後端 科目名稱為 "accountName"
-// post 出
-// 1.入帳日期 在後端為 "entryDate"
-// 2.科目編號 在後端為 "accountCode" 
-// 3.科目名稱 在後端為 "accountName"
-// 4.借方名稱 在後端為 "debit"
-// 5.貸方名稱 在後端為 "credit"
-// 6.摘要 在後端為 "description"
+// API 端點配置
+const API_BASE_URL = 'http://localhost:8080/api';
+const AMORTIZATION_API = `${API_BASE_URL}/amortization`;
 
-let accountsData = [];
-
-// ========== 原有功能保持不變 ==========
+// 獲取當前日期
 function getCurrentDate() {
     const today = new Date();
     return today.toISOString().split('T')[0];
 }
 
+// 設置預設日期
 function setDefaultDates() {
     const dateInput = document.getElementById('entry-date');
     if (!dateInput.value) dateInput.value = getCurrentDate();
 }
 
-async function loadAccountsData() {
-    try {
-        const response = await fetch('http://localhost:8080/api/accounts');
-        if (response.ok) {
-            accountsData = await response.json(); // 直接用原始欄位 code, name
-        } else {
-            throw new Error();
-        }
-    } catch {
-        accountsData = [
-            { code: "1001000", name: '現金' },
-            { code: "1002000", name: '銀行存款' },
-            { code: "2001000", name: '應付帳款' },
-            { code: "3001000", name: '資本' },
-            { code: "4001000", name: '銷貨收入' },
-            { code: "5001000", name: '銷貨成本' }
-        ];
-    }
-}
-
-// ========== 新增的固定資產聯動功能 ==========
-// 定義每個固定資產類型對應的折舊科目
+// 固定資產類型對應的折舊科目映射 - 改為使用中文，與後端對應
 const fixedAssetDepreciationOptions = {
-    'land': {
+    '土地': {
+        assetCode: '1411000',      // 土地
+        depreciationCode: null,    // 土地無折舊
+        expenseCode: null,         // 土地無折舊費用
         message: '土地無需折舊',
         disabled: true,
         autoSelect: null
     },
-    'buildings': {
-        text: '累積折舊-房屋及建物',
-        value: 'ACCbuildings',
-        disabled: true
+    '房屋及建物': {
+        assetCode: '1431000',      // 房屋及建物
+        depreciationCode: '1439000', // 累積折舊-房屋及建物
+        expenseCode: '6103001',    // 折舊費用-建築物
+        disabled: true,
+        autoSelect: '1439000'
     },
-    'itEquipments': {
-        text: '累積折舊-資訊設備',
-        value: 'ACCitEquipments',
-        disabled: true
+    '資訊設備': {
+        assetCode: '1441000',      // 資訊設備
+        depreciationCode: '1449000', // 累積折舊-資訊設備
+        expenseCode: '6103002',    // 折舊費用-資訊設備
+        disabled: true,
+        autoSelect: '1449000'
     },
-    'officeitEquipments': {
-        text: '累積折舊-辦公設備',
-        value: 'ACCofficeitEquipments',
-        disabled: true
+    '辦公設備': {
+        assetCode: '1451000',      // 辦公設備
+        depreciationCode: '1459000', // 累積折舊-辦公設備
+        expenseCode: '6103003',    // 折舊費用-辦公設備
+        disabled: true,
+        autoSelect: '1459000'
     },
-    'transportationEquipments': {
-        text: '累積折舊-運輸設備',
-        value: 'ACCtransportationEquipments',
-        disabled: true
+    '運輸設備': {
+        assetCode: '1461000',      // 運輸設備
+        depreciationCode: '1469000', // 累積折舊-運輸設備
+        expenseCode: '6103004',    // 折舊費用-運輸設備
+        disabled: true,
+        autoSelect: '1469000'
     },
-    'miscellaneousEquipments': {
-        text: '累積折舊-什項設備',
-        value: 'ACCmiscellaneousEquipments',
-        disabled: true
+    '什項設備': {
+        assetCode: '1471000',      // 什項設備
+        depreciationCode: '1479000', // 累積折舊-什項設備
+        expenseCode: '6103005',    // 折舊費用-什項設備
+        disabled: true,
+        autoSelect: '1479000'
     }
 };
 
-// 更新每期折舊科目選單的函數
+// 更新每期折舊科目選單
 function updateFixedAssetDepreciationSubject(selectedType) {
-    // 直接使用 ID 選擇器
     const depreciationSubjectSelect = document.getElementById('depreciation-subject');
     if (!depreciationSubjectSelect) return;
     
@@ -88,7 +71,14 @@ function updateFixedAssetDepreciationSubject(selectedType) {
     
     if (!selectedType || !fixedAssetDepreciationOptions[selectedType]) {
         // 如果沒有選擇或選擇了未定義的選項，恢復預設狀態
-        depreciationSubjectSelect.innerHTML = '<option value="">請選擇</option>';
+        depreciationSubjectSelect.innerHTML = `
+            <option value="">請選擇</option>
+            <option value="1439000">累積折舊-房屋及建物</option>
+            <option value="1449000">累積折舊-資訊設備</option>
+            <option value="1459000">累積折舊-辦公設備</option>
+            <option value="1469000">累積折舊-運輸設備</option>
+            <option value="1479000">累積折舊-什項設備</option>
+        `;
         depreciationSubjectSelect.disabled = false;
         depreciationSubjectSelect.style.backgroundColor = '';
         depreciationSubjectSelect.style.color = '';
@@ -103,7 +93,7 @@ function updateFixedAssetDepreciationSubject(selectedType) {
     depreciationSubjectSelect.style.color = '#999';
     
     // 特別處理土地的情況
-    if (selectedType === 'land') {
+    if (selectedType === '土地') {
         const option = document.createElement('option');
         option.value = '';
         option.textContent = config.message; // "土地無需折舊"
@@ -114,22 +104,22 @@ function updateFixedAssetDepreciationSubject(selectedType) {
     
     // 處理其他固定資產類型：自動帶出對應的累計折舊科目並反灰
     const option = document.createElement('option');
-    option.value = config.value;
-    option.textContent = config.text;
+    option.value = config.depreciationCode;
+    option.textContent = getAccountNameByCode(config.depreciationCode);
     depreciationSubjectSelect.appendChild(option);
-    depreciationSubjectSelect.value = config.value;
+    depreciationSubjectSelect.value = config.depreciationCode;
 }
 
-// ========== 事件監聽器設置 ==========
-// 表單提交處理
-const journalForm = document.getElementById('journal-entry-form');
-if (journalForm) {
-    journalForm.addEventListener('submit', async function (e) {
-        e.preventDefault();
-        
-        // 固定資產表單提交處理
-        handleFixedAssetFormSubmission();
-    });
+// 根據科目代碼獲取科目名稱
+function getAccountNameByCode(code) {
+    const accountNames = {
+        '1439000': '累積折舊-房屋及建物',
+        '1449000': '累積折舊-資訊設備',
+        '1459000': '累積折舊-辦公設備',
+        '1469000': '累積折舊-運輸設備',
+        '1479000': '累積折舊-什項設備'
+    };
+    return accountNames[code] || code;
 }
 
 // 固定資產表單提交處理
@@ -138,19 +128,11 @@ async function handleFixedAssetFormSubmission() {
     const fixedAssetType = document.getElementById('fixed-asset-type').value;
     const fixedAssetName = document.getElementById('fixed-asset-name').value;
     const creditAccount = document.getElementById('credit-account').value;
-    const depreciationSubject = document.getElementById('depreciation-subject').value;
-    
-    // 注意：HTML 中金額和殘值的 ID 都是 startDate，需要修正
-    const amountInputs = document.querySelectorAll('input[type="number"]');
-    const amount = amountInputs[0] ? amountInputs[0].value : '';
-    const residualValue = amountInputs[1] ? amountInputs[1].value : '';
-    
-    // 摘要欄位
-    const descriptionInputs = document.querySelectorAll('input[type="text"]');
-    const description = descriptionInputs[0] ? descriptionInputs[0].value : '';
-    
+    const amount = document.getElementById('amount').value;
+    const residualValue = document.getElementById('residual-value').value;
     const usefulLifeYears = document.getElementById('useful-life-years').value;
     const usefulLifeMonths = document.getElementById('useful-life-months').value;
+    const description = document.getElementById('description').value;
 
     // 基本驗證
     if (!entryDate) return alert('請選擇入帳日期');
@@ -159,54 +141,69 @@ async function handleFixedAssetFormSubmission() {
     if (!creditAccount) return alert('請選擇對應貸方科目');
     if (!amount || parseFloat(amount) <= 0) return alert('請輸入正確的金額');
     
-    // 土地不需要折舊科目和使用年限
-    if (fixedAssetType !== 'land') {
-        if (!depreciationSubject) return alert('請選擇每期折舊科目');
-        if (!usefulLifeYears && !usefulLifeMonths) return alert('請輸入使用年限');
+    // 土地不需要使用年限，其他固定資產需要
+    if (fixedAssetType !== '土地' && !usefulLifeYears && !usefulLifeMonths) {
+        return alert('請輸入使用年限');
     }
 
+    // 構建符合後端 AssetAmortizationRequest 格式的數據
     const formData = {
-        entryDate,
-        fixedAssetType,
-        fixedAssetName,
-        creditAccount,
-        depreciationSubject: fixedAssetType === 'land' ? null : depreciationSubject, // 土地設為 null
+        entryDate: entryDate,
+        assetName: fixedAssetName,
+        creditAccountCode: creditAccount,
         amount: parseFloat(amount),
-        residualValue: parseFloat(residualValue || '0'),
-        usefulLifeYears: parseInt(usefulLifeYears || '0'),
-        usefulLifeMonths: parseInt(usefulLifeMonths || '0'),
-        description
+        salvageValue: parseFloat(residualValue || '0'),
+        usageYears: parseInt(usefulLifeYears || '0'),
+        month: parseInt(usefulLifeMonths || '0'),
+        description: description || `購入${fixedAssetName}`
     };
 
     console.log('固定資產數據:', formData);
     
     try {
-        // 這裡可以添加API調用
-        // const response = await fetch('http://localhost:8080/api/fixed-assets', {
-        //     method: 'POST',
-        //     headers: { 'Content-Type': 'application/json' },
-        //     body: JSON.stringify(formData)
-        // });
+        const response = await fetch(`${AMORTIZATION_API}/fixed`, {
+            method: 'POST',
+            headers: { 
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            },
+            body: JSON.stringify(formData)
+        });
         
-        alert('固定資產分錄已提交！');
-        document.getElementById('journal-entry-form').reset();
-        setDefaultDates();
-        updateFixedAssetDepreciationSubject('');
+        if (response.ok) {
+            const message = await response.text();
+            alert(message || '固定資產分錄已提交！');
+            document.getElementById('journal-entry-form').reset();
+            setDefaultDates();
+            updateFixedAssetDepreciationSubject('');
+        } else {
+            const errorText = await response.text();
+            console.error('提交錯誤:', errorText);
+            alert(`提交失敗: ${errorText}`);
+        }
     } catch (error) {
-        console.error('提交錯誤:', error);
-        alert('提交失敗，請重試');
+        console.error('網路錯誤:', error);
+        alert('網路連接失敗，請檢查後端服務是否正常運行');
     }
 }
 
-// DOMContentLoaded 事件處理
+// 表單提交事件監聽器
+const journalForm = document.getElementById('journal-entry-form');
+if (journalForm) {
+    journalForm.addEventListener('submit', async function (e) {
+        e.preventDefault();
+        handleFixedAssetFormSubmission();
+    });
+}
+
+// 頁面載入完成後的初始化
 document.addEventListener('DOMContentLoaded', function () {
     // 設置預設日期
     setDefaultDates();
 
-    // 新增的固定資產聯動功能
+    // 固定資產類型選擇變化監聽
     const fixedAssetTypeSelect = document.getElementById('fixed-asset-type');
     if (fixedAssetTypeSelect) {
-        // 監聽固定資產類型選擇變化
         fixedAssetTypeSelect.addEventListener('change', function() {
             const selectedType = this.value;
             updateFixedAssetDepreciationSubject(selectedType);
@@ -216,8 +213,5 @@ document.addEventListener('DOMContentLoaded', function () {
         updateFixedAssetDepreciationSubject(fixedAssetTypeSelect.value);
     }
 
-    // 如果存在賬戶相關功能，載入賬戶數據
-    if (document.querySelector('.account-code') || document.querySelector('.account-name')) {
-        loadAccountsData();
-    }
+    console.log('固定資產表單已初始化');
 });
