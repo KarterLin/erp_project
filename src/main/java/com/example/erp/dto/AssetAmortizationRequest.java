@@ -10,12 +10,13 @@ import java.time.LocalDate;
 public class AssetAmortizationRequest {
 
     private LocalDate entryDate;            // 資產入帳日期
-    private String assetName;               // 資產名稱（顯示用）
-    private String intangibleType;          // 無形資產類型（專利權、商標權、電腦軟體）
+    private String assetAccount;           //無形資產類型（專利權、商標權、電腦軟體）
+    private String assetName;               // 名稱
+    
 
     private String creditAccountCode;       // 貸方帳戶（現金/應付）
 
-    private BigDecimal amount;              // 資產金額（含殘值）
+    private BigDecimal amount;              // 資產金額
     private BigDecimal salvageValue;        // 殘值（可為 0）
 
     private Integer usageYears;             // 使用年限（後端轉換為月）
@@ -23,6 +24,14 @@ public class AssetAmortizationRequest {
     private String description;             // 摘要
 
     // === Getter / Setter ===
+
+    public String getAssetAccount() {
+        return assetAccount;
+    }
+
+    public void setAssetAccount(String assetAccount) {
+        this.assetAccount = assetAccount;
+    }
 
     public LocalDate getEntryDate() {
         return entryDate;
@@ -40,13 +49,6 @@ public class AssetAmortizationRequest {
         this.assetName = assetName;
     }
 
-    public String getIntangibleType() {
-        return intangibleType;
-    }
-
-    public void setIntangibleType(String intangibleType) {
-        this.intangibleType = intangibleType;
-    }
 
     public String getCreditAccountCode() {
         return creditAccountCode;

@@ -30,7 +30,7 @@
                     <div class="row-above-buttons">
                         <div class="form-group">
                             <label for="intangible-type">無形資產類型：</label>
-                            <select id="intangible-type" name="intangibleType" class="form-control">
+                            <select id="intangible-type" name="intangibleType" class="form-control" required>
                                 <option value="">請選擇</option>
                                 <option value="專利權">專利權</option>
                                 <option value="商標權">商標權</option>
@@ -40,14 +40,14 @@
 
                         <div class="form-group">
                             <label for="intangible-name">無形資產名稱：</label>
-                            <input type="text" id="intangible-name" name="intangibleName" class="form-control">
+                            <input type="text" id="intangible-name" name="assetName" class="form-control" required>
                         </div>
                     </div>
 
                     <div class="row-above-buttons">
                         <div class="form-group">
                             <label for="credit-account">對應貸方科目：</label>
-                            <select id="credit-account" name="creditAccount" class="form-control">
+                            <select id="credit-account" name="creditAccountCode" class="form-control" required>
                                 <option value="">請選擇</option>
                                 <option value="1111000">庫存現金</option>
                                 <option value="1113001">銀行存款–合庫南港活存</option>
@@ -72,12 +72,12 @@
                     <div class="row-above-buttons">
                         <div class="form-group">
                             <label for="amount">金額：</label>
-                            <input type="number" id="amount" name="amount" class="form-control" step="0.01">
+                            <input type="number" id="amount" name="amount" class="form-control" step="0.01" min="0" required>
                         </div>
 
                         <div class="form-group">
                             <label for="residual-value">預估剩餘殘值：</label>
-                            <input type="number" id="residual-value" name="residualValue" class="form-control" step="0.01" value="0">
+                            <input type="number" id="residual-value" name="salvageValue" class="form-control" step="0.01" min="0" value="0">
                         </div>
                     </div>
 
@@ -88,21 +88,34 @@
                         </div>
 
                         <div class="form-group">
-                            <label for="useful-life-years">使用年限：</label>
-                            <div style="display: flex; gap: 10px;">
-                                <input type="number" id="useful-life-years" name="usefulLifeYears" min="0"
-                                    placeholder="年">
-                                <input type="number" id="useful-life-months" name="usefulLifeMonths" min="0" max="11"
-                                    placeholder="月">
+                            <label for="useful-life">使用年限：</label>
+                            <div style="display: flex; gap: 10px; align-items: center;">
+                                <input type="number" id="useful-life-years" name="usageYears" min="0" max="100"
+                                    placeholder="年" style="flex: 1;">
+                                <span>年</span>
+                                <input type="number" id="useful-life-months" name="month" min="0" max="11"
+                                    placeholder="月" style="flex: 1;">
+                                <span>月</span>
                             </div>
+                            <small style="color: #666; font-size: 12px;">至少需要輸入年或月其中一項</small>
                         </div>
                     </div>
 
-                    <button type="submit">送出分錄</button>
+                    <div style="margin-top: 20px;">
+                        <button type="submit" style="margin-right: 10px;">送出分錄</button>
+                        <button type="button" id="reset-form">重置表單</button>
+                    </div>
                 </form>
+
+                <!-- 顯示將要送出的 JSON 數據（開發用） -->
+                <div id="json-preview" style="margin-top: 20px; display: none;">
+                    <h3>JSON 數據預覽：</h3>
+                    <pre id="json-content" style="background: #f5f5f5; padding: 10px; border-radius: 5px; overflow-x: auto;"></pre>
+                </div>
             </div>
         </div>
     </div>
+    
     <script src="js/sidebar.js"></script>
     <script src="js/amortization.js"></script>
 

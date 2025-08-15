@@ -1,15 +1,16 @@
 package com.example.erp.service;
 
+import java.math.BigDecimal;
+import java.time.LocalDate;
+
+import org.springframework.stereotype.Service;
+
+import com.example.erp.dto.AssetAmortizationRequest;
 import com.example.erp.entity.Category;
 import com.example.erp.entity.ScheduleStatus;
 import com.example.erp.repository.AccountRepository;
 import com.example.erp.repository.AmortizationScheduleRepository;
 import com.example.erp.util.AssetAccountMapper;
-import com.example.erp.dto.AssetAmortizationRequest;
-import org.springframework.stereotype.Service;
-
-import java.math.BigDecimal;
-import java.time.LocalDate;
 
 /**
  * 固定資產與無形資產共用 Service，區別在 Controller 注入時指定 Category
@@ -65,7 +66,7 @@ public class FixedAssetService extends AbstractAmortizationService<AssetAmortiza
     }
 
     @Override protected String getOriginalDebitAccountCode(AssetAmortizationRequest r) {
-        return AssetAccountMapper.getFAByAssetName(r.getAssetName()).assetCode(); // 借方 = 資產帳戶
+        return AssetAccountMapper.getFAByAssetName(r.getAssetAccount()).assetCode(); // 借方 = 資產帳戶
     }
 
     @Override protected String getOriginalCreditAccountCode(AssetAmortizationRequest r) {
@@ -73,11 +74,11 @@ public class FixedAssetService extends AbstractAmortizationService<AssetAmortiza
     }
 
     @Override protected String getScheduleDebitAccountCode(AssetAmortizationRequest r) {
-        return AssetAccountMapper.getFAByAssetName(r.getAssetName()).expenseCode(); // 每期 借：折舊/攤銷費用
+        return AssetAccountMapper.getFAByAssetName(r.getAssetAccount()).expenseCode(); // 每期 借：折舊/攤銷費用
     }
 
     @Override protected String getScheduleCreditAccountCode(AssetAmortizationRequest r) {
-        return AssetAccountMapper.getFAByAssetName(r.getAssetName()).accumulatedCode(); // 每期 貸：累積折舊/攤銷
+        return AssetAccountMapper.getFAByAssetName(r.getAssetAccount()).accumulatedCode(); // 每期 貸：累積折舊/攤銷
     }
 
     @Override protected Category getCategory(AssetAmortizationRequest r) {

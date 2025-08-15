@@ -54,7 +54,7 @@ public class IntangibleAssetService extends AbstractAmortizationService<AssetAmo
     }
 
     @Override protected String getOriginalDebitAccountCode(AssetAmortizationRequest r) {
-        return AssetAccountMapper.getIAByAssetName(r.getAssetName()).assetCode(); // 借方 = 資產帳戶
+        return AssetAccountMapper.getIAByAssetName(r.getAssetAccount()).assetCode(); // 借方 = 資產帳戶
     }
 
     @Override protected String getOriginalCreditAccountCode(AssetAmortizationRequest r) {
@@ -62,11 +62,11 @@ public class IntangibleAssetService extends AbstractAmortizationService<AssetAmo
     }
 
     @Override protected String getScheduleDebitAccountCode(AssetAmortizationRequest r) {
-        return AssetAccountMapper.getIAByAssetName(r.getAssetName()).expenseCode(); // 每期 借：折舊/攤銷費用
+        return AssetAccountMapper.getIAByAssetName(r.getAssetAccount()).expenseCode(); // 每期 借：折舊/攤銷費用
     }
 
     @Override protected String getScheduleCreditAccountCode(AssetAmortizationRequest r) {
-        return AssetAccountMapper.getIAByAssetName(r.getAssetName()).accumulatedCode(); // 每期 貸：累積折舊/攤銷
+        return AssetAccountMapper.getIAByAssetName(r.getAssetAccount()).accumulatedCode(); // 每期 貸：累積折舊/攤銷
     }
 
     @Override protected Category getCategory(AssetAmortizationRequest r) {

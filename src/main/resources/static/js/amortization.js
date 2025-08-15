@@ -2,7 +2,10 @@
 const API_BASE_URL = 'http://localhost:8080/api';
 const AMORTIZATION_API = `${API_BASE_URL}/amortization`;
 
-// 獲取當前日期
+// 開發模式 - 設為 true 可以顯示 JSON 預覽和詳細日誌
+const DEBUG_MODE = true;
+
+// 獲取當前日期 (YYYY-MM-DD 格式)
 function getCurrentDate() {
     const today = new Date();
     return today.toISOString().split('T')[0];
@@ -11,33 +14,53 @@ function getCurrentDate() {
 // 設置預設日期
 function setDefaultDates() {
     const dateInput = document.getElementById('entry-date');
-    if (!dateInput.value) dateInput.value = getCurrentDate();
+    if (!dateInput.value) {
+        dateInput.value = getCurrentDate();
+    }
 }
 
-// 無形資產類型對應的攤提科目映射 - 改為使用中文，與後端對應
+// 無形資產類型對應的攤提科目映射
 const intangibleAmortizationOptions = {
     '專利權': {
-        assetCode: '1781000',      // 專利權
-        amortizationCode: '1781001', // 累計攤銷-專利權
-        expenseCode: '6103006',    // 攤銷費用-專利權
+        assetCode: '1781000',
+        amortizationCode: '1781001',
+        expenseCode: '6103006',
         disabled: true,
         autoSelect: '1781001'
     },
     '商標權': {
-        assetCode: '1782000',      // 商標權
-        amortizationCode: '1782001', // 累計攤銷-商標權
-        expenseCode: '6103007',    // 攤銷費用-商標權
+        assetCode: '1782000',
+        amortizationCode: '1782001',
+        expenseCode: '6103007',
         disabled: true,
         autoSelect: '1782001'
     },
     '電腦軟體': {
-        assetCode: '1783000',      // 電腦軟體
-        amortizationCode: '1783001', // 累計攤銷-電腦軟體
-        expenseCode: '6103008',    // 攤銷費用-電腦軟體
+        assetCode: '1783000',
+        amortizationCode: '1783001',
+        expenseCode: '6103008',
         disabled: true,
         autoSelect: '1783001'
     }
 };
+
+// 科目代碼對應名稱
+const accountNames = {
+    '1781001': '累計攤銷-專利權',
+    '1782001': '累計攤銷-商標權',
+    '1783001': '累計攤銷-電腦軟體',
+    '1111000': '庫存現金',
+    '1113001': '銀行存款–合庫南港活存',
+    '1113011': '銀行存款–國泰南港活存',
+    '1113021': '銀行存款–富邦南港活存',
+    '1113031': '銀行存款–玉山南港活存',
+    '2151000': '應付費用'
+};
+
+// 根據科目代碼獲取科目名稱
+function getAccountNameByCode(code) {
+    return accountNames[code] || code;
+}
 
 // 更新每期攤提科目選單
 function updateIntangibleAmortizationSubject(selectedType) {
@@ -48,7 +71,7 @@ function updateIntangibleAmortizationSubject(selectedType) {
     amortizationSubjectSelect.innerHTML = '';
     
     if (!selectedType || !intangibleAmortizationOptions[selectedType]) {
-        // 如果沒有選擇或選擇了未定義的選項，恢復預設選項
+        // 恢復預設選項
         amortizationSubjectSelect.innerHTML = `
             <option value="">請選擇</option>
             <option value="1781001">累計攤銷-專利權</option>
@@ -75,7 +98,6 @@ function updateIntangibleAmortizationSubject(selectedType) {
         amortizationSubjectSelect.style.backgroundColor = '#f5f5f5';
         amortizationSubjectSelect.style.color = '#999';
         
-        // 自動選擇對應的值
         if (config.autoSelect) {
             amortizationSubjectSelect.value = config.autoSelect;
         }
@@ -86,103 +108,267 @@ function updateIntangibleAmortizationSubject(selectedType) {
     }
 }
 
-// 根據科目代碼獲取科目名稱
-function getAccountNameByCode(code) {
-    const accountNames = {
-        '1781001': '累計攤銷-專利權',
-        '1782001': '累計攤銷-商標權', 
-        '1783001': '累計攤銷-電腦軟體'
+// 驗證表單數據
+function validateFormData(formData) {
+    const errors = [];
+    
+    if (!formData.entryDate) {
+        errors.push('請選擇入帳日期');
+    }
+    
+    if (!formData.assetAccount) {
+        errors.push('請選擇無形資產類型');
+    }
+    
+    if (!formData.assetName || formData.assetName.trim() === '') {
+        errors.push('請輸入無形資產名稱');
+    }
+    
+    if (!formData.creditAccountCode) {
+        errors.push('請選擇對應貸方科目');
+    }
+    
+    if (!formData.amount || parseFloat(formData.amount) <= 0) {
+        errors.push('請輸入正確的金額（大於0）');
+    }
+    
+    // 驗證使用年限
+    const years = parseInt(formData.usageYears) || 0;
+    const months = parseInt(formData.month) || 0;
+    
+    if (years === 0 && months === 0) {
+        errors.push('請至少輸入使用年限（年或月）');
+    }
+    
+    if (months > 11) {
+        errors.push('使用月份不能超過11個月');
+    }
+    
+    return errors;
+}
+
+// 構建符合後端 AssetAmortizationRequest 格式的 JSON 數據
+function buildRequestData() {
+    // 獲取表單數據
+    const entryDate = document.getElementById('entry-date').value;
+    const intangibleType = document.getElementById('intangible-type').value;
+    const assetName = document.getElementById('intangible-name').value.trim();
+    const creditAccountCode = document.getElementById('credit-account').value;
+    const amount = document.getElementById('amount').value;
+    const salvageValue = document.getElementById('residual-value').value || '0';
+    const usageYears = document.getElementById('useful-life-years').value || '0';
+    const month = document.getElementById('useful-life-months').value || '0';
+    const description = document.getElementById('description').value.trim();
+    
+    // 根據無形資產類型獲取對應的資產科目代碼
+    let assetAccountCode = null;
+    if (intangibleAmortizationOptions[intangibleType]) {
+        assetAccountCode = intangibleAmortizationOptions[intangibleType].assetCode;
+    }
+    
+    // 構建請求數據，完全對應後端 AssetAmortizationRequest 類
+    const requestData = {
+        entryDate: entryDate,                    // LocalDate
+        assetAccount: intangibleType,          // String - 無形資產類型（用於後端判斷科目）
+        assetName: assetName,                    // String - 資產名稱（僅用於顯示）
+        creditAccountCode: creditAccountCode,    // String - 貸方科目
+        amount: parseFloat(amount),              // BigDecimal
+        salvageValue: parseFloat(salvageValue),  // BigDecimal
+        usageYears: parseInt(usageYears),        // Integer
+        month: parseInt(month),                  // Integer  
+        description: description || `購入${intangibleType}-${assetName}`, // String - 更清楚的預設摘要
+        // 額外提供資產科目代碼（如果後端需要）
     };
-    return accountNames[code] || code;
+    
+    return requestData;
+}
+
+// 顯示 JSON 預覽（開發用）
+function showJsonPreview(data) {
+    if (!DEBUG_MODE) return;
+    
+    const previewDiv = document.getElementById('json-preview');
+    const contentPre = document.getElementById('json-content');
+    
+    if (previewDiv && contentPre) {
+        contentPre.textContent = JSON.stringify(data, null, 2);
+        previewDiv.style.display = 'block';
+    }
 }
 
 // 無形資產表單提交處理
 async function handleIntangibleFormSubmission() {
-    const entryDate = document.getElementById('entry-date').value;
-    const intangibleType = document.getElementById('intangible-type').value;
-    const intangibleName = document.getElementById('intangible-name').value;
-    const creditAccount = document.getElementById('credit-account').value;
-    const amount = document.getElementById('amount').value;
-    const residualValue = document.getElementById('residual-value').value;
-    const usefulLifeYears = document.getElementById('useful-life-years').value;
-    const usefulLifeMonths = document.getElementById('useful-life-months').value;
-    const description = document.getElementById('description').value;
-
-    // 基本驗證
-    if (!entryDate) return alert('請選擇入帳日期');
-    if (!intangibleType) return alert('請選擇無形資產類型');
-    if (!intangibleName) return alert('請輸入無形資產名稱');
-    if (!creditAccount) return alert('請選擇對應貸方科目');
-    if (!amount || parseFloat(amount) <= 0) return alert('請輸入正確的金額');
-    if (!usefulLifeYears && !usefulLifeMonths) return alert('請輸入使用年限');
-
-    // 構建符合後端 AssetAmortizationRequest 格式的數據
-    const formData = {
-        entryDate: entryDate,
-        assetName: intangibleName,
-        intangibleType: intangibleType,  // 新增：傳送無形資產類型
-        creditAccountCode: creditAccount,
-        amount: parseFloat(amount),
-        salvageValue: parseFloat(residualValue || '0'),
-        usageYears: parseInt(usefulLifeYears || '0'),
-        month: parseInt(usefulLifeMonths || '0'),
-        description: description || `購入${intangibleName}`
-    };
-
-    console.log('無形資產數據:', formData);
-    
     try {
+        // 構建請求數據
+        const requestData = buildRequestData();
+        
+        // 驗證數據
+        const errors = validateFormData(requestData);
+        if (errors.length > 0) {
+            alert('請修正以下錯誤：\n' + errors.join('\n'));
+            return;
+        }
+        
+        // 顯示 JSON 預覽（開發用）
+        showJsonPreview(requestData);
+        
+        console.log('準備送出的無形資產數據:', requestData);
+        console.log('JSON字串:', JSON.stringify(requestData, null, 2));
+        
+        // 送出請求到後端
         const response = await fetch(`${AMORTIZATION_API}/intangible`, {
             method: 'POST',
             headers: { 
                 'Content-Type': 'application/json',
                 'Accept': 'application/json'
             },
-            body: JSON.stringify(formData)
+            body: JSON.stringify(requestData)
         });
         
+        console.log('HTTP回應狀態:', response.status);
+        
+        // 處理回應
         if (response.ok) {
             const message = await response.text();
-            alert(message || '無形資產分錄已提交！');
-            document.getElementById('journal-entry-form').reset();
-            setDefaultDates();
-            updateIntangibleAmortizationSubject('');
+            console.log('成功回應:', message);
+            alert(message || '無形資產分錄已成功提交！');
+            
+            // 重置表單
+            resetForm();
         } else {
-            const errorText = await response.text();
-            console.error('提交錯誤:', errorText);
-            alert(`提交失敗: ${errorText}`);
+            // 嘗試解析錯誤回應
+            let errorMessage = '';
+            const contentType = response.headers.get('content-type');
+            
+            if (contentType && contentType.includes('application/json')) {
+                try {
+                    const errorJson = await response.json();
+                    console.error('後端JSON錯誤回應:', errorJson);
+                    errorMessage = errorJson.message || errorJson.error || `HTTP ${response.status} 錯誤`;
+                } catch (jsonError) {
+                    console.error('無法解析錯誤JSON:', jsonError);
+                    errorMessage = await response.text();
+                }
+            } else {
+                errorMessage = await response.text();
+            }
+            
+            console.error('後端回應錯誤:', response.status, errorMessage);
+            alert(`提交失敗 (${response.status}): ${errorMessage}\n\n可能的原因：\n1. 後端需要根據 intangibleType 而非 assetName 來判斷科目\n2. 科目設定不完整\n3. 數據格式問題`);
         }
     } catch (error) {
-        console.error('網路錯誤:', error);
-        alert('網路連接失敗，請檢查後端服務是否正常運行');
+        console.error('網路或其他錯誤:', error);
+        alert('提交失敗：網路連接錯誤，請檢查後端服務是否正常運行');
     }
 }
 
-// 表單提交事件監聽器
-const journalForm = document.getElementById('journal-entry-form');
-if (journalForm) {
-    journalForm.addEventListener('submit', async function (e) {
-        e.preventDefault();
-        handleIntangibleFormSubmission();
-    });
+// 重置表單
+function resetForm() {
+    const form = document.getElementById('journal-entry-form');
+    if (form) {
+        form.reset();
+        setDefaultDates();
+        updateIntangibleAmortizationSubject('');
+        
+        // 隱藏 JSON 預覽
+        const previewDiv = document.getElementById('json-preview');
+        if (previewDiv) {
+            previewDiv.style.display = 'none';
+        }
+    }
 }
 
-// 頁面載入完成後的初始化
+// 表單實時驗證
+function setupRealTimeValidation() {
+    const amountInput = document.getElementById('amount');
+    const salvageInput = document.getElementById('residual-value');
+    const yearsInput = document.getElementById('useful-life-years');
+    const monthsInput = document.getElementById('useful-life-months');
+    
+    // 金額驗證
+    if (amountInput) {
+        amountInput.addEventListener('blur', function() {
+            const value = parseFloat(this.value);
+            if (this.value && (isNaN(value) || value <= 0)) {
+                this.style.borderColor = 'red';
+                this.title = '金額必須大於0';
+            } else {
+                this.style.borderColor = '';
+                this.title = '';
+            }
+        });
+    }
+    
+    // 殘值驗證
+    if (salvageInput) {
+        salvageInput.addEventListener('blur', function() {
+            const value = parseFloat(this.value);
+            if (this.value && (isNaN(value) || value < 0)) {
+                this.style.borderColor = 'red';
+                this.title = '殘值不能小於0';
+            } else {
+                this.style.borderColor = '';
+                this.title = '';
+            }
+        });
+    }
+    
+    // 使用月份驗證
+    if (monthsInput) {
+        monthsInput.addEventListener('blur', function() {
+            const value = parseInt(this.value);
+            if (this.value && (isNaN(value) || value < 0 || value > 11)) {
+                this.style.borderColor = 'red';
+                this.title = '月份必須在0-11之間';
+            } else {
+                this.style.borderColor = '';
+                this.title = '';
+            }
+        });
+    }
+}
+
+// DOM 載入完成後的初始化
 document.addEventListener('DOMContentLoaded', function () {
+    console.log('無形資產攤提頁面初始化開始...');
+    
     // 設置預設日期
     setDefaultDates();
-
-    // 無形資產類型選擇變化監聽
+    
+    // 設置表單提交事件監聽器
+    const journalForm = document.getElementById('journal-entry-form');
+    if (journalForm) {
+        journalForm.addEventListener('submit', async function (e) {
+            e.preventDefault();
+            await handleIntangibleFormSubmission();
+        });
+    }
+    
+    // 設置重置按鈕事件監聽器
+    const resetButton = document.getElementById('reset-form');
+    if (resetButton) {
+        resetButton.addEventListener('click', resetForm);
+    }
+    
+    // 設置無形資產類型選擇變化監聽
     const intangibleTypeSelect = document.getElementById('intangible-type');
     if (intangibleTypeSelect) {
         intangibleTypeSelect.addEventListener('change', function() {
             const selectedType = this.value;
             updateIntangibleAmortizationSubject(selectedType);
         });
-
+        
         // 初始化攤提科目選單
         updateIntangibleAmortizationSubject(intangibleTypeSelect.value);
     }
-
-    console.log('無形資產表單已初始化');
+    
+    // 設置實時驗證
+    setupRealTimeValidation();
+    
+    // 開發模式提示
+    if (DEBUG_MODE) {
+        console.log('DEBUG_MODE 已啟用 - 將顯示 JSON 預覽');
+    }
+    
+    console.log('無形資產攤提頁面初始化完成！');
 });
