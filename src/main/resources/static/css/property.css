@@ -1,170 +1,225 @@
 /* 重置默認邊距和填充 */
- * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
 
-        body {
-            margin: 0;
-            font-family: "Lato", sans-serif;
-            background-color: #f5f7fa;
-        }
-               
-        /* 主要內容區域 */
-        .main-content {
-            padding: 20px;
-            min-height: 100vh;
-        }
+body {
+    margin: 0;
+    font-family: "Lato", sans-serif;
+    background-color: #f5f7fa;
+}
+       
+/* 主要內容區域 */
+.main-content {
+    padding: 20px;
+    min-height: 100vh;
+}
 
-        /* 頂部連結 */
-        .header-link {
-            display: inline-block;
-            margin-bottom: 20px;
-            padding: 10px 20px;
-            background-color: #3498db;
-            color: white;
-            text-decoration: none;
-            border-radius: 5px;
-            transition: background-color 0.3s;
-        }
+/* 頂部連結 */
+.header-link {
+    display: inline-block;
+    margin-bottom: 20px;
+    padding: 10px 20px;
+    background-color: #3498db;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+}
 
-        .header-link:hover {
-            background-color: #2980b9;
-        }
+.header-link:hover {
+    background-color: #2980b9;
+}
 
-        /* 表單容器 */
-        .entry-form-container {
-            background-color: white;
-            padding: 30px;
-            border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-            max-width: 100%;
-            overflow-x: auto;
-        }
+/* 表單容器 */
+.entry-form-container {
+    background-color: white;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    max-width: 100%;
+    overflow-x: auto;
+}
 
-        /* 表格樣式 */
-        #entries-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-bottom: 20px;
-            font-size: 14px;
-        }
+/* 表格樣式 - 同時支援原有的 entries-table 和新的 fixed-asset-table, intangible-asset-table */
+#entries-table,
+#fixed-asset-table,
+#intangible-asset-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+    font-size: 14px;
+}
 
-        #entries-table th,
-        #entries-table td {
-            border: 1px solid #ddd;
-            padding: 12px 8px;
-            text-align: center;
-        }
+#entries-table th,
+#entries-table td,
+#fixed-asset-table th,
+#fixed-asset-table td,
+#intangible-asset-table th,
+#intangible-asset-table td {
+    border: 1px solid #ddd;
+    padding: 12px 8px;
+    text-align: center;
+}
 
-        #entries-table th {
-            background-color: #34495e;
-            color: white;
-            font-weight: bold;
-        }
+#entries-table th,
+#fixed-asset-table th,
+#intangible-asset-table th {
+    background-color: #34495e;
+    color: white;
+    font-weight: bold;
+}
 
-        #entries-table tr:nth-child(even) {
-            background-color: #f9f9f9;
-        }
+#entries-table tr:nth-child(even),
+#fixed-asset-table tr:nth-child(even),
+#intangible-asset-table tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
 
-        #entries-table tr:hover {
-            background-color: #f1f1f1;
-        }
+#entries-table tr:hover,
+#fixed-asset-table tr:hover,
+#intangible-asset-table tr:hover {
+    background-color: #f1f1f1;
+}
 
-        /* 輸入欄位樣式 */
-        input[type="text"],
-        input[type="number"],
-        input[type="date"],
-        select {
-            width: 100%;
-            padding: 8px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            font-size: 14px;
-        }
+/* 輸入欄位樣式 */
+input[type="text"],
+input[type="number"],
+input[type="date"],
+select {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 14px;
+}
 
-        input[type="text"]:focus,
-        input[type="number"]:focus,
-        input[type="date"]:focus,
-        select:focus {
-            outline: none;
-            border-color: #3498db;
-            box-shadow: 0 0 5px rgba(52, 152, 219, 0.3);
-        }
+input[type="text"]:focus,
+input[type="number"]:focus,
+input[type="date"]:focus,
+select:focus {
+    outline: none;
+    border-color: #3498db;
+    box-shadow: 0 0 5px rgba(52, 152, 219, 0.3);
+}
 
-        /* 被鎖定的輸入欄位 */
-        input[type="number"]:disabled {
-            background-color: #f5f5f5;
-            color: #999;
-            cursor: not-allowed;
-        }
+/* 被鎖定的輸入欄位 */
+input[type="number"]:disabled {
+    background-color: #f5f5f5;
+    color: #999;
+    cursor: not-allowed;
+}
 
-        /* 按鈕樣式 */
-        button {
-            padding: 10px 20px;
-            margin: 5px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 14px;
-            transition: background-color 0.3s;
-        }
+/* 按鈕樣式 */
+button {
+    padding: 10px 20px;
+    margin: 5px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.3s;
+}
 
-        #add-row {
-            background-color: #27ae60;
-            color: white;
-        }
+#add-row {
+    background-color: #27ae60;
+    color: white;
+}
 
-        #add-row:hover {
-            background-color: #219a52;
-        }
+#add-row:hover {
+    background-color: #219a52;
+}
 
-        button[type="submit"] {
-            background-color: #3498db;
-            color: white;
-        }
+button[type="submit"] {
+    background-color: #3498db;
+    color: white;
+}
 
-        button[type="submit"]:hover {
-            background-color: #2980b9;
-        }
+button[type="submit"]:hover {
+    background-color: #2980b9;
+}
 
-        .remove-row {
-            background-color: #e74c3c;
-            color: white;
-            width: 30px;
-            height: 30px;
-            border-radius: 50%;
-            padding: 0;
-            margin: 0;
-        }
+.remove-row {
+    background-color: #e74c3c;
+    color: white;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    padding: 0;
+    margin: 0;
+}
 
-        .remove-row:hover {
-            background-color: #c0392b;
-        }
+.remove-row:hover {
+    background-color: #c0392b;
+}
 
-        /* 響應式設計 */
-        @media screen and (max-width: 700px) {
-           
+/* 資產區塊間距 */
+#fixed-asset-section,
+#intangible-asset-section {
+    margin-bottom: 30px;
+}
 
-            .main-content {
-                margin-left: 0;
-            }
-        }
+#fixed-asset-section h1,
+#intangible-asset-section h1 {
+    margin-bottom: 15px;
+    color: #34495e;
+    font-size: 24px;
+}
 
-        @media screen and (max-width: 400px) {
-            
+/* 日期選擇器和按鈕容器 */
+.date-wrapper {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+}
 
-            .entry-form-container {
-                padding: 15px;
-            }
+.date-wrapper label {
+    margin-right: 10px;
+    font-weight: bold;
+    color: #34495e;
+}
 
-            #entries-table {
-                font-size: 12px;
-            }
+.date-wrapper input[type="date"] {
+    width: auto;
+    margin-right: 10px;
+}
 
-            #entries-table th,
-            #entries-table td {
-                padding: 8px 4px;
-            }
-        }
+/* 響應式設計 */
+@media screen and (max-width: 700px) {
+    .main-content {
+        margin-left: 0;
+    }
+    
+    .date-wrapper {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    
+    .date-wrapper input[type="date"],
+    .date-wrapper button {
+        margin: 5px 0;
+    }
+}
+
+@media screen and (max-width: 400px) {
+    .entry-form-container {
+        padding: 15px;
+    }
+
+    #entries-table,
+    #fixed-asset-table,
+    #intangible-asset-table {
+        font-size: 12px;
+    }
+
+    #entries-table th,
+    #entries-table td,
+    #fixed-asset-table th,
+    #fixed-asset-table td,
+    #intangible-asset-table th,
+    #intangible-asset-table td {
+        padding: 8px 4px;
+    }
+}

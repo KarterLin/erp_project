@@ -17,7 +17,7 @@ public class AssetAccountMapper {
         // 你可以繼續加更多對應
     );
     private static final Map<String, AssetAccountMapping> FAMap = Map.of(
-            "土地", new AssetAccountMapping("1411000", "", ""),
+            "土地", new AssetAccountMapping("1411000", "None", "None"),
             "房屋及建物", new AssetAccountMapping("1431000", "6103001", "1439000"),
             "資訊設備", new AssetAccountMapping("1441000", "6103002", "1449000"),
             "辦公設備", new AssetAccountMapping("1451000", "6103003", "1459000"),
