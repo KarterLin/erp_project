@@ -168,53 +168,71 @@ function clearTable() {
   });
 }
 
+
+
+
+// 格式化金額（負數用括弧）
+function formatAmount(amount) {
+    if (amount == null) return '0.00';
+    if (amount < 0) {
+        return '(' + Math.abs(amount).toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2}) + ')';
+    } else {
+        return amount.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2});
+    }
+}
+
+// 格式化百分比
+function formatPercent(percent) {
+    if (percent == null) return '0.00%';
+    return percent.toFixed(2) + '%';
+}
+
 // 更新表格內容
 function updateBalanceSheet(data) {
     clearTable();
-    // 計算總額 (用來算百分比)
-    let totalBalance = data.reduce((sum, item) => sum + Number(item.balance), 0);
 
-    data.forEach(item => {
+    if (!Array.isArray(data.details)) return;
+
+    // 計算總額用來算百分比
+    const totalAssets = (data.currentAssetsTotal || 0) + (data.nonCurrentAssetsTotal || 0);
+    const totalLiabilities = (data.currentLiabilitiesTotal || 0) + (data.nonCurrentLiabilitiesTotal || 0);
+    const totalEquity = (data.capitalTotal || 0) + (data.retainedEarningsTotal || 0);
+
+    data.details.forEach(item => {
         const subjectTd = document.querySelector(`td[data-parent-id='${item.parentId}']`);
-        console.log(`查找 parentId = ${item.parentId}`);
-        if (subjectTd) {
-            const tr = subjectTd.parentElement;
+        if (!subjectTd) return;
 
-            // 小計欄
-            const subtotalTd = tr.children[2];
-            subtotalTd.textContent = Number(item.balance).toLocaleString(undefined, {
-                minimumFractionDigits: 2,
-                maximumFractionDigits: 2
-            });
+        const tr = subjectTd.parentElement;
 
-            // 百分比欄
-            const percentTd = tr.children[3];
-            let percent = totalBalance !== 0 ? (item.balance / totalBalance) * 100 : 0;
-            percentTd.textContent = percent.toFixed(2) + '%';
+        // 更新小計欄
+        const subtotalTd = tr.children[2];
+        subtotalTd.textContent = formatAmount(item.balance);
+
+        // 更新百分比欄
+        const percentTd = tr.children[3];
+        let percent = 0;
+
+        if (item.parentId >= 1000 && item.parentId < 2000) {
+            percent = totalAssets ? (item.balance / totalAssets) * 100 : 0;
+        } else if (item.parentId >= 2000 && item.parentId < 3000) {
+            percent = totalLiabilities ? (item.balance / totalLiabilities) * 100 : 0;
+        } else if (item.parentId >= 3000 && item.parentId < 4000) {
+            percent = totalEquity ? (item.balance / totalEquity) * 100 : 0;
         }
+
+        percentTd.textContent = formatPercent(percent);
     });
 
-    // 更新合計列
-    updateTotals();
-}
+    // 更新合計欄位
+    document.getElementById('currentAssetsTotal').textContent = formatAmount(data.currentAssetsTotal);
+    document.getElementById('nonCurrentAssetsTotal').textContent = formatAmount(data.nonCurrentAssetsTotal);
+    document.getElementById('totalAssets').textContent = formatAmount(data.totalAssets);
 
+    document.getElementById('currentLiabilitiesTotal').textContent = formatAmount(data.currentLiabilitiesTotal);
+    document.getElementById('nonCurrentLiabilitiesTotal').textContent = formatAmount(data.nonCurrentLiabilitiesTotal);
+    document.getElementById('totalLiabilities').textContent = formatAmount(data.totalLiabilities);
 
-
-// 這裡寫個簡單更新合計欄的函式範例
-function updateTotals() {
-  // 流動資產合計
-  const flowAssetsTotalTd = [...document.querySelectorAll('td')]
-    .find(td => td.textContent.includes('流動資產合計'))?.nextElementSibling?.nextElementSibling;
-
-  if (flowAssetsTotalTd) {
-    // 簡單範例：加總 group1 裡所有小計欄的值
-    let sum = 0;
-    document.querySelectorAll('tr.sub-row.group1.show').forEach(tr => {
-      const val = tr.children[2].textContent.replace(/,/g, '');
-      sum += Number(val);
-    });
-    flowAssetsTotalTd.textContent = sum.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2});
-  }
-
-  // 其他合計可用類似方法做
+    document.getElementById('capitalTotal').textContent = formatAmount(data.capitalTotal);
+    document.getElementById('retainedEarningsTotal').textContent = formatAmount(data.retainedEarningsTotal);
+    document.getElementById('totalEquity').textContent = formatAmount(data.totalEquity);
 }

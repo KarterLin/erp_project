@@ -10,18 +10,16 @@ public class BalanceSheetDTO {
     public BalanceSheetDTO(Long parentId, String parentName, BigDecimal balance) {
         this.parentId = parentId;
         this.parentName = parentName;
-        this.balance = balance;
+        this.balance = balance != null ? balance : BigDecimal.ZERO;
     }
 
-    public Long getParentId() {
-        return parentId;
-    }
+    // --- getters & setters ---
+    public Long getParentId() { return parentId; }
+    public void setParentId(Long parentId) { this.parentId = parentId; }
 
-    public String getParentName() {
-        return parentName;
-    }
+    public String getParentName() { return parentName; }
+    public void setParentName(String parentName) { this.parentName = parentName; }
 
-    public BigDecimal getBalance() {
-        return balance;
-    }
+    public BigDecimal getBalance() { return balance; }
+    public void setBalance(BigDecimal balance) { this.balance = balance != null ? balance : BigDecimal.ZERO; }
 }
