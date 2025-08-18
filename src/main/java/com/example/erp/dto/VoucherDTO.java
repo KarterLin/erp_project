@@ -16,6 +16,13 @@ public class VoucherDTO {
     private BigDecimal debitAmount;  // 借方金額
     private BigDecimal creditAmount; // 貸方金額
     private String summary;       // 摘要
+    
+    // 新增欄位
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    private LocalDate voucherDate; // 日期
+    private String remarks;        // 備註  
+    private String description;    // 摘要
+    private BigDecimal balance;    // 餘額
 
     public VoucherDTO() {
     }
@@ -33,7 +40,25 @@ public class VoucherDTO {
         this.creditAmount = creditAmount;
         this.summary = summary;
     }
+    
+    // 新增包含日期的建構子
+    public VoucherDTO(String voucherNumber,
+            String accountName,
+            String accountCode,
+            BigDecimal debitAmount,
+            BigDecimal creditAmount,
+            String summary,
+            LocalDate voucherDate) {
+        this.voucherNumber = voucherNumber;
+        this.accountName = accountName;
+        this.accountCode = accountCode;
+        this.debitAmount = debitAmount;
+        this.creditAmount = creditAmount;
+        this.summary = summary;
+        this.voucherDate = voucherDate;
+    }
 
+    // Getters and Setters
     public String getVoucherNumber() {
         return voucherNumber;
     }
@@ -82,15 +107,6 @@ public class VoucherDTO {
         this.summary = summary;
     }
 
-    
-// 新增欄位
-    @JsonFormat(pattern = "yyyy-MM-dd")
-    private LocalDate voucherDate; // 日期
-    private String remarks;        // 備註  
-    private String description;    // 摘要
-    private BigDecimal balance;    // 餘額
-
-// 新增對應的 getter/setter 方法
     public LocalDate getVoucherDate() {
         return voucherDate;
     }
