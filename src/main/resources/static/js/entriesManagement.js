@@ -1,8 +1,201 @@
+// AccountSelector 類別 - 科目選擇器
+class AccountSelector {
+    constructor(inputElement, options = {}) {
+        this.input = inputElement;
+        this.dropdown = inputElement.nextElementSibling;
+        this.accounts = options.accounts || [];
+        this.onSelect = options.onSelect || (() => {});
+        this.searchType = options.searchType || 'both'; // 'code', 'name', 'both'
+        this.placeholder = options.placeholder || '搜尋科目代碼或名稱...';
+        
+        this.selectedAccount = null;
+        this.filteredAccounts = [...this.accounts];
+        this.highlightedIndex = -1;
+        
+        this.init();
+    }
+    
+    init() {
+        this.input.placeholder = this.placeholder;
+        this.bindEvents();
+        this.renderDropdown();
+    }
+    
+    bindEvents() {
+        // 輸入事件
+        this.input.addEventListener('input', (e) => {
+            this.handleInput(e.target.value);
+        });
+        
+        // 聚焦事件
+        this.input.addEventListener('focus', () => {
+            this.showDropdown();
+        });
+        
+        // 失焦事件
+        this.input.addEventListener('blur', (e) => {
+            setTimeout(() => {
+                this.hideDropdown();
+            }, 150);
+        });
+        
+        // 鍵盤事件
+        this.input.addEventListener('keydown', (e) => {
+            this.handleKeydown(e);
+        });
+        
+        // 點擊下拉選單外部
+        document.addEventListener('click', (e) => {
+            if (!this.input.contains(e.target) && !this.dropdown.contains(e.target)) {
+                this.hideDropdown();
+            }
+        });
+    }
+    
+    handleInput(value) {
+        this.filterAccounts(value);
+        this.renderDropdown();
+        this.showDropdown();
+        this.highlightedIndex = -1;
+        
+        // 如果輸入為空，清除選中的科目
+        if (!value.trim()) {
+            this.selectedAccount = null;
+        }
+    }
+    
+    filterAccounts(searchValue) {
+        if (!searchValue.trim()) {
+            this.filteredAccounts = [...this.accounts];
+            return;
+        }
+        
+        const search = searchValue.toLowerCase();
+        this.filteredAccounts = this.accounts.filter(account => {
+            return account.code.toLowerCase().includes(search) || 
+                   account.name.toLowerCase().includes(search);
+        });
+    }
+    
+    renderDropdown() {
+        this.dropdown.innerHTML = '';
+        
+        if (this.filteredAccounts.length === 0) {
+            const noResults = document.createElement('div');
+            noResults.className = 'no-results';
+            noResults.textContent = '查無相符的科目';
+            this.dropdown.appendChild(noResults);
+            return;
+        }
+        
+        this.filteredAccounts.forEach((account, index) => {
+            const option = document.createElement('div');
+            option.className = 'account-option';
+            option.textContent = `${account.code} - ${account.name}`;
+            option.dataset.index = index;
+            option.dataset.code = account.code;
+            option.dataset.name = account.name;
+            
+            option.addEventListener('click', () => {
+                this.selectAccount(account);
+            });
+            
+            this.dropdown.appendChild(option);
+        });
+    }
+    
+    handleKeydown(e) {
+        if (!this.dropdown.classList.contains('show')) return;
+        
+        switch (e.key) {
+            case 'ArrowDown':
+                e.preventDefault();
+                this.highlightNext();
+                break;
+            case 'ArrowUp':
+                e.preventDefault();
+                this.highlightPrevious();
+                break;
+            case 'Enter':
+                e.preventDefault();
+                this.selectHighlighted();
+                break;
+            case 'Escape':
+                this.hideDropdown();
+                break;
+        }
+    }
+    
+    highlightNext() {
+        this.highlightedIndex = Math.min(this.highlightedIndex + 1, this.filteredAccounts.length - 1);
+        this.updateHighlight();
+    }
+    
+    highlightPrevious() {
+        this.highlightedIndex = Math.max(this.highlightedIndex - 1, -1);
+        this.updateHighlight();
+    }
+    
+    updateHighlight() {
+        const options = this.dropdown.querySelectorAll('.account-option');
+        options.forEach((option, index) => {
+            option.classList.toggle('highlighted', index === this.highlightedIndex);
+        });
+        
+        if (this.highlightedIndex >= 0) {
+            const highlightedOption = options[this.highlightedIndex];
+            highlightedOption.scrollIntoView({ block: 'nearest' });
+        }
+    }
+    
+    selectHighlighted() {
+        if (this.highlightedIndex >= 0 && this.highlightedIndex < this.filteredAccounts.length) {
+            this.selectAccount(this.filteredAccounts[this.highlightedIndex]);
+        }
+    }
+    
+    selectAccount(account) {
+        this.selectedAccount = account;
+        this.input.value = `${account.code} - ${account.name}`;
+        this.hideDropdown();
+        this.onSelect(account);
+    }
+    
+    showDropdown() {
+        this.dropdown.classList.add('show');
+    }
+    
+    hideDropdown() {
+        this.dropdown.classList.remove('show');
+        this.highlightedIndex = -1;
+        this.updateHighlight();
+    }
+    
+    getSelectedAccount() {
+        return this.selectedAccount;
+    }
+    
+    clear() {
+        this.input.value = '';
+        this.selectedAccount = null;
+        this.filteredAccounts = [...this.accounts];
+        this.hideDropdown();
+    }
+    
+    updateAccounts(newAccounts) {
+        this.accounts = newAccounts;
+        this.filteredAccounts = [...newAccounts];
+        this.renderDropdown();
+    }
+}
+
 // API 基礎 URL
 const API_BASE_URL = 'http://localhost:8080/api';
 
 // 全局變數存儲當前查詢結果，用於匯出功能
 let currentVoucherData = [];
+let allAccounts = [];
+let subjectSelector = null;
 
 // DOM 載入完成後執行
 document.addEventListener("DOMContentLoaded", function () {
@@ -38,30 +231,40 @@ async function loadAccounts() {
     try {
         const response = await fetch(`${API_BASE_URL}/accounts`);
         if (response.ok) {
-            const accounts = await response.json();
-            populateAccountSelect(accounts);
+            allAccounts = await response.json();
+            initializeSubjectSelector();
         } else {
             console.error('載入科目失敗:', response.status);
         }
     } catch (error) {
         console.error('載入科目錯誤:', error);
+        // 使用備用資料
+        allAccounts = [
+            { code: "1001000", name: '現金' },
+            { code: "1002000", name: '銀行存款' },
+            { code: "2001000", name: '應付帳款' },
+            { code: "3001000", name: '資本' },
+            { code: "4001000", name: '銷貨收入' },
+            { code: "5001000", name: '銷貨成本' }
+        ];
+        initializeSubjectSelector();
     }
 }
 
-// 填入科目下拉選單
-function populateAccountSelect(accounts) {
-    const selectElement = document.getElementById('suject');
-    
-    // 清空現有選項（除了「全部」）
-    selectElement.innerHTML = '<option value="">全部</option>';
-    
-    // 添加科目選項
-    accounts.forEach(account => {
-        const option = document.createElement('option');
-        option.value = account.name;
-        option.textContent = `${account.code} - ${account.name}`;
-        selectElement.appendChild(option);
-    });
+// 初始化科目選擇器
+function initializeSubjectSelector() {
+    const subjectInput = document.getElementById('suject');
+    if (subjectInput) {
+        subjectSelector = new AccountSelector(subjectInput, {
+            accounts: allAccounts,
+            placeholder: '搜尋科目代碼或名稱...',
+            onSelect: (account) => {
+                console.log('選擇的科目:', account);
+                // 選擇科目後自動觸發查詢
+                searchVouchers();
+            }
+        });
+    }
 }
 
 // 綁定事件監聽器
@@ -83,9 +286,6 @@ function bindEventListeners() {
             }
         });
     });
-    
-    // 下拉選單改變時自動查詢
-    document.getElementById('suject').addEventListener('change', searchVouchers);
 }
 
 // 清空表單
@@ -93,7 +293,11 @@ function clearForm() {
     document.getElementById('dateRange').value = '';
     document.getElementById('summonsId').value = '';
     document.getElementById('summary').value = '';
-    document.getElementById('suject').selectedIndex = 0;
+    
+    // 清空科目選擇器
+    if (subjectSelector) {
+        subjectSelector.clear();
+    }
     
     // 清空表格並重新載入所有資料
     searchVouchers();
@@ -124,7 +328,7 @@ async function searchVouchers() {
 
 // 執行搜尋 - 統一使用 POST 方法
 async function performSearch(searchParams) {
-    console.log('搜尋參數:', searchParams); // 除錯用
+    console.log('搜尋參數:', searchParams);
     
     // 驗證日期區間的邏輯正確性
     if (searchParams.startDate && searchParams.endDate) {
@@ -132,7 +336,6 @@ async function performSearch(searchParams) {
         console.log('  開始日期:', searchParams.startDate);
         console.log('  結束日期:', searchParams.endDate);
         
-        // 確保結束日期不早於開始日期
         if (searchParams.startDate > searchParams.endDate) {
             console.warn('警告: 結束日期早於開始日期');
             alert('結束日期不能早於開始日期');
@@ -149,7 +352,7 @@ async function performSearch(searchParams) {
             body: JSON.stringify(searchParams)
         });
         
-        console.log('Response status:', response.status); // 除錯用
+        console.log('Response status:', response.status);
         
         if (!response.ok) {
             const errorText = await response.text();
@@ -158,7 +361,7 @@ async function performSearch(searchParams) {
         }
         
         const result = await response.json();
-        console.log('後端返回資料筆數:', result.length); // 除錯用
+        console.log('後端返回資料筆數:', result.length);
         
         // 前端額外驗證：過濾掉不在日期範圍內的資料
         if (searchParams.startDate && searchParams.endDate && result.length > 0) {
@@ -167,13 +370,11 @@ async function performSearch(searchParams) {
                 
                 let voucherDateStr;
                 if (Array.isArray(voucher.voucherDate)) {
-                    // 處理 [year, month, day] 格式
                     const [year, month, day] = voucher.voucherDate;
                     voucherDateStr = `${year}-${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
                 } else if (typeof voucher.voucherDate === 'string') {
-                    // 處理字符串格式
                     if (voucher.voucherDate.includes('-')) {
-                        voucherDateStr = voucher.voucherDate.split('T')[0]; // 移除時間部分
+                        voucherDateStr = voucher.voucherDate.split('T')[0];
                     } else {
                         voucherDateStr = voucher.voucherDate;
                     }
@@ -181,7 +382,6 @@ async function performSearch(searchParams) {
                     return false;
                 }
                 
-                // 檢查日期是否在範圍內
                 const isInRange = voucherDateStr >= searchParams.startDate && voucherDateStr <= searchParams.endDate;
                 
                 if (!isInRange) {
@@ -208,40 +408,34 @@ function getSearchParameters() {
     const dateRange = document.getElementById('dateRange').value;
     const voucherNumber = document.getElementById('summonsId').value.trim();
     const description = document.getElementById('summary').value.trim();
-    const account = document.getElementById('suject').value;
     
     const params = {};
     
-    // 處理日期區間 - 修復日期區間問題
+    // 處理日期區間
     if (dateRange) {
-        console.log('原始日期範圍:', dateRange); // 調試用
+        console.log('原始日期範圍:', dateRange);
         
-        // Flatpickr range mode 可能使用不同的分隔符
         let startDateStr, endDateStr;
         
         if (dateRange.includes(' 至 ')) {
-            // 處理中文分隔符
             const dates = dateRange.split(' 至 ');
             if (dates.length === 2) {
                 startDateStr = dates[0].trim();
                 endDateStr = dates[1].trim();
             }
         } else if (dateRange.includes(' to ')) {
-            // 處理英文分隔符
             const dates = dateRange.split(' to ');
             if (dates.length === 2) {
                 startDateStr = dates[0].trim();
                 endDateStr = dates[1].trim();
             }
         } else {
-            // 單一日期選擇
             startDateStr = dateRange.trim();
             endDateStr = dateRange.trim();
         }
         
-        console.log('分割後的日期:', { startDateStr, endDateStr }); // 調試用
+        console.log('分割後的日期:', { startDateStr, endDateStr });
         
-        // 格式化日期
         if (startDateStr && endDateStr) {
             const startDate = validateAndFormatDate(startDateStr);
             const endDate = validateAndFormatDate(endDateStr);
@@ -249,25 +443,29 @@ function getSearchParameters() {
             if (startDate && endDate) {
                 params.startDate = startDate;
                 params.endDate = endDate;
-                console.log('最終設定的日期參數:', { startDate, endDate }); // 調試用
+                console.log('最終設定的日期參數:', { startDate, endDate });
             } else {
                 console.warn('日期格式化失敗:', { startDateStr, endDateStr, startDate, endDate });
             }
         }
     }
     
-    // 其他參數 - 只有在有值的時候才加入
+    // 其他參數
     if (voucherNumber) {
         params.voucherNumber = voucherNumber;
     }
     if (description) {
         params.description = description;
     }
-    if (account) {
-        params.account = account;
+    
+    // 處理科目查詢 - 使用選擇器的選中科目
+    if (subjectSelector && subjectSelector.getSelectedAccount()) {
+        const selectedAccount = subjectSelector.getSelectedAccount();
+        console.log('選擇的科目代碼:', selectedAccount.code);
+        params.account = selectedAccount.code;
     }
     
-    console.log('最終搜尋參數:', params); // 調試用
+    console.log('最終搜尋參數:', params);
     return params;
 }
 
@@ -275,32 +473,27 @@ function getSearchParameters() {
 function validateAndFormatDate(dateString) {
     if (!dateString) return null;
     
-    console.log('驗證日期輸入:', dateString); // 調試用
+    console.log('驗證日期輸入:', dateString);
     
     try {
-        // 直接處理 YYYY-MM-DD 格式的字符串
         if (dateString.match(/^\d{4}-\d{2}-\d{2}$/)) {
             console.log('日期格式化:', dateString, '-> 已是正確格式');
             return dateString;
         }
         
-        // 處理 YYYY/MM/DD 格式
         if (dateString.match(/^\d{4}\/\d{2}\/\d{2}$/)) {
             const formatted = dateString.replace(/\//g, '-');
             console.log('日期格式化:', dateString, '->', formatted);
             return formatted;
         }
         
-        // 處理其他可能的日期格式
-        const date = new Date(dateString + 'T00:00:00'); // 強制設定為當地時間00:00:00
+        const date = new Date(dateString + 'T00:00:00');
         
-        // 檢查日期是否有效
         if (isNaN(date.getTime())) {
             console.warn('無效的日期:', dateString);
             return null;
         }
         
-        // 格式化為 YYYY-MM-DD 格式
         const year = date.getFullYear();
         const month = String(date.getMonth() + 1).padStart(2, '0');
         const day = String(date.getDate()).padStart(2, '0');
@@ -320,7 +513,6 @@ function displayVouchers(vouchers) {
     const tbody = document.getElementById('voucherTableBody');
     const noDataMessage = document.getElementById('noDataMessage');
     
-    // 清空表格
     tbody.innerHTML = '';
     
     if (!vouchers || vouchers.length === 0) {
@@ -330,9 +522,7 @@ function displayVouchers(vouchers) {
     
     noDataMessage.style.display = 'none';
     
-    // 直接顯示每筆傳票明細，不分組
     vouchers.forEach(voucher => {
-        // 調試用：輸出傳票資料到控制台
         console.log('Voucher data:', voucher);
         
         const row = tbody.insertRow();
@@ -360,7 +550,7 @@ function formatAmount(amount) {
 
 // 格式化日期
 function formatDate(dateString) {
-    console.log('格式化日期輸入:', dateString, '類型:', typeof dateString); // 調試用
+    console.log('格式化日期輸入:', dateString, '類型:', typeof dateString);
     
     if (!dateString) {
         console.log('日期為空');
@@ -370,16 +560,13 @@ function formatDate(dateString) {
     try {
         let date;
         
-        // 處理不同的日期格式
         if (typeof dateString === 'string') {
-            // 處理 YYYY-MM-DD 格式
             if (dateString.includes('-')) {
                 date = new Date(dateString + 'T00:00:00');
             } else {
                 date = new Date(dateString);
             }
         } else if (Array.isArray(dateString) && dateString.length >= 3) {
-            // 處理 [year, month, day] 格式
             date = new Date(dateString[0], dateString[1] - 1, dateString[2]);
         } else {
             date = new Date(dateString);
@@ -387,7 +574,6 @@ function formatDate(dateString) {
         
         console.log('轉換後的 Date 物件:', date);
         
-        // 檢查日期是否有效
         if (isNaN(date.getTime())) {
             console.log('無效的日期');
             return '';
@@ -424,7 +610,7 @@ function showLoading(isLoading) {
 
 // 顯示錯誤訊息
 function showError(message) {
-    alert(message); // 簡單的錯誤顯示，可以改為更好的UI
+    alert(message);
 }
 
 // 匯出到 Excel
@@ -435,20 +621,15 @@ function exportToExcel() {
     }
     
     try {
-        console.log('準備匯出資料:', currentVoucherData); // 調試用
+        console.log('準備匯出資料:', currentVoucherData);
         
-        // 準備匯出資料
         const exportData = prepareExportData(currentVoucherData);
         
-        console.log('處理後的匯出資料:', exportData); // 調試用
+        console.log('處理後的匯出資料:', exportData);
         
-        // 創建工作簿
         const workbook = XLSX.utils.book_new();
-        
-        // 創建工作表
         const worksheet = XLSX.utils.json_to_sheet(exportData);
         
-        // 設置列寬
         const colWidths = [
             { wch: 12 }, // 日期
             { wch: 15 }, // 傳票編號
@@ -460,16 +641,13 @@ function exportToExcel() {
         ];
         worksheet['!cols'] = colWidths;
         
-        // 添加工作表到工作簿
         XLSX.utils.book_append_sheet(workbook, worksheet, '傳票明細');
         
-        // 產生檔案名稱
         const fileName = `傳票明細_${new Date().toISOString().split('T')[0]}.xlsx`;
         
-        // 下載檔案
         XLSX.writeFile(workbook, fileName);
         
-        console.log('匯出完成:', fileName); // 調試用
+        console.log('匯出完成:', fileName);
         
     } catch (error) {
         console.error('匯出錯誤:', error);

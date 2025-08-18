@@ -44,10 +44,13 @@
                     </div>
                     <div class="field">
                         <label for="suject" class="l1">科目名稱：</label>
-                        <div class="select-wrapper">
-                            <select id="suject" name="category">
-                                <option value="">全部</option>
-                            </select>
+                        <div class="account-selector">
+                            <input type="text" 
+                                   id="suject" 
+                                   class="account-input" 
+                                   placeholder="搜尋科目代碼或名稱..."
+                                   autocomplete="off">
+                            <div class="account-dropdown" id="subject-dropdown"></div>
                         </div>
                     </div>
                 </div>
