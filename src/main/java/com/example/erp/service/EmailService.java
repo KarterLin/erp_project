@@ -9,37 +9,39 @@ import org.springframework.transaction.annotation.Transactional;
 
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
+import lombok.AllArgsConstructor;
 
 @Service
+@AllArgsConstructor
 public class EmailService {
 	
     private final JavaMailSender mailSender;
 	private final UserInfoService userService;
-	private final CompanyInfoService companyService;
-
-    public EmailService(JavaMailSender mailSender, UserInfoService userService, CompanyInfoService companyService) {
-        this.mailSender = mailSender;
-        this.userService = userService;
-        this.companyService = companyService;
-    }
-    
+   
 	@Transactional
-    public void assignCompany(String uEmail) {
-		Long cId = companyService.getCId(uEmail);
+    public void assignCompany(String uEmail, String token) {
 		try {
+			// 從 token 取出最後 8 碼
+	        String cIdPart = token.substring(token.length() - 8);
+	     // 轉成 Long，自動去掉補的 0，例如 "00001234" -> 1234
+	        Long cId = Long.parseLong(cIdPart);
 			userService.updateCompanyId(uEmail, cId);
 		} catch (Exception e) {
-            System.out.println(e);
+            System.out.println("assignCompany 發生錯誤：" + e.getMessage());
         }
     }
-    
-    public String sendVerificationEmail(String to) {
+ 
+    public String sendVerificationEmail(String to, Long cId) {
         try {
             MimeMessage message = mailSender.createMimeMessage();
             MimeMessageHelper helper = new MimeMessageHelper(message, "utf-8");
             
             // token
-    		String token = UUID.randomUUID().toString();
+    		String rawToken = UUID.randomUUID().toString().replace("-", "");
+    		// cId 固定補滿 8 碼
+            String paddedCId = String.format("%08d", cId);
+         // 最後的 token = uuid + "_" + paddedCId
+            String token = rawToken+ paddedCId;
             String subject = "帳號驗證信";
             String verificationUrl = "http://localhost:8080/api/register/confirm/" +token;
             String content = "<p>您好，</p>"
@@ -55,11 +57,11 @@ public class EmailService {
             System.out.println("驗證信寄出成功！");
             
             return token;
-            
         } catch (MessagingException e) {
             e.printStackTrace();
             throw new RuntimeException("寄送驗證信失敗", e);
         }
-    }
+    } 
+   
 	
 }
