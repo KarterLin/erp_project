@@ -7,9 +7,12 @@
     <title>Journal Entry</title>
     <link rel="stylesheet" href="./css/journalEntries.css" />
     <link rel="stylesheet" href="./css/sidebar.css">
+    <link rel="stylesheet" href="./css/topnavbar.css">
 </head>
 
 <body>
+    <!-- Topbar -->
+    <div id="topbar-container"></div>
     <!-- Sidebar -->
     <div id="sidebar-container"></div>
 
@@ -34,14 +37,24 @@
                         </tr>
                         <tr class="journal-row">
                             <td>
-                                <select name="accountCode[]" class="account-code" required>
-                                    <option value="">請選擇科目編號</option>
-                                </select>
+                                <div class="account-selector">
+                                    <input type="text" 
+                                           class="account-input account-code-input" 
+                                           placeholder="搜尋科目編號..."
+                                           data-type="code"
+                                           autocomplete="off">
+                                    <div class="account-dropdown"></div>
+                                </div>
                             </td>
                             <td>
-                                <select name="accountName[]" class="account-name" required>
-                                    <option value="">請選擇科目名稱</option>
-                                </select>
+                                <div class="account-selector">
+                                    <input type="text" 
+                                           class="account-input account-name-input" 
+                                           placeholder="搜尋科目名稱..."
+                                           data-type="name"
+                                           autocomplete="off">
+                                    <div class="account-dropdown"></div>
+                                </div>
                             </td>
                             <td><input type="number" name="debit[]" min="0" step="1" class="debit-amount"></td>
                             <td><input type="number" name="credit[]" min="0" step="1" class="credit-amount"></td>
@@ -63,6 +76,7 @@
         </div>
     </div>
     <script src="js/sidebar.js"></script>
+    <script src="js/topnavbar.js"></script>
     <script src="js/journalEntries.js"></script>
     
 </body>

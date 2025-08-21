@@ -69,10 +69,7 @@
     <version>3.27.2</version> <!-- 用最新穩定版本 -->
 </dependency>
 
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-mail</artifactId>
-		</dependency>
+
 		
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -107,6 +104,7 @@
 			<version>0.11.5</version> <!-- 用 Jackson 處理 JSON -->
 			<scope>runtime</scope>
 		</dependency>
+
 
 	</dependencies>
 

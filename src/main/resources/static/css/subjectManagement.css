@@ -1,0 +1,168 @@
+body {
+     margin: 0;
+     font-family: "Lato", sans-serif;
+     background-color: #f5f7fa;
+}
+
+.title-bar {
+     display: flex;
+     align-items: center;
+     justify-content: space-between;
+     /* 左右兩邊分開 */
+     margin: 20px;
+}
+
+.title {
+     margin: 0;
+     font-size: 40px;
+     font-weight: bold;
+     white-space: nowrap;
+}
+
+.btn-bar {
+     display: flex;
+     margin-left: 15px;
+}
+
+.add-btn {
+     padding: 10px 20px;
+     font-size: 16px;
+     background-color: #a09277;
+     color: white;
+     border: none;
+     border-radius: 6px;
+     cursor: pointer;
+}
+
+.add-btn:hover {
+     background-color: #8a7b63;
+}
+
+@media (max-width: 768px) {
+     .title {
+          font-size: 40px;
+          margin-left: 15px;
+          margin-top: 8px;
+          flex: 1;
+     }
+
+     .menu {
+          margin-left: 15px;
+     }
+
+     .title-bar {
+          flex-direction: column;
+          align-items: flex-start;
+          gap: 10px;
+     }
+
+     .add-btn {
+          font-size: 14px;
+          padding: 8px 16px;
+     }
+
+
+}
+
+
+.accordion-container {
+     margin-top: 40px;
+     width: 50%;
+     font-family: Arial, sans-serif;
+     font-size: 20px;
+     padding: 0 50px 0 20px;
+     box-sizing: border-box;
+}
+
+.accordion-header {
+     background-color: #a09277;
+     color: #fff;
+     padding: 15px;
+     cursor: pointer;
+     border-bottom: 1px solid #ddd;
+     font-weight: bold;
+}
+
+.accordion-content {
+     display: none;
+     padding: 15px;
+     background-color: #f9f9f9;
+     border-bottom: 1px solid #ddd;
+}
+
+.accordion-content li:not(:last-child) {
+     margin-bottom: 10px;
+}
+
+.accordion-item.active .accordion-content {
+     display: block;
+}
+
+/* Modal 背景 */
+.modal {
+
+     display: none;
+     /* 預設隱藏 */
+     position: fixed;
+     z-index: 1000;
+     left: 0;
+     top: 0;
+     width: 100%;
+     height: 100%;
+     overflow: auto;
+     background-color: rgba(180, 168, 168, 0.4);
+     /* 半透明黑色背景 */
+}
+
+/* Modal 內容區塊 */
+.modal-content {
+     background-color: #fff;
+     margin: 10% auto;
+     padding: 20px;
+     border-radius: 8px;
+     width: 50%;
+     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+/* 關閉按鈕 */
+.close {
+     color: #aaa;
+     float: right;
+     font-size: 28px;
+     font-weight: bold;
+     cursor: pointer;
+}
+
+.close:hover {
+     color: black;
+}
+
+.form-row {
+    display: flex;
+    gap: 40px;
+    margin-top: 20px;
+}
+
+.form-group {
+    flex: 1; /* 平均分配 */
+    display: flex;
+    flex-direction: column;
+    font-size: 18px;
+}
+
+.form-group label {
+    margin-bottom: 5px;
+}
+
+.form-group select,
+.form-group input {
+    padding: 8px;
+    font-size: 16px;
+}
+
+.form-btn{
+     display: flex;
+     justify-content: flex-end;
+     margin-top: 20px;
+     gap: 10px;
+}

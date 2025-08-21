@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="./css/incomeStatement.css">
+    <link rel="stylesheet" href="./css/sidebar.css">
+    <link rel="stylesheet" href="./css/topnavbar.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+
+<body>
+    <!-- Topbar -->
+    <div id="topbar-container"></div>
+    <!-- Sidebar -->
+    <div id="sidebar-container"></div>
+
+    <div class="page-wrapper">
+        <div class="d1">
+            <div class="left-group">
+                <h1 class="title">損益表</h1>
+            </div>
+            <div class="d2">
+                <button class="btn1">匯出檔案</button>
+            </div>
+        </div>
+        <div class="d3">
+            <div class="field">
+                <label for="dateRange" class="l1">日期選擇：</label>
+                <input type="text" class="form-control" id="dateRange" placeholder="請選擇日期區間" autocomplete="off">
+            </div>
+        </div>
+        <div class="table-container">
+            <div class="tableFixHead">
+                <table class="table my-table">
+                    <thead>
+                        <tr>
+                            <th rowspan="2">項目名稱</th>
+                            <th rowspan="2">會計科目</th>
+                            <th colspan="2" id="dateRangeHeader">2025-07-01 - 2025-07-31</th>
+                        </tr>
+                        <tr>
+                            <th>小計</th>
+                            <th>百分比</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- 主列 -->
+                        <tr class="main-row group1 expanded">
+                            <td>營業收入</td>
+                            <td></td>
+                            <td class="text-end"></td>
+                            <td class="text-end"></td>
+                        </tr>
+                        <!-- 子列 -->
+                        <tr class="sub-row group1 show">
+                            <td></td>
+                            <td data-parent-id="4000">營業收入</td>
+                            <td class="text-end">0</td>
+                            <td class="text-end">0%</td>
+                        </tr>
+                        <tr class="main-row group2 expanded">
+                            <td>營業成本</td>
+                            <td></td>
+                            <td class="text-end"></td>
+                            <td class="text-end"></td>
+                        </tr>
+                        <tr class="sub-row group2 show">
+                            <td></td>
+                            <td data-parent-id="5000">營業成本</td>
+                            <td class="text-end">0</td>
+                            <td class="text-end">0%</td>
+                        </tr>
+                        <tr class="total-row">
+                            <td>營業毛利</td>
+                            <td></td>
+                            <td class="text-end" id="grossProfit">0</td>
+                            <td class="text-end">0%</td>
+                        </tr>
+                        <tr class="spacer-row">
+                            <td colspan="4">&nbsp;</td>
+                        </tr>
+
+                        <!-- 主列 -->
+                        <tr class="main-row group3 expanded">
+                            <td>營業費用</td>
+                            <td></td>
+                            <td class="text-end"></td>
+                            <td class="text-end"></td>
+                        </tr>
+                        <!-- 子列 -->
+                        <tr class="sub-row group3 show">
+                            <td></td>
+                            <td data-parent-id="6100">推銷費用</td>
+                            <td class="text-end">0</td>
+                            <td class="text-end">0%</td>
+                        </tr>
+                        <tr class="sub-row group3 show">
+                            <td></td>
+                            <td data-parent-id="6200">管理費用</td>
+                            <td class="text-end">0</td>
+                            <td class="text-end">0%</td>
+                        </tr>
+                        <tr class="sub-row group3 show">
+                            <td></td>
+                            <td data-parent-id="6300">研究發展費用</td>
+                            <td class="text-end">0</td>
+                            <td class="text-end">0%</td>
+                        </tr>
+                        <tr class="total-row">
+                            <td>營業費用合計</td>
+                            <td></td>
+                            <td class="text-end">0</td>
+                            <td class="text-end">0%</td>
+                        </tr>
+                        <tr class="total-row">
+                            <td>營業淨利(損)</td>
+                            <td></td>
+                            <td class="text-end" id="operatingIncome">0</td>
+                            <td class="text-end">0%</td>
+                        </tr>
+                        <tr class="spacer-row">
+                            <td colspan="4">&nbsp;</td>
+                        </tr>
+
+                        <!-- 主列 -->
+                        <tr class="main-row group4 expanded">
+                            <td>營業外收入及支出</td>
+                            <td></td>
+                            <td class="text-end"></td>
+                            <td class="text-end"></td>
+                        </tr>
+                        <!-- 子列 -->
+                        <tr class="sub-row group4 show">
+                            <td></td>
+                            <td data-parent-id="7100">其他收入</td>
+                            <td class="text-end">0</td>
+                            <td class="text-end">0%</td>
+                        </tr>
+                        <tr class="sub-row group4 show">
+                            <td></td>
+                            <td data-parent-id="7230">其他利益及損失</td>
+                            <td class="text-end">0</td>
+                            <td class="text-end">0%</td>
+                        </tr>
+                        <tr class="sub-row group4 show">
+                            <td></td>
+                            <td data-parent-id="7050">財務成本</td>
+                            <td class="text-end">0</td>
+                            <td class="text-end">0%</td>
+                        </tr>
+                        <tr class="total-row">
+                            <td>營業外收入及支出合計</td>
+                            <td></td>
+                            <td class="text-end">0</td>
+                            <td class="text-end">0%</td>
+                        </tr>
+                        <tr class="spacer-row">
+                            <td colspan="4">&nbsp;</td>
+                        </tr>
+                        
+                        <tr class="total-row">
+                            <td>稅前淨利(損)</td>
+                            <td></td>
+                            <td class="text-end" id="preTaxIncome">0</td>
+                            <td class="text-end">0%</td>
+                        </tr>
+                        
+                        <tr>
+                            <td></td>
+                            <td data-parent-id="7950">所得稅費用</td>
+                            <td class="text-end">0</td>
+                            <td class="text-end">0%</td>
+                        </tr>
+                        <tr class="final-total-row">
+                            <td>本期淨利(損)</td>
+                            <td></td>
+                            <td class="text-end" id="netIncome">0</td>
+                            <td class="text-end">0%</td>
+                        </tr>
+                        
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+
+    <script src="js/sidebar.js"></script>
+    <script src="js/topnavbar.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/zh.js"></script>
+    <script src="./js/incomeStatement.js"></script>
+</body>
+
+</html>

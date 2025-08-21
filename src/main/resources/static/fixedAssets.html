@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Journal Entry</title>
+    <link rel="stylesheet" href="./css/fixedAssets.css" />
+    <link rel="stylesheet" href="./css/sidebar.css">
+    <link rel="stylesheet" href="./css/topnavbar.css">
+</head>
+
+<body>
+    <!-- Topbar -->
+    <div id="topbar-container"></div>
+    <!-- Sidebar -->
+    <div id="sidebar-container"></div>
+    
+    <!-- 主要內容區域 -->
+    <div class="page-wrapper">
+        <div class="main-content">
+            <h1>新增固定資產</h1><br>
+            <a href="./assets.html" class="header-link">回到資產管理</a>
+
+            <div class="entry-form-container">
+                <form id="journal-entry-form">
+                    <div class="form-group date-wrapper">
+                        <label for="entry-date">入帳日期：</label>
+                        <input type="date" id="entry-date" name="entryDate" required>
+                    </div><br>
+
+                    <div class="row-above-buttons">
+                        <div class="form-group">
+                            <label for="fixed-asset-type">固定資產類型：</label>
+                            <select id="fixed-asset-type" name="assetAccount" class="form-control" required>
+                                <option value="">請選擇</option>
+                                <option value="土地">土地</option>
+                                <option value="房屋及建物">房屋及建物</option>
+                                <option value="資訊設備">資訊設備</option>
+                                <option value="辦公設備">辦公設備</option>
+                                <option value="運輸設備">運輸設備</option>
+                                <option value="什項設備">什項設備</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="fixed-asset-name">固定資產名稱：</label>
+                            <input type="text" id="fixed-asset-name" name="assetName" class="form-control" required>
+                        </div>
+                    </div>
+
+                    <div class="row-above-buttons">
+                        <div class="form-group">
+                            <label for="credit-account">對應貸方科目：</label>
+                            <select id="credit-account" name="creditAccountCode" class="form-control" required>
+                                <option value="">請選擇</option>
+                                <option value="1111000">庫存現金</option>
+                                <option value="1113001">銀行存款–合庫南港活存</option>
+                                <option value="1113011">銀行存款–國泰南港活存</option>
+                                <option value="1113021">銀行存款–富邦南港活存</option>
+                                <option value="1113031">銀行存款–玉山南港活存</option>
+                                <option value="2151000">應付費用</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="depreciation-subject">每期折舊科目：</label>
+                            <select id="depreciation-subject" name="depreciationSubject" class="form-control">
+                                <option value="">請選擇</option>
+                                <option value="1439000">累積折舊-房屋及建物</option>
+                                <option value="1449000">累積折舊-資訊設備</option>
+                                <option value="1459000">累積折舊-辦公設備</option>
+                                <option value="1469000">累積折舊-運輸設備</option>
+                                <option value="1479000">累積折舊-什項設備</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="row-above-buttons">
+                        <div class="form-group">
+                            <label for="amount">金額：</label>
+                            <input type="number" id="amount" name="amount" class="form-control" step="0.01" min="0" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="residual-value">預估剩餘殘值：</label>
+                            <input type="number" id="residual-value" name="salvageValue" class="form-control" step="0.01" min="0" value="0">
+                        </div>
+                    </div>
+
+                    <div class="row-above-buttons">
+                        <div class="form-group">
+                            <label for="description">摘要：</label>
+                            <input type="text" id="description" name="description" class="form-control">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="useful-life">使用年限：</label>
+                            <div style="display: flex; gap: 10px; align-items: center;">
+                                <input type="number" id="useful-life-years" name="usageYears" min="0" max="100"
+                                    placeholder="年" style="flex: 1;">
+                                <span>年</span>
+                                <input type="number" id="useful-life-months" name="month" min="0" max="11"
+                                    placeholder="月" style="flex: 1;">
+                                <span>月</span>
+                            </div>
+                            <small style="color: #666; font-size: 12px;">土地無需輸入年限，其他資產至少需要輸入年或月其中一項</small>
+                        </div>
+                    </div>
+
+                    <div style="margin-top: 20px;">
+                        <button type="submit" style="margin-right: 10px;">送出分錄</button>
+                        <button type="button" id="reset-form">重置表單</button>
+                    </div>
+                </form>
+
+                <!-- 顯示將要送出的 JSON 數據（開發用） -->
+                <!-- <div id="json-preview" style="margin-top: 20px; display: none;">
+                    <h3>JSON 數據預覽：</h3>
+                    <pre id="json-content" style="background: #f5f5f5; padding: 10px; border-radius: 5px; overflow-x: auto;"></pre>
+                </div> -->
+            </div>
+        </div>
+    </div>
+    
+    <script src="js/sidebar.js"></script>
+    <script src="js/topnavbar.js"></script>
+    <script src="js/fixedAssets.js"></script>
+
+</body>
+
+</html>

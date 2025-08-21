@@ -1,20 +1,21 @@
 package com.example.erp.service;
 
-import com.example.erp.dto.JournalDetailDTO;
-import com.example.erp.dto.JournalEntryRequest;
-import com.example.erp.entity.Account;
-import com.example.erp.entity.AmortizationSchedule;
-import com.example.erp.entity.JournalDetail;
-import com.example.erp.entity.Category;
-import com.example.erp.entity.ScheduleStatus;
-import com.example.erp.repository.AccountRepository;
-import com.example.erp.repository.AmortizationScheduleRepository;
-import org.springframework.transaction.annotation.Transactional;
-
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDate;
 import java.util.List;
+
+import org.springframework.transaction.annotation.Transactional;
+
+import com.example.erp.dto.JournalDetailDTO;
+import com.example.erp.dto.JournalEntryRequest;
+import com.example.erp.entity.Account;
+import com.example.erp.entity.AmortizationSchedule;
+import com.example.erp.entity.Category;
+import com.example.erp.entity.JournalDetail;
+import com.example.erp.entity.ScheduleStatus;
+import com.example.erp.repository.AccountRepository;
+import com.example.erp.repository.AmortizationScheduleRepository;
 
 public abstract class AbstractAmortizationService<R> {
 
@@ -63,10 +64,22 @@ public abstract class AbstractAmortizationService<R> {
         BigDecimal base = getAmount(r).subtract(getResidualValue(r));     // 可攤金額
         if (base.signum() < 0) throw new IllegalArgumentException("殘值不可大於金額");
 
-        BigDecimal monthly = base.divide(BigDecimal.valueOf(months), 0, RoundingMode.DOWN); // 無條件捨去
+        BigDecimal monthly;
+        Account debitAccount;
+        Account creditAccount;
+        
+        if ("1411000".equals(getOriginalDebitAccountCode(r))){
+        	monthly = BigDecimal.ZERO;
+            debitAccount = null;
+            creditAccount = null;
+        }else {
+            monthly = base.divide(BigDecimal.valueOf(months), 0, RoundingMode.DOWN); // 無條件捨去
+            debitAccount  = accountRepo.findByCode(getScheduleDebitAccountCode(r)).orElseThrow();
+            creditAccount = accountRepo.findByCode(getScheduleCreditAccountCode(r)).orElseThrow();
+        }
 
-        Account debitAccount  = accountRepo.findByCode(getScheduleDebitAccountCode(r)).orElseThrow();
-        Account creditAccount = accountRepo.findByCode(getScheduleCreditAccountCode(r)).orElseThrow();
+        // Account debitAccount  = accountRepo.findByCode(getScheduleDebitAccountCode(r)).orElseThrow();
+        // Account creditAccount = accountRepo.findByCode(getScheduleCreditAccountCode(r)).orElseThrow();
 
         AmortizationSchedule s = new AmortizationSchedule();
         s.setJournalDetail(sourceDetail);                // 來源明細
@@ -81,7 +94,7 @@ public abstract class AbstractAmortizationService<R> {
         s.setResidualValue(getResidualValue(r));
         s.setDepreciationAccount(debitAccount);          // 每期 借
         s.setAssetAccount(creditAccount);                // 每期 貸（預付或累積）
-        s.setStatus(ScheduleStatus.ACTIVE);
+        s.setStatus(getScheduleStatus(r));
 
         scheduleRepo.save(s);
     }
@@ -99,5 +112,6 @@ public abstract class AbstractAmortizationService<R> {
     protected abstract String getScheduleDebitAccountCode(R r);    // 每期 借
     protected abstract String getScheduleCreditAccountCode(R r);   // 每期 貸
     protected abstract Category getCategory(R r);
+    protected abstract ScheduleStatus getScheduleStatus(R r);
 }
 
