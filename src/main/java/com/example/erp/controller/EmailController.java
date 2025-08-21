@@ -6,9 +6,11 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import tw.yen.spring.service.ConfirmationTokenService;
-import tw.yen.spring.service.EmailService;
-import tw.yen.spring.service.UserInfoService;
+import com.example.erp.service.ConfirmationTokenService;
+import com.example.erp.service.EmailService;
+import com.example.erp.service.UserInfoService;
+
+
 
 @RestController
 @RequestMapping("/api/register")

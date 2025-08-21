@@ -18,7 +18,7 @@ import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
-import tw.yen.spring.security.CustomUserDetails;
+import com.example.erp.security.CustomUserDetails;
 
 @Service
 public class JwtServiceImpl implements JwtService{

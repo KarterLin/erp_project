@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import com.example.erp.entity.CompanyInfo;
 import com.example.erp.entity.ConfirmationTokens;
 import com.example.erp.entity.UserInfo;
+import com.example.erp.payload.request.RegistrationRequest;
 import com.example.erp.security.enums.Role;
 
 import lombok.RequiredArgsConstructor;

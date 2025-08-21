@@ -11,8 +11,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import tw.yen.spring.payload.request.RegistrationRequest;
-import tw.yen.spring.service.RegistrationService;
+import com.example.erp.payload.request.RegistrationRequest;
+import com.example.erp.service.RegistrationService;
+
 
 
 @RestController

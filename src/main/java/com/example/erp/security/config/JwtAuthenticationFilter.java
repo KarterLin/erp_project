@@ -19,8 +19,8 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
-import tw.yen.spring.security.CustomUserDetailsService;
-import tw.yen.spring.security.service.JwtService;
+import com.example.erp.security.CustomUserDetailsService;
+import com.example.erp.security.service.JwtService;
 
 @Component
 @RequiredArgsConstructor
