@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="./css/entriesManagement.css">
+    <link rel="stylesheet" href="./css/sidebar.css">
+    <link rel="stylesheet" href="./css/topnavbar.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+</head>
+
+<body>
+    <!-- Topbar -->
+    <div id="topbar-container"></div>
+    <!-- Sidebar -->
+    <div id="sidebar-container"></div>
+
+    <div class="page-wrapper">
+        <div class="d1">
+            <div class="left-group">
+                <h1 class="title">傳票管理</h1>
+            </div>
+            <div class="d2">
+                <button class="btn1" id="exportBtn">匯出傳票</button>
+                <button class="btn1" onclick="window.location.href='journalEntries.html'">新增傳票</button>
+            </div>
+        </div>
+        
+        <div class="d3">
+            <fieldset class="query-box">
+                <legend class="query-title">查詢條件</legend>
+                <div class="ds">
+                    <div class="field">
+                        <label for="dateRange" class="l1">日期區間：</label>
+                        <input type="text" id="dateRange" placeholder="請選擇日期區間">
+                    </div>
+                    <div class="field">
+                        <label for="summonsId" class="l1">傳票編號：</label>
+                        <input type="text" id="summonsId" placeholder="請輸入編號">
+                    </div>
+                    
+                    <div class="field">
+                        <label for="summary" class="l1">摘要備註：</label>
+                        <input type="text" id="summary" placeholder="請輸入摘要">
+                    </div>
+                    <div class="field">
+                        <label for="suject" class="l1">科目名稱：</label>
+                        <div class="account-selector">
+                            <input type="text" 
+                                   id="suject" 
+                                   class="account-input" 
+                                   placeholder="搜尋科目代碼或名稱..."
+                                   autocomplete="off">
+                            <div class="account-dropdown" id="subject-dropdown"></div>
+                        </div>
+                    </div>
+                </div>
+            </fieldset>
+        </div>
+        
+        <div class="fieldbtngroup">
+            <button class="btn2" id="searchBtn">查詢</button>
+            <button class="btn2" id="clearBtn">清空</button>
+        </div>
+        
+        <div class="table-container">
+            <div class="tableFixHead">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>日期</th>
+                            <th>傳票編號</th>
+                            <th>科目代碼</th>
+                            <th>科目名稱</th>
+                            <th>借方金額</th>
+                            <th>貸方金額</th>
+                            <th>摘要</th>
+                        </tr>
+                    </thead>
+                    <tbody id="voucherTableBody">
+                        <!-- 動態插入數據 -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        
+        <!-- Loading 狀態 -->
+        <div id="loadingMessage" style="display: none; text-align: center; padding: 20px;">
+            載入中...
+        </div>
+        
+        <!-- 無數據提示 -->
+        <div id="noDataMessage" style="display: none; text-align: center; padding: 20px;">
+            查無資料
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/zh.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <script src="./js/entriesManagement.js"></script>
+    <script src="js/sidebar.js"></script>
+    <script src="js/topnavbar.js"></script>
+</body>
+
+</html>

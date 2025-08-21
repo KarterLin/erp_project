@@ -37,6 +37,12 @@ body {
      /* 讓裡面所有元素垂直置中 */
      gap: 5px;
      /* 元素間距 */
+     margin-left: 25px;
+}
+@media (max-width: 768px) {
+     .d3{
+          margin-left: 15px;
+     }
 }
 
 
@@ -189,4 +195,31 @@ td.text-end {
      overflow-y: auto;
      border: 1px solid #ccc;
      /* 可選：加個邊框更明顯 */
+}
+.my-table {
+    border-collapse: separate !important; /* 改用 separate 才能確保上下邊框不合併 */
+    border-spacing: 0; /* 消除空隙 */
+    width: 100%;
+}
+
+.my-table td,
+.my-table th {
+    border: none; /* 先清掉預設邊框 */
+}
+
+.total-row td:nth-child(3),
+.total-row td:nth-child(4){
+    border-top: 1px solid black; /* 小節合計：上單線 */
+}
+
+/* 小計 (第 3 欄) 與 百分比 (第 4 欄) */
+.final-total-row td:nth-child(3),
+.final-total-row td:nth-child(4) {
+    border-bottom: 4px double black !important;
+}
+
+/* 如果還要保留上方的單線，可以加這個 */
+.final-total-row td:nth-child(3),
+.final-total-row td:nth-child(4) {
+    border-top: 1px solid black !important;
 }

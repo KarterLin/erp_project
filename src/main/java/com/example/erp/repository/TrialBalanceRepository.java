@@ -13,14 +13,15 @@ import com.example.erp.dto.TrialBalanceSummaryDTO;
 import com.example.erp.entity.JournalDetail;
 
 @Repository
-public interface TrialBalanceRepository  extends JpaRepository<JournalDetail, Long>{
-	
-	@Query("SELECT new com.example.erp.dto.TrialBalanceDTO(" +
-           "a.code, a.name, a.parentId, SUM(d.debit) , SUM(d.credit)) " +
+public interface TrialBalanceRepository extends JpaRepository<JournalDetail, Long> {
+    
+    @Query("SELECT new com.example.erp.dto.TrialBalanceDTO(" +
+           "a.code, a.name, a.parentId, SUM(d.debit), SUM(d.credit)) " +
            "FROM JournalDetail d " +
            "JOIN d.account a " +
            "JOIN d.journalEntry e " +
-           "WHERE e.entryDate >= :startDate AND e.entryDate < :endDate " +
+           "WHERE d.isActive = true " +
+           "AND e.entryDate >= :startDate AND e.entryDate < :endDate " +
            "GROUP BY a.code, a.name, a.parentId " +
            "ORDER BY a.code")
     List<TrialBalanceDTO> findTB(@Param("startDate") LocalDate startDate,
@@ -30,7 +31,8 @@ public interface TrialBalanceRepository  extends JpaRepository<JournalDetail, Lo
            "SUM(COALESCE(d.debit, 0)), SUM(COALESCE(d.credit, 0))) " +
            "FROM JournalDetail d " +
            "JOIN d.journalEntry e " +
-           "WHERE d.isActive = true AND e.entryDate BETWEEN :start AND :end")
-    TrialBalanceSummaryDTO findSummary(@Param("start") LocalDate start,
-                                       @Param("end") LocalDate end);
+           "WHERE d.isActive = true " +
+           "AND e.entryDate >= :startDate AND e.entryDate < :endDate")
+    TrialBalanceSummaryDTO findSummary(@Param("startDate") LocalDate startDate,
+                                       @Param("endDate") LocalDate endDate);
 }

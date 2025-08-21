@@ -10,20 +10,28 @@ import java.time.LocalDate;
 public class AssetAmortizationRequest {
 
     private LocalDate entryDate;            // 資產入帳日期
-    private String assetName;               // 資產名稱（顯示用）
+    private String assetAccount;           //無形資產類型（專利權、商標權、電腦軟體）
+    private String assetName;               // 名稱
+    
 
     private String creditAccountCode;       // 貸方帳戶（現金/應付）
-    private String assetAccountCode;        // 資產帳戶（借方原始分錄用）
-    private String amortizeExpenseCode;     // 每期借方（折舊/攤銷費用）
-    private String accumulatedAccountCode;  // 每期貸方（累積折舊/攤銷）
 
-    private BigDecimal amount;              // 資產金額（含殘值）
+    private BigDecimal amount;              // 資產金額
     private BigDecimal salvageValue;        // 殘值（可為 0）
 
     private Integer usageYears;             // 使用年限（後端轉換為月）
+    private Integer month;
     private String description;             // 摘要
 
     // === Getter / Setter ===
+
+    public String getAssetAccount() {
+        return assetAccount;
+    }
+
+    public void setAssetAccount(String assetAccount) {
+        this.assetAccount = assetAccount;
+    }
 
     public LocalDate getEntryDate() {
         return entryDate;
@@ -41,36 +49,13 @@ public class AssetAmortizationRequest {
         this.assetName = assetName;
     }
 
+
     public String getCreditAccountCode() {
         return creditAccountCode;
     }
 
     public void setCreditAccountCode(String creditAccountCode) {
         this.creditAccountCode = creditAccountCode;
-    }
-
-    public String getAssetAccountCode() {
-        return assetAccountCode;
-    }
-
-    public void setAssetAccountCode(String assetAccountCode) {
-        this.assetAccountCode = assetAccountCode;
-    }
-
-    public String getAmortizeExpenseCode() {
-        return amortizeExpenseCode;
-    }
-
-    public void setAmortizeExpenseCode(String amortizeExpenseCode) {
-        this.amortizeExpenseCode = amortizeExpenseCode;
-    }
-
-    public String getAccumulatedAccountCode() {
-        return accumulatedAccountCode;
-    }
-
-    public void setAccumulatedAccountCode(String accumulatedAccountCode) {
-        this.accumulatedAccountCode = accumulatedAccountCode;
     }
 
     public BigDecimal getAmount() {
@@ -97,6 +82,14 @@ public class AssetAmortizationRequest {
         this.usageYears = usageYears;
     }
 
+    public Integer getMonth() {
+        return month;
+    }
+
+    public void setMonth(Integer month) {
+        this.month = month;
+    }
+
     public String getDescription() {
         return description;
     }
@@ -104,5 +97,4 @@ public class AssetAmortizationRequest {
     public void setDescription(String description) {
         this.description = description;
     }
-} 
-
+}

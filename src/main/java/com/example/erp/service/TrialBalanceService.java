@@ -13,38 +13,51 @@ import com.example.erp.util.OpenDateValidator;
 
 @Service
 public class TrialBalanceService {
-	private TrialBalanceRepository tbr;
-	private ClosePeriodRepository closingTime;
-	
-	public TrialBalanceService(TrialBalanceRepository tbr, ClosePeriodRepository closingTime) {
-		this.tbr = tbr;
-		this.closingTime = closingTime; 
-	}
-	
-	public TrialBalanceSummaryDTO getTBSum(LocalDate end) {
-        // 取得最後關帳日期，假設 ClosePeriodRepository 有方法取得
+    private TrialBalanceRepository tbr;
+    private ClosePeriodRepository closingTime;
+    
+    public TrialBalanceService(TrialBalanceRepository tbr, ClosePeriodRepository closingTime) {
+        this.tbr = tbr;
+        this.closingTime = closingTime; 
+    }
+    
+    public TrialBalanceSummaryDTO getTBSum(LocalDate end) {
+        // 取得最後關帳日期
         LocalDate lastClosed = closingTime.findLatestClosingTime();
-
+        
+        // 計算起始日期的邏輯
+        LocalDate start;
+        
         if (lastClosed == null) {
-            // 尚無關帳紀錄，預設從當年初開始
-            lastClosed = end.withDayOfYear(1).minusDays(1); // 比如 1/1 的前一天
+            // 尚無關帳紀錄，從系統開始運作日期計算（假設從2025年1月1日開始）
+            start = LocalDate.of(2025, 1, 1);
+        } else {
+            // 有關帳紀錄的情況
+            if (end.isAfter(lastClosed)) {
+                // 查詢日期在關帳日期之後，從關帳日期的下一天開始
+                start = lastClosed.plusDays(1);
+            } else {
+                // 查詢日期在關帳日期之前或等於關帳日期
+                // 這種情況下應該從該年度的1月1日開始
+                start = end.withDayOfYear(1);
+            }
         }
-
-		LocalDate start = end.isBefore(lastClosed.plusDays(1))? 
-				end.withDayOfYear(1):lastClosed.plusDays(1);
-			
-		
-		OpenDateValidator.validateRange(start, end);
-		LocalDate endExclusive = end.plusDays(1);
-		
-		List<TrialBalanceDTO> details = tbr.findTB(start, endExclusive);
-		TrialBalanceSummaryDTO summary = tbr.findSummary(start, endExclusive);
-		
-		return new TrialBalanceSummaryDTO(
-				summary.getTotalDebit(),
-				summary.getTotalCredit(),
-				details);
-	}
-	
-
+        
+        // 確保起始日期不會晚於結束日期
+        if (start.isAfter(end)) {
+            start = end;
+        }
+        
+        OpenDateValidator.validateRange(start, end);
+        LocalDate endExclusive = end.plusDays(1);
+        
+        // 查詢試算表詳細資料（只查詢 is_active = 1 的資料）
+        List<TrialBalanceDTO> details = tbr.findTB(start, endExclusive);
+        TrialBalanceSummaryDTO summary = tbr.findSummary(start, endExclusive);
+        
+        return new TrialBalanceSummaryDTO(
+                summary.getTotalDebit(),
+                summary.getTotalCredit(),
+                details);
+    }
 }

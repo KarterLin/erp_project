@@ -32,7 +32,6 @@ CREATE TABLE journal_detail (
 
   FOREIGN KEY (journal_entry_id) REFERENCES journal_entry(id) ON DELETE CASCADE,
   FOREIGN KEY (account_id) REFERENCES account(id)
-  FOREIGN KEY (amortization_schedule_id) REFERENCES amortization_schedule(id)
 );
 
 CREATE TABLE amortization_schedule (
@@ -59,4 +58,51 @@ CREATE TABLE amortization_schedule (
     FOREIGN KEY (credit_account_id) REFERENCES account(id)
 );
 
-
+CREATE TABLE `company_info` (
+  `id` bigint(20) PRIMARY KEY AUTO_INCREMENT,
+  `company_name` varchar(255) DEFAULT NULL,
+  `taxid` varchar(255) UNIQUE,
+  `responsible_person` varchar(255) DEFAULT NULL,
+  `res_phone` varchar(255) DEFAULT NULL,
+  `res_email` varchar(255) DEFAULT NULL
+) 
+CREATE TABLE `user_info` (
+  `id` bigint(20) PRIMARY KEY AUTO_INCREMENT,
+  `account` varchar(255) NOT NULL,
+  `password` varchar(255) NOT NULL,
+  `email` varchar(255) UNIQUE,
+  `role` varchar(20) NOT NULL,
+  `status` int(11) DEFAULT NULL,
+  `company_id` bigint(20) DEFAULT NULL
+ )
+ALTER TABLE `user_info`
+	ADD KEY `company_id` (`company_id`);
+CREATE TABLE `confirmation_tokens` (
+  `id` bigint(20) PRIMARY KEY AUTO_INCREMENT,
+  `token` varchar(255) DEFAULT NULL,
+  `created_at` datetime NOT NULL,
+  `expires_at` datetime NOT NULL,
+  `confirmed_at` datetime DEFAULT NULL,
+  `user_id` bigint(20) DEFAULT NULL
+)
+ALTER TABLE `confirmation_tokens`
+  ADD CONSTRAINT `FKrj6hpi5gy4mkxydpuoynffd0i` FOREIGN KEY (`user_id`) REFERENCES `user_info` (`id`);
+CREATE TABLE `refresh_token` (
+  `id` bigint(20) PRIMARY KEY AUTO_INCREMENT,
+  `user_id` bigint(20) DEFAULT NULL,
+  `token` varchar(255) NOT UNIQUE,
+  `expiry_date` datetime(6) NOT NULL,
+  `revoked` tinyint(1) NOT NULL
+ALTER TABLE `refresh_token`
+  ADD CONSTRAINT `FKkupq8l7d5fqk56k0r5ynumimt` FOREIGN KEY (`user_id`) REFERENCES `user_info` (`id`);  
+CREATE TABLE `permission` (
+  `id` int(11) PRIMARY KEY AUTO_INCREMENT,
+  `name` varchar(255) UNIQUE,
+  `description` varchar(255) DEFAULT NULL
+)
+CREATE TABLE `role_permission` (
+  `role` varchar(20) PRIMARY KEY,
+  `permission_id` int(11) NOT NULL
+)	
+ALTER TABLE `role_permission`
+  ADD CONSTRAINT `role_permission_ibfk_1` FOREIGN KEY (`permission_id`) REFERENCES `permission` (`id`) ON DELETE CASCADE;
