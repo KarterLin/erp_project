@@ -11,8 +11,8 @@
   left: 0;
   width: var(--sidebar-width);
   height: calc(100vh - var(--topbar-height));        /* ✅ 高度扣掉 topbar */
-  background-color: #f1f1f1;
-  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+  background-color:#1a1a1a;
+  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.4);
   transform: translateX(0);
   transition: transform 0.3s ease;
   z-index: 1000;                                     /* 低於 topbar（建議 topbar 用 1200） */
@@ -24,18 +24,18 @@
 
 .sidebar a {
   display: block;
-  color: black;
+  color: #e5e7eb;
   padding: 16px;
   text-decoration: none;
 }
 
 .sidebar a.active {
-  background-color: #04AA6D;
+  background-color: #f97316;
   color: white;
 }
 
 .sidebar a:hover:not(.active) {
-  background-color: #555;
+  background-color: #333;
   color: white;
 }
 

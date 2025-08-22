@@ -1,0 +1,110 @@
+/* ===== 黑底＋橘色主題 ===== */
+
+/* 全域背景與文字 */
+body {
+  background-color: #121212 !important;
+  color: #e0e0e0 !important;
+  font-family: "Lato", sans-serif;
+}
+
+/* 返回帳務管理按鈕 */
+.header-link {
+  background-color: #ff6b00 !important;
+  color: #ffffff !important;
+  border-radius: 6px;
+}
+.header-link:hover {
+  background-color: #e65c00 !important;
+}
+
+/* 表單容器 */
+.entry-form-container {
+  background-color: #1e1e1e !important;
+  color: #e0e0e0 !important;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.6) !important;
+  border-radius: 8px;
+}
+
+/* 表格 */
+#entries-table {
+  background: #1b1b1b !important;
+  border-collapse: collapse;
+}
+#entries-table th,
+#entries-table td {
+  border: 1px solid #333 !important;
+  color: #e0e0e0 !important;
+}
+#entries-table th {
+  background-color: #ff6b00 !important;
+  color: #fff !important;
+}
+#entries-table tr:nth-child(even) {
+  background-color: #1e1e1e !important;
+}
+#entries-table tr:hover {
+  background-color: #2a2a2a !important;
+}
+
+/* 輸入框 */
+input[type="text"],
+input[type="number"],
+input[type="date"],
+select,
+.account-input {
+  background: #2a2a2a !important;
+  color: #ffffff !important;
+  border: 1px solid #444 !important;
+  border-radius: 4px;
+}
+input:focus, select:focus {
+  border-color: #ff6b00 !important;
+  outline: none;
+  box-shadow: 0 0 5px rgba(255, 107, 0, 0.6) !important;
+}
+input:disabled {
+  background-color: #2a2a2a !important;
+  color: #777 !important;
+}
+
+/* 下拉選單 */
+.account-dropdown {
+  background: #2a2a2a !important;
+  color: #eee !important;
+  border: 1px solid #444 !important;
+}
+.account-option:hover,
+.account-option.highlighted {
+  background-color: #ff6b00 !important;
+  color: #fff !important;
+}
+
+/* 按鈕 */
+button {
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  padding: 10px 18px;
+  font-size: 14px;
+}
+#add-row {
+  background-color: #27ae60 !important;
+  color: #fff !important;
+}
+#add-row:hover {
+  background-color: #1e8f4e !important;
+}
+button[type="submit"] {
+  background-color: #ff6b00 !important;
+  color: #fff !important;
+}
+button[type="submit"]:hover {
+  background-color: #e65c00 !important;
+}
+.remove-row {
+  background-color: #e74c3c !important;
+  color: #fff !important;
+}
+.remove-row:hover {
+  background-color: #c0392b !important;
+}
