@@ -1,10 +1,17 @@
 package com.example.erp.entity;
 
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
+
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import org.springframework.data.annotation.CreatedBy;
+
+@Getter
+@Setter
 @Entity
 @Table(name = "journal_entry")
 public class JournalEntry {
@@ -23,9 +30,19 @@ public class JournalEntry {
     @Column(name = "voucher_number")
     private String voucherNumber;
 
+    @CreatedBy
+    @Column(name = "user_id")
+    private Long userId;   // 自動帶入目前使用者 ID
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "status", nullable = false)
+    private EntryStatus status = EntryStatus.PENDING; // 預設待審核
+    
     @OneToMany(mappedBy = "journalEntry", cascade = CascadeType.ALL)
     private List<JournalDetail> details;
 
+    
+    
 	public Long getId() {
 		return id;
 	}

@@ -4,6 +4,7 @@ import com.example.erp.dto.JournalDetailDTO;
 import com.example.erp.dto.JournalEntryRequest;
 import com.example.erp.entity.Account;
 import com.example.erp.entity.AmortizationSchedule;
+import com.example.erp.entity.EntryStatus;
 import com.example.erp.entity.JournalDetail;
 import com.example.erp.entity.JournalEntry;
 import com.example.erp.repository.AccountRepository;
@@ -53,6 +54,7 @@ public class JournalEntryService {
         // 建立主表
         JournalEntry entry = new JournalEntry();
         entry.setEntryDate(request.getEntryDate());
+        entry.setStatus(EntryStatus.PENDING);
         entry.setCreatedAt(LocalDateTime.now());
         
         OpenDateValidator.validate(request.getEntryDate());
