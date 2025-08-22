@@ -17,7 +17,7 @@ import com.example.erp.service.AddUserService;
 import lombok.RequiredArgsConstructor;
 
 @RestController
-@RequestMapping("/api/user/new")
+@RequestMapping("/api/user/create")
 @RequiredArgsConstructor
 public class AddUserController {
 	private final AddUserService newUserService;

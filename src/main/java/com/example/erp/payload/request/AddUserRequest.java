@@ -27,7 +27,5 @@ public class AddUserRequest {
 	@NotNull
 	@JsonProperty("role")
 	private String role;
-	@NotNull
-	@JsonProperty("cId")
-	private Long cId;
+
 }
