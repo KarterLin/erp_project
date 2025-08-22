@@ -52,7 +52,7 @@ header{ padding:16px 24px; font-size:24px; font-weight:700; }
   aspect-ratio:1/1; border-radius:50%; border:1px solid #ccc; margin:auto;
 }
 .income .circle{ background:#fff; }
-.expense .circle{ background:#9be132; }
+.expense .circle{ background:#f97316; }
 
 /* ==== 摘要卡片：三列平均 ==== */
 .financial-summary{
@@ -85,4 +85,31 @@ table.t1{
 @media (max-width:600px){
   :root{ --kpi-height: 380px; }
   .content{ flex-direction:column; }
+}
+/* ==== Dark Theme：黑底 + 橘色（套用在 <body class="theme-dark">）==== */
+.theme-dark{
+  /* 柔和黑：底色與文字 */
+  --bg:#121212;
+  --text:#e5e7eb;
+  --muted:#9ca3af;
+
+  /* 卡片/邊框/陰影 */
+  --card-bg:#1a1a1a;
+  --card-border:#2a2a2a;
+  --shadow:0 2px 12px rgba(0,0,0,.45);
+
+  /* 主色：橘（Tailwind orange-500） */
+  --accent:#f97316;
+}
+
+/* 細節調整（在深色主題下更舒服） */
+.theme-dark .t1 tbody tr:hover{ background:#1f2937; }    /* 表格 hover */
+.theme-dark .circle{ border-color:#333; }                /* 圓餅外框 */
+.theme-dark .income .circle{ background:#111; }
+.theme-dark .financial-summary .item{ border-bottom-color:#2a2a2a; }
+.theme-dark .financial-summary .item h4{ color:#e5e7eb; }
+
+/* 顏色轉場更平滑（可選） */
+body, .card, table.t1, .t1 th, .t1 td{
+  transition: background-color .25s ease, color .25s ease, border-color .25s ease;
 }

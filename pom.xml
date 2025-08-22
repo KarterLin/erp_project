@@ -116,11 +116,6 @@
             <version>1.18.32</version><!--$NO-MVN-MAN-VER$-->
             <scope>provided</scope>
         </dependency>
-
-
-		
-	
-
 	</dependencies>
 
 	<build>

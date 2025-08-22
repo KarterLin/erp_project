@@ -1,168 +1,128 @@
-body {
-     margin: 0;
-     font-family: "Lato", sans-serif;
-     background-color: #f5f7fa;
+/* ===== Design Tokens ===== */
+:root{
+  --primary:#2e5cf0;
+  --primary-dark:#224bd7;
+  --ink:#2e3a59;
+  --muted:#9aa5d0;
+  --card-border:#e6ecf5;
+  --card-shadow:0 6px 24px rgba(30,48,120,.08);
+  --bg:#f5f7fa;
+  --surface:#fff;
+  --card-max:820px; /* 想更窄或更寬改這裡 */
 }
 
-.title-bar {
-     display: flex;
-     align-items: center;
-     justify-content: space-between;
-     /* 左右兩邊分開 */
-     margin: 20px;
+/* ===== Base ===== */
+body{
+  margin:0;
+  font-family:"Lato",system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,"Noto Sans",sans-serif;
+  background:var(--bg);
+  color:#1f2937;
+}
+.page-wrapper{ padding:20px; }
+
+/* ===== Title + Add Button ===== */
+.title-bar{
+  display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom:12px;
+}
+.title{
+  margin:0; white-space:nowrap; font-size:40px; font-weight:800;
+}
+.btn-bar{ display:flex; gap:10px; }
+.add-btn{
+  padding:10px 16px; font-size:14px; background:var(--primary); color:#fff;
+  border:none; border-radius:10px; cursor:pointer;
+  box-shadow:0 6px 16px rgba(46,92,240,.25);
+  transition:background-color .2s, box-shadow .2s, transform .05s;
+}
+.add-btn:hover{ background:var(--primary-dark); }
+
+/* ===== Subject Card（無搜尋列） ===== */
+.subject-card{
+  border:1px solid var(--card-border);
+  border-radius:12px;
+  background:var(--surface);
+  box-shadow:var(--card-shadow);
+  padding:16px;
+  width:100%;
+  max-width:var(--card-max);
+  margin:0 12px 24px; /* 左對齊、與畫面留白 */
+}
+.card-header{
+  margin:-16px -16px 12px;
+  padding:12px 16px;
+  background:linear-gradient(180deg,var(--primary) 0%,var(--primary-dark) 100%);
+  color:#fff; font-weight:800; font-size:18px; border-radius:12px 12px 0 0;
 }
 
-.title {
-     margin: 0;
-     font-size: 40px;
-     font-weight: bold;
-     white-space: nowrap;
+/* ===== Accordion ===== */
+.accordion-container{ max-width:100%; }
+
+.accordion-item{ border-bottom:1px solid #eef2ff; }
+
+.accordion-header{
+  width:100%;
+  display:flex; align-items:center; gap:12px;
+  background:#fff; color:var(--primary);
+  font-weight:800; font-size:20px;
+  padding:10px 6px;
+  border:none; text-align:left; cursor:pointer;
+
+  /* 取消黑色外框 */
+  outline:none !important; box-shadow:none !important;
 }
-
-.btn-bar {
-     display: flex;
-     margin-left: 15px;
+.accordion-header:focus-visible{
+  outline:none;
+  box-shadow:0 0 0 3px rgba(46,92,240,.15);
+  border-radius:8px;
 }
-
-.add-btn {
-     padding: 10px 20px;
-     font-size: 16px;
-     background-color: #a09277;
-     color: white;
-     border: none;
-     border-radius: 6px;
-     cursor: pointer;
+.accordion-header .name{ flex:0 1 auto; }
+.accordion-header .badge{
+  margin-left:8px; padding:2px 10px; border-radius:999px;
+  background:#eaf0ff; color:var(--primary);
+  font-size:14px; font-weight:800;
 }
-
-.add-btn:hover {
-     background-color: #8a7b63;
+.accordion-header .chevron{
+  margin-left:auto; width:18px; height:18px;
+  background-repeat:no-repeat; background-size:18px 18px;
+  transition:transform .2s ease;
+  background-image:url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="%232e5cf0" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>');
 }
+.accordion-item.active .chevron{ transform:rotate(180deg); }
 
-@media (max-width: 768px) {
-     .title {
-          font-size: 40px;
-          margin-left: 15px;
-          margin-top: 8px;
-          flex: 1;
-     }
-
-     .menu {
-          margin-left: 15px;
-     }
-
-     .title-bar {
-          flex-direction: column;
-          align-items: flex-start;
-          gap: 10px;
-     }
-
-     .add-btn {
-          font-size: 14px;
-          padding: 8px 16px;
-     }
-
-
+.accordion-content{
+  display:none; padding:10px 0 12px 6px; background:#fff;
 }
+.accordion-item.active .accordion-content{ display:block; }
+.accordion-content ul{ list-style:none; margin:0; padding-left:0; }
+.accordion-content li{ padding:6px 0; border-bottom:1px dashed #f1f5ff; }
+.accordion-content li:last-child{ border-bottom:none; }
 
-
-.accordion-container {
-     margin-top: 40px;
-     width: 50%;
-     font-family: Arial, sans-serif;
-     font-size: 20px;
-     padding: 0 50px 0 20px;
-     box-sizing: border-box;
+/* ===== Modal ===== */
+.modal{
+  display:none; position:fixed; inset:0; z-index:1000;
+  background:rgba(0,0,0,.35);
 }
-
-.accordion-header {
-     background-color: #a09277;
-     color: #fff;
-     padding: 15px;
-     cursor: pointer;
-     border-bottom: 1px solid #ddd;
-     font-weight: bold;
+.modal-content{
+  background:#fff; margin:8% auto; padding:20px; border-radius:12px;
+  width:min(720px,86vw); box-shadow:0 12px 30px rgba(0,0,0,.25);
 }
+.close{ float:right; font-size:28px; color:#94a3b8; cursor:pointer; }
+.close:hover{ color:#000; }
 
-.accordion-content {
-     display: none;
-     padding: 15px;
-     background-color: #f9f9f9;
-     border-bottom: 1px solid #ddd;
+.form-row{ display:flex; gap:24px; margin-top:16px; flex-wrap:wrap; }
+.form-group{ flex:1 1 240px; display:flex; flex-direction:column; font-size:16px; }
+.form-group label{ margin-bottom:6px; font-weight:700; color:var(--ink); }
+.form-group input,.form-group select{
+  height:42px; padding:8px 12px;
+  border:1px solid #e2e6ff; border-radius:10px; font-size:15px;
 }
+.form-btn{ display:flex; justify-content:flex-end; gap:10px; margin-top:16px; }
+.form-btn .add-btn{ min-width:96px; }
 
-.accordion-content li:not(:last-child) {
-     margin-bottom: 10px;
-}
-
-.accordion-item.active .accordion-content {
-     display: block;
-}
-
-/* Modal 背景 */
-.modal {
-
-     display: none;
-     /* 預設隱藏 */
-     position: fixed;
-     z-index: 1000;
-     left: 0;
-     top: 0;
-     width: 100%;
-     height: 100%;
-     overflow: auto;
-     background-color: rgba(180, 168, 168, 0.4);
-     /* 半透明黑色背景 */
-}
-
-/* Modal 內容區塊 */
-.modal-content {
-     background-color: #fff;
-     margin: 10% auto;
-     padding: 20px;
-     border-radius: 8px;
-     width: 50%;
-     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-}
-
-/* 關閉按鈕 */
-.close {
-     color: #aaa;
-     float: right;
-     font-size: 28px;
-     font-weight: bold;
-     cursor: pointer;
-}
-
-.close:hover {
-     color: black;
-}
-
-.form-row {
-    display: flex;
-    gap: 40px;
-    margin-top: 20px;
-}
-
-.form-group {
-    flex: 1; /* 平均分配 */
-    display: flex;
-    flex-direction: column;
-    font-size: 18px;
-}
-
-.form-group label {
-    margin-bottom: 5px;
-}
-
-.form-group select,
-.form-group input {
-    padding: 8px;
-    font-size: 16px;
-}
-
-.form-btn{
-     display: flex;
-     justify-content: flex-end;
-     margin-top: 20px;
-     gap: 10px;
+/* ===== RWD ===== */
+@media (max-width:768px){
+  .title{ font-size:28px; }
+  .title-bar{ flex-direction:column; align-items:flex-start; }
+  .subject-card{ max-width:100%; margin:0 12px 20px; }
+  .accordion-header{ font-size:18px; }
 }

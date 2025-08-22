@@ -35,7 +35,7 @@ public class RegistrationRequest {
 	private String password;
 	@NotNull
 	private String role;
-	private Integer status;
+
 	
 	
 	public String getcName() {

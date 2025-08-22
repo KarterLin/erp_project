@@ -3,8 +3,8 @@
   position: fixed;
   top: 0; left: 0; right: 0;
   height: var(--topbar-height, 80px);
-  background: #fff;
-  border-bottom: 1px solid #e5e7eb;
+  background:#1a1a1a;
+  border-bottom: 1px solid #1a1a1a;
   display: grid;
   grid-template-columns: 1fr auto 1fr;  /* 左右各 1fr，品牌在中央 auto 欄 */
   align-items: center;
@@ -43,7 +43,7 @@
   font-size: 32px;                     /* 字體大小 */
   font-weight: 900;                    /* 粗體 */
   font-family: "Noto Sans TC", "Microsoft JhengHei", sans-serif;
-  background: linear-gradient(90deg, #2563eb, #9333ea); /* 藍到紫漸層 */
+  background: linear-gradient(90deg, #ff6600, #ffd700); 
   -webkit-background-clip: text;       /* 讓漸層套用到文字 */
   -webkit-text-fill-color: transparent;/* 隱藏實心字色，只顯示漸層 */
   letter-spacing: 1.5px;               /* 增加字距 */
@@ -56,7 +56,7 @@
 }
 
 /* 右邊的 Blog/通知/訊息維持小字 */
-.topbar-right .nav-link{ font-size: 14px; color:#2563eb; text-decoration:none; }
+.topbar-right .nav-link{ font-size: 14px; color:#ff8c00; text-decoration:none; }
 .topbar-right .user img{ width:32px; height:32px; border-radius:50%; }
 .topbar-right .user span{ font-size:14px; }
 

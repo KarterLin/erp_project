@@ -17,27 +17,27 @@
     <!-- Sidebar -->
     <div id="sidebar-container"></div>
     <div class="page-wrapper">
-        <header>帳務管理</header>
+        <h1 class="page-title">帳務管理</h1>
 
-        <div class="buttons">
-            <div class=".button-item">
-                <span class="button-label">建立交易</span>
-                <a href="./journalEntries.html"><button>
-                    <img src="./img/book.png" alt="coin" width="50px" height="50px">
-                    新增交易分錄
-                </button>
-            </a>
+        <section class="action-group">
+            <h2 class="group-title">建立交易</h2>
+            <div class="actions">
+                <a class="action-card" href="./journalEntries.html">
+                    <img src="./img/book.png" alt="新增交易分錄" />
+                    <span>新增交易分錄</span>
+                </a>
             </div>
-        </div>
-        <div class="buttons">
-            <div class=".button-item">
-                <span class="button-label">帳務管理</span>
-                <button>
-                    <img src="./img/output.png" alt="coin" width="50px" height="50px">
-                    匯出帳務資料
+        </section>
+
+        <section class="action-group">
+            <h2 class="group-title">帳務管理</h2>
+            <div class="actions">
+                <button type="button" class="action-card">
+                    <img src="./img/output.png" alt="匯出帳務資料" />
+                    <span>匯出帳務資料</span>
                 </button>
             </div>
-        </div>
+        </section>
     </div>
     <script src="js/sidebar.js"></script>
     <script src="js/topnavbar.js"></script>

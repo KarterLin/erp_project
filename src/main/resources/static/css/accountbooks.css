@@ -1,78 +1,169 @@
-body {
-     margin: 0;
-     font-family: "Lato", sans-serif;
-     background-color: #f5f7fa;
+:root{
+  --bg:#121212;
+  --panel:#161818;
+  --card:#1f2224;
+  --border:#2a2f33;
+  --text:#e8eaed;
+  --muted:#a8b3be;
+  --accent:#ff8a00;   /* 主橘 */
+  --accent-2:#ffd166; /* 次金（可選） */
+  --radius:14px;
+  --shadow:0 8px 22px rgba(0,0,0,.35);
 }
 
-header {
-     padding: 16px;
-     font-size: 40px;
-     font-weight: bold;
+/* 基礎樣式（不影響 sidebar / topbar） */
+html, body{
+  background: var(--bg);
+  color: var(--text);
+  font-family: "Lato", "Noto Sans TC", "Microsoft JhengHei", sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
-
-
-
-
-@media screen and (max-width: 700px) {
-     
-
-     .content,
-     header {
-          margin-left: 0;
-     }
+/* 舊版 <header> 與新版 .page-title 都支援 */
+header,
+.page-title{
+  margin: 16px 24px 8px;
+  font-size: 40px;
+  font-weight: 800;
+  letter-spacing: .5px;
+  color: var(--text);
+}
+@media (max-width: 600px){
+  header,
+  .page-title{ font-size: 32px; }
 }
 
-
-
-.button-item {
-     width: 80px;
-     font-size: 14px;
-     font-weight: bold;
-     color: #333;
-     text-align: right;
-     padding-right: 10px;
+/* 群組（建立交易 / 帳務管理） */
+.action-group{
+  margin-top: 6px;
+}
+.group-title{
+  margin: 18px 24px 10px;
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--muted);
+  position: relative;
+}
+.group-title::after{
+  content:"";
+  display:block;
+  width: 64px;
+  height: 3px;
+  margin-top: 8px;
+  background: linear-gradient(90deg, var(--accent), transparent);
+  border-radius: 2px;
 }
 
-.buttons {
-     display: flex;
-     align-items: center;
-     /* 垂直置中 label 和按鈕們 */
-     margin-left: 25px;
-     /* 跟 header 一致對齊 */
-     gap: 20px;
-     margin-top: 30px;
+/* 卡片容器：自適應欄數 */
+.actions{
+  display: flex;
+  flex-wrap: wrap;
+  gap: 18px;
+  padding: 0 24px;
 }
 
+/* 卡片：固定大小 */
+.action-card{
+  flex: 0 0 180px;     /* 固定寬度 180px */
+  height: 160px;       /* 固定高度 */
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
 
-.buttons button {
-     display: flex;
-     flex-direction: column;
-     /* ✅ 這裡才是圖片在上、文字在下 */
-     align-items: center;
-     justify-content: center;
-     border: none;
-     border-radius: 5px;
-     cursor: pointer;
-     width: 150px;
-     /* 可調整按鈕大小 */
-     height: 150px;
-     font-size: 16px;
-     gap: 8px;
-     background-color: white;
+  border:1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--card);
+  color: var(--text);
+  text-decoration: none;
+  box-shadow: var(--shadow);
+  transition: transform .15s ease, box-shadow .2s ease, border-color .2s ease, background .2s ease;
+  cursor: pointer;
 }
 
-.buttons button:hover {
-     background-color: #f0f0f0;
-     /* 可選：滑鼠滑過有灰色變化 */
+/* 讓 a / button 都可用 */
+a.action-card{ display:flex; }
+button.action-card{
+  width: 100%;
+  border: none;
+  background: var(--card);
 }
 
-.button-label {
-     margin-bottom: 8px;
-     font-size: 25px;
-     color: #534e4e;
-     font-weight: 500;
-     display: block;
-     height: 30px;
-     line-height: 1.2;
+/* 圖示與文字 */
+.action-card img{
+  width: 56px;
+  height: 56px;
+  object-fit: contain;
+  filter: drop-shadow(0 2px 4px rgba(0,0,0,.35));
+}
+.action-card span{
+  margin-top: 10px;
+  font-size: 16px;
+  font-weight: 800;
+  letter-spacing: .4px;
+}
+
+/* Hover / Focus / Active 狀態 */
+.action-card:hover,
+.action-card:focus{
+  transform: translateY(-3px);
+  border-color: var(--accent);
+  box-shadow: 0 12px 28px rgba(0,0,0,.45);
+  background: linear-gradient(180deg, #222629, var(--card));
+}
+.action-card:active{
+  transform: translateY(-1px);
+}
+
+/* 深色主題下的可視化 focus */
+.action-card:focus-visible{
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+/* 舊樣式（如果你保留 .buttons 結構，不會壞，但建議改用 .action-group/.actions/.action-card）
+   可視需要刪掉這段 */
+.buttons{
+  display: flex;
+  align-items: center;
+  margin-left: 25px;
+  gap: 20px;
+  margin-top: 30px;
+}
+.button-label{
+  margin-bottom: 8px;
+  font-size: 20px;
+  color: var(--muted);
+  font-weight: 600;
+  display: block;
+  height: 30px;
+  line-height: 1.2;
+}
+/* 原本白色 button 改為深色卡片風（如果仍使用 .buttons button） */
+.buttons button{
+  display:flex;
+  flex-direction: column;
+  align-items:center;
+  justify-content:center;
+  width:150px;
+  height:150px;
+  border:1px solid var(--border);
+  border-radius: var(--radius);
+  cursor: pointer;
+  font-size: 16px;
+  gap: 8px;
+  background: var(--card);
+  color: var(--text);
+  box-shadow: var(--shadow);
+  transition: transform .15s ease, box-shadow .2s ease, border-color .2s ease;
+}
+.buttons button:hover{
+  transform: translateY(-3px);
+  border-color: var(--accent);
+}
+
+/* 手機調整 */
+@media (max-width: 600px){
+  .action-card{ height: 150px; }
 }
