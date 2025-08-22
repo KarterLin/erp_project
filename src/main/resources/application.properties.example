@@ -15,3 +15,26 @@ server.port=8080
 
 # Logging
 logging.level.org.springframework=INFO
+logging.level.root=INFO
+logging.level.org.springframework.security=DEBUG
+
+#SMTP(mailtrap)
+spring.mail.host=sandbox.smtp.mailtrap.io
+spring.mail.port=2525
+spring.mail.username=yourusername
+spring.mail.password=yourpassword
+
+#是否使用驗證 & TLS
+spring.mail.properties.mail.smtp.auth=true
+spring.mail.properties.mail.smtp.starttls.enable=true
+spring.mail.properties.mail.smtp.starttls.required=true
+
+#JWT
+application.security.jwt.secret-key=96d90e27891e4c6f8f44359cbe28741c76e8a0fcd16f46f59a1e8db10fcbd82e
+#實務會另設在環境變數以提高安全性
+application.security.jwt.expiration=900000
+application.security.jwt.cookie-name=jwt-cookie
+application.security.jwt.refresh-token.expiration=1296000000
+application.security.jwt.refresh-token.cookie-name=refresh-jwt-cookie
+
+
