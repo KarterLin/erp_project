@@ -1,11 +1,14 @@
 package com.example.erp.exception;
 
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-
 import java.util.HashMap;
 import java.util.Map;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
+
+import com.example.erp.payload.response.ApiResponse;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
@@ -19,5 +22,11 @@ public class GlobalExceptionHandler {
         return ResponseEntity
                 .status(HttpStatus.BAD_REQUEST)
                 .body(body);
+    }
+    
+    @ExceptionHandler(PasswordUpdateException.class)
+    public ResponseEntity<ApiResponse> handlePasswordUpdateException(PasswordUpdateException ex) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .body(ApiResponse.error(ex.getMessage()));
     }
 }
