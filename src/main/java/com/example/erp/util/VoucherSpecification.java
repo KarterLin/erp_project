@@ -29,6 +29,10 @@ public class VoucherSpecification {
 
             // 排除反向分錄 (isSystemGenerated = false)
             predicates.add(cb.isFalse(detailJoin.get("isSystemGenerated")));
+            
+         // 傳票狀態（只抓已審核通過的）
+            predicates.add(cb.equal(root.get("status"), "APPROVED"));
+
 
             // 傳票日期區間（主表欄位）
             if (request.getStartDate() != null && request.getEndDate() != null) {
