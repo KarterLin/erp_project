@@ -12,6 +12,17 @@ public class SecurityWhitelist {
             "/swagger-ui/**",
             "/webjars/**",
 	        "/error",
-	        "/favicon.ico"
+	        "/favicon.ico",
+
+			//  karter 開發用，請視情況移除 (請正式版後刪除)
+	        "/api/**", // 開發用，請視情況移除
+	        // 靜態資源與 HTML 頁面白名單
+	        "/js/**",
+	        "/css/**",
+	        "/images/**",
+	        "/static/**",
+	        "/*.html",
+	        "/journalEntries.html",
+	        "/fixedAssets.html"
 	    };
 }

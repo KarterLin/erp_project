@@ -20,7 +20,7 @@ public interface TrialBalanceRepository extends JpaRepository<JournalDetail, Lon
            "FROM JournalDetail d " +
            "JOIN d.account a " +
            "JOIN d.journalEntry e " +
-           "WHERE d.isActive = true AND (" +
+           "WHERE d.isActive = true AND e.status = 'APPROVED' AND (" +
 	       "  (a.type IN ('revenue', 'expense') AND e.entryDate BETWEEN :start AND :end) " +
 	       "  OR (a.type IN ('asset', 'liability', 'equity') AND a.id <> 65) " +
 	       "  OR (a.id = 65 AND e.entryDate < :end)" +
@@ -35,7 +35,7 @@ public interface TrialBalanceRepository extends JpaRepository<JournalDetail, Lon
            "FROM JournalDetail d " +
            "JOIN d.journalEntry e " +
            "JOIN d.account a " +
-           "WHERE d.isActive = true AND (" +
+           "WHERE d.isActive = true AND e.status = 'APPROVED' AND (" +
            "  (a.type IN ('revenue', 'expense') AND e.entryDate BETWEEN :start AND :end) " +
            "  OR (a.type IN ('asset', 'liability', 'equity') AND a.id <> 65) " +
            "  OR (a.id = 65 AND e.entryDate < :end)" +
