@@ -1,240 +1,207 @@
-/* 重置默認邊距和填充 */ 
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+/* ===== 白底＋橘色品牌（與首頁一致） ===== */
+:root{
+  --bg:#ffffff;
+  --text:#0f172a;
+  --muted:#6b7280;
+
+  --card-bg:#ffffff;
+  --card-border:#e5e7eb;
+  --shadow:0 4px 12px rgba(0,0,0,.08);
+
+  --accent:#f97316;          /* 橘 */
+  --accent-weak:#fff7ed;     /* 淡橘（hover/底線） */
+
+  --radius:12px;
 }
 
-body {
-    margin: 0;
-    font-family: "Lato", sans-serif;
-    background-color: #121212;  /* 黑底 */
-    color: #e0e0e0;            /* 全域字色 */
-}
-       
-/* 主要內容區域 */
-.main-content {
-    padding: 20px;
-    min-height: 100vh;
+/* Reset */
+*{ box-sizing:border-box; margin:0; padding:0; }
+html,body{
+  background:var(--bg);
+  color:var(--text);
+  font-family:"Lato","Noto Sans TC","Microsoft JhengHei",sans-serif;
+  -webkit-font-smoothing:antialiased;
 }
 
-/* 頂部連結 */
-.header-link {
-    display: inline-block;
-    margin-bottom: 20px;
-    padding: 10px 20px;
-    background-color: #ff6b00;   /* 橘色 */
-    color: white;
-    text-decoration: none;
-    border-radius: 5px;
-    transition: background-color 0.3s;
-}
-.header-link:hover {
-    background-color: #e65c00;   /* 深橘 */
+/* 主內容 */
+.page-wrapper{ /* 已有 topbar/側欄的外層，不變 */ }
+.main-content{
+  padding:24px;
+  min-height:100vh;
 }
 
-/* 表單容器 */
-.entry-form-container {
-    background-color: #1e1e1e;   /* 深灰 */
-    padding: 30px;
-    border-radius: 8px;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.6);
-    max-width: 100%;
-    overflow-x: auto;
-    color: #e0e0e0;
+/* 回上一頁連結：改成白底橘框，更清爽 */
+.header-link{
+  display:inline-block;
+  margin: 4px 0 16px;
+  padding: 8px 14px;
+  border:1px solid var(--card-border);
+  border-radius:10px;
+  background:#fff;
+  color:var(--text);
+  text-decoration:none;
+  font-weight:700;
+  transition: background .2s ease, border-color .2s ease, color .2s ease, box-shadow .2s ease;
+}
+.header-link:hover{
+  background:var(--accent-weak);
+  border-color:var(--accent);
+  color:var(--text);
+  box-shadow:0 2px 10px rgba(0,0,0,.06);
 }
 
-/* 表格樣式 */
-#entries-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-bottom: 20px;
-    font-size: 14px;
-    background: #1b1b1b;
-}
-#entries-table th,
-#entries-table td {
-    border: 1px solid #333;
-    padding: 12px 8px;
-    text-align: center;
-    color: #e0e0e0;
-}
-#entries-table th {
-    background-color: #ff6b00;  /* 橘色表頭 */
-    color: white;
-    font-weight: bold;
-}
-#entries-table tr:nth-child(even) {
-    background-color: #1e1e1e;
-}
-#entries-table tr:hover {
-    background-color: #2a2a2a;
+/* 表單卡片容器 */
+.entry-form-container{
+  background:var(--card-bg);
+  color:var(--text);
+  padding:24px;
+  border:1px solid var(--card-border);
+  border-radius:var(--radius);
+  box-shadow:var(--shadow);
+  max-width:100%;
+  overflow-x:auto; /* 保留橫向捲動以防超寬欄位 */
 }
 
-/* 輸入欄位樣式 */
+/* 表格 */
+#entries-table{
+  width:100%;
+  border-collapse:collapse;
+  margin-bottom:16px;
+  font-size:14px;
+  background:var(--card-bg);
+}
+#entries-table th,#entries-table td{
+  border:1px solid var(--card-border);
+  padding:12px 8px;
+  text-align:center;
+}
+#entries-table th{
+  background:var(--accent);
+  color:#fff;
+  font-weight:800;
+  position:sticky; top:0; z-index:1;
+}
+#entries-table tr:hover{ background:var(--accent-weak); }
+
+/* 欄位輸入 */
 input[type="text"],
 input[type="number"],
 input[type="date"],
 select,
-.account-input {
-    width: 100%;
-    padding: 8px;
-    border: 1px solid #444;
-    border-radius: 4px;
-    font-size: 14px;
-    background: #2a2a2a;
-    color: #fff;
+.account-input{
+  width:100%;
+  padding:8px 10px;
+  border:1px solid var(--card-border);
+  border-radius:8px;
+  font-size:14px;
+  background:#fff;
+  color:var(--text);
+  transition:border-color .15s ease, box-shadow .15s ease;
 }
-input:focus, select:focus {
-    outline: none;
-    border-color: #ff6b00;
-    box-shadow: 0 0 5px rgba(255, 107, 0, 0.6);
+input:focus, select:focus{
+  outline:none;
+  border-color:var(--accent);
+  box-shadow:0 0 0 3px rgba(249,115,22,.15);
 }
-input:disabled {
-    background-color: #2a2a2a;
-    color: #777;
-    cursor: not-allowed;
-}
-
-/* 下拉選單 */
-.account-dropdown {
-    background: #2a2a2a;
-    border: 1px solid #444;
-    border-top: none;
-    border-radius: 0 0 4px 4px;
-    max-height: 200px;
-    overflow-y: auto;
-    z-index: 1000;
-    display: none;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.6);
-}
-.account-dropdown.show {
-    display: block;
-}
-.account-option {
-    padding: 10px 12px;
-    cursor: pointer;
-    border-bottom: 1px solid #333;
-    font-size: 13px;
-    text-align: left;
-    color: #eee;
-}
-.account-option:hover,
-.account-option.highlighted {
-    background-color: #ff6b00;
-    color: white;
-}
-.no-results {
-    padding: 10px 12px;
-    color: #aaa;
-    font-style: italic;
-    font-size: 13px;
-    text-align: left;
+input:disabled{
+  background:#f3f4f6;
+  color:#9ca3af;
+  cursor:not-allowed;
 }
 
-/* 按鈕樣式 */
-button {
-    padding: 10px 20px;
-    margin: 5px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 14px;
-    transition: background-color 0.3s;
-}
-#add-row {
-    background-color: #27ae60;
-    color: white;
-}
-#add-row:hover {
-    background-color: #1e8f4e;
-}
-button[type="submit"] {
-    background-color: #ff6b00;
-    color: white;
-}
-button[type="submit"]:hover {
-    background-color: #e65c00;
-}
-.remove-row {
-    background-color: #e74c3c;
-    color: white;
-    width: 30px;
-    height: 30px;
-    border-radius: 50%;
-    padding: 0;
-    margin: 0;
-}
-.remove-row:hover {
-    background-color: #c0392b;
-}
-
-/* 響應式設計 */
-@media screen and (max-width: 700px) {
-    .main-content {
-        margin-left: 0;
-    }
-    .account-dropdown { max-height: 150px; }
-    .account-option { padding: 8px 10px; font-size: 12px; }
-}
-@media screen and (max-width: 400px) {
-    .entry-form-container { padding: 15px; }
-    #entries-table { font-size: 12px; }
-    #entries-table th, #entries-table td { padding: 8px 4px; }
-    .account-input { padding: 6px; font-size: 12px; }
-    .account-option { padding: 6px 8px; font-size: 11px; }
-}
-/* 保證容器是定位基準點 */
-.account-selector{
-  position: relative;   /* 已有就不用重複，但確保存在 */
-}
-
-/* 讓下拉清單脫離文流，浮在輸入框下方，不影響表格高度 */
+/* 下拉選單（科目搜尋） */
+.account-selector{ position:relative; }
 .account-dropdown{
-  position: absolute;   /* 關鍵：脫離文流 */
-  top: calc(100% + 4px);/* 貼齊輸入框下方，可微微留 4px 間距 */
-  left: 0;
-  right: 0;
-  z-index: 2000;        /* 讓它蓋過表格其他元素 */
-  max-height: 220px;
-  overflow-y: auto;
-  /* 其他你原本的深色主題樣式保持不變 */
+  position:absolute;
+  top:calc(100% + 4px);
+  left:0; right:0;
+  background:#fff;
+  border:1px solid var(--card-border);
+  border-radius:8px;
+  box-shadow:0 8px 20px rgba(0,0,0,.12);
+  max-height:260px;
+  overflow-y:auto;
+  z-index:5000;
+  display:none;
 }
-
-/* 顯示/隱藏控制 */
-.account-dropdown.show{
-  display: block;
-}
-/* 讓容器不要把下拉清單裁掉 */
-.entry-form-container{
-  position: relative;      /* 建立層級基準 */
-  overflow: visible;       /* 不裁切溢出內容（覆蓋原本 overflow-x:auto 的影響） */
-}
-
-/* 若還是有被裁切，保險起見把表格所有層的 overflow 都放開 */
-#entries-table,
-#entries-table thead,
-#entries-table tbody,
-#entries-table tr,
-#entries-table td {
-  overflow: visible;
-}
-
-/* 保證定位基準在輸入框容器 */
-.account-selector{
-  position: relative;
-}
-
-/* 下拉清單浮在輸入框下方，不參與表格排版，並且層級最高 */
-.account-dropdown{
-  position: absolute;
-  top: calc(100% + 4px);
-  left: 0;
-  right: 0;
-  z-index: 5000;           /* 提高層級避免被其他元素蓋住 */
-  max-height: 260px;
-  overflow-y: auto;
-}
-
-/* 顯示控制（保留原本的 class 切換） */
 .account-dropdown.show{ display:block; }
+.account-option{
+  padding:10px 12px;
+  cursor:pointer;
+  font-size:13px;
+  text-align:left;
+  color:var(--text);
+  border-bottom:1px solid #f1f5f9;
+}
+.account-option:last-child{ border-bottom:none; }
+.account-option:hover,
+.account-option.highlighted{
+  background:var(--accent-weak);
+}
+.no-results{
+  padding:10px 12px;
+  color:var(--muted);
+  font-style:italic;
+}
+
+/* 讓表格不裁切 dropdown（保險） */
+#entries-table, #entries-table thead, #entries-table tbody,
+#entries-table tr, #entries-table td{ overflow:visible; }
+
+/* 小計列區塊 */
+#balance-check{
+  margin: 8px 0 12px;
+  font-size:14px;
+}
+#balance-check strong{ font-weight:800; }
+#balance-diff{ color:#b91c1c; }
+
+/* 按鈕 */
+button{
+  padding:10px 18px;
+  margin:6px 4px 0 0;
+  border:none;
+  border-radius:10px;
+  cursor:pointer;
+  font-size:14px;
+  font-weight:700;
+  transition: transform .05s ease, box-shadow .2s ease, background .2s ease;
+}
+button:active{ transform: translateY(1px); }
+
+/* 新增列 */
+#add-row{
+  background:#16a34a;
+  color:#fff;
+  box-shadow:0 2px 10px rgba(22,163,74,.25);
+}
+#add-row:hover{ background:#15803d; }
+
+/* 送出 */
+button[type="submit"]{
+  background:var(--accent);
+  color:#fff;
+  box-shadow:0 2px 10px rgba(249,115,22,.25);
+}
+button[type="submit"]:hover{ background:#ea580c; }
+
+/* 刪除單列按鈕（圓形） */
+.remove-row{
+  background:#ef4444;
+  color:#fff;
+  width:30px; height:30px;
+  border-radius:50%;
+  padding:0; margin:0;
+  box-shadow:0 2px 8px rgba(239,68,68,.25);
+}
+.remove-row:hover{ background:#dc2626; }
+
+/* 響應式 */
+@media (max-width:900px){
+  .entry-form-container{ padding:20px; }
+}
+@media (max-width:600px){
+  .entry-form-container{ padding:16px; }
+  #entries-table{ font-size:13px; }
+  #entries-table th,#entries-table td{ padding:10px 6px; }
+}

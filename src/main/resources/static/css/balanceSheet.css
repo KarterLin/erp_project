@@ -1,225 +1,223 @@
+/* ===== Balance Sheet：白底＋橘色品牌（只改色、不動排版） ===== */
+:root{
+  --accent: #f97316;        /* 主橘 */
+  --accent-weak: #fff7ed;   /* 淡橘 */
+  --text: #0f172a;          /* 文字 */
+  --muted: #6b7280;         /* 次文字 */
+  --surface: #ffffff;       /* 白底 */
+  --border: #e5e7eb;        /* 邊線色 */
+}
+
 body {
-     margin: 0;
-     font-family: "Lato", sans-serif;
-     background-color: #f5f7fa;
+  margin: 0;
+  font-family: "Lato", sans-serif;
+  background-color: var(--surface);
+  color: var(--text);
 }
 
+/* 標題只換字色，不改大小/粗細 */
 .title {
-     white-space: nowrap;
-     margin: 0;
-     font-size: 40px;
-     font-weight: bold;
+  white-space: nowrap;
+  margin: 0;
+  font-size: 40px;
+  font-weight: bold;
+  color: var(--text);
 }
 
+/* 版面設定維持不變（僅保留你的原設定） */
 .d1 {
-     display: flex;
-     align-items: center;
-     justify-content: space-between;
-     padding: 10px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 20px;
 }
-
 .left-group {
-     display: flex;
-     align-items: center;
-     gap: 10px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
-
 .d2 {
-     display: flex;
-     gap: 10px;
-     margin-top: 10px;
-     margin-right: 35px;
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+  margin-right: 35px;
 }
-
 .d3 {
-     display: flex;
-     align-items: center;
-     /* 讓裡面所有元素垂直置中 */
-     gap: 5px;
-     /* 元素間距 */
-     margin-left: 25px;
+  display: flex;
+  align-items: center; /* 讓裡面所有元素垂直置中 */
+  gap: 5px;            /* 元素間距 */
+  margin-left: 25px;
 }
 @media (max-width: 768px) {
-     .d3{
-          margin-left: 15px;
-     }
+  .d3{ margin-left: 15px; }
 }
 
-
+/* 按鈕：只改色，不動大小/圓角/邊線粗細 */
 .btn1 {
-     cursor: pointer;
-     background-color: #f0f0f0;
-     border: solid 1px blue;
-     border-radius: 4px;
-     font-size: 25px;
-     height: 50px;
-     width: 150px;
+  cursor: pointer;
+  background-color: #fff;      /* 原 #f0f0f0 → 白 */
+  border-color: var(--border); /* 保留你的 1px 寬度，只改顏色 */
+  border-style: solid;
+  border-width: 1px;
+  border-radius: 4px;
+  font-size: 25px;
+  height: 50px;
+  width: 150px;
+  color: var(--text);
 }
-
 .btn2 {
-
-     line-height: 25px;
-     cursor: pointer;
-     background-color: #f0f0f0;
-     border: solid 2px blue;
-     border-radius: 4px;
-     font-size: 15px;
-     height: 30px;
-     width: 200px;
+  line-height: 25px;
+  cursor: pointer;
+  background-color: #fff;       /* 原 #f0f0f0 → 白 */
+  border-color: var(--border);  /* 保留你的 2px 寬度，只改顏色 */
+  border-style: solid;
+  border-width: 2px;
+  border-radius: 4px;
+  font-size: 15px;
+  height: 30px;
+  width: 200px;
+  color: var(--text);
 }
 
+/* 開關：藍 → 橘（不改大小） */
 .switch-container {
-     display: inline-flex;
-     align-items: center;
-     cursor: pointer;
-     border-radius: 30px;
-     background-color: #ccc;
-     padding: 5px 10px 5px 5px;
-     transition: background-color 0.3s ease;
-     color: white;
-     font-weight: bold;
-     user-select: none;
-     margin-right: 20px;
-     margin-left: 15px;
+  display: inline-flex;
+  align-items: center;
+  cursor: pointer;
+  border-radius: 30px;
+  background-color: #f3f4f6; /* 原 #ccc → 淺灰 */
+  padding: 5px 10px 5px 5px;
+  transition: background-color 0.3s ease;
+  color: var(--text);  /* 原 white → 主文字色 */
+  font-weight: bold;
+  user-select: none;
+  margin-right: 20px;
+  margin-left: 15px;
 }
-
 .switch-container.active {
-     background-color: #0d6efd;
-     /* Bootstrap 藍 */
+  background-color: var(--accent); /* 原 #0d6efd → 橘 */
+  color: #fff;
 }
-
 .switch-circle {
-     width: 20px;
-     height: 20px;
-     border-radius: 50%;
-     background-color: white;
-     margin-right: 25px;
-     transition: transform 0.3s ease;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background-color: #fff;
+  margin-right: 25px;
+  transition: transform 0.3s ease;
 }
+.switch-container.active .switch-circle { transform: translateX(20px); }
 
-.switch-container.active .switch-circle {
-     transform: translateX(20px);
-}
-
+/* 表格：只改色 */
 .my-table thead th {
-     background-color: #04AA6D;
-     color: white;
-     text-align: center;
-     vertical-align: middle;
-     font-size: 20px;
-     width: 300px;
-     max-width: 300px;
-     white-space: nowrap;
+  background-color: var(--accent); /* 原綠色 → 橘 */
+  color: #fff;
+  text-align: center;
+  vertical-align: middle;
+  font-size: 20px;
+  width: 300px;
+  max-width: 300px;
+  white-space: nowrap;
 }
 
+/* Bootstrap 可能帶來 .bg-success / .text-white；強制橘底 */
+.my-table thead tr:first-child th{
+  background-color: var(--accent) !important;
+  color: #fff !important;
+}
+
+/* 第二列欄名（你的 HTML 放在 thead 裡的 <td>），只改字色與底色 */
+.my-table thead tr:nth-child(2) td{
+  background-color: #fff;
+  color: var(--text);
+}
+
+/* 表身：全白底、主文字色（不動你的排版） */
 .my-table tbody td {
-     background-color: #f7f7f7;
-     /* vertical-align: middle; */
+  background-color: #fff; /* 原 #f7f7f7 → 白 */
+  color: var(--text);
+  /* vertical-align: middle; */ /* 仍保留你的註解狀態 */
 }
 
+.text-end { text-align: right; }
 
-
-.text-end {
-     text-align: right;
-}
-
+/* 外層容器：僅保留原設定 */
 .table-container {
-     margin-top: 25px;
-     margin-right: 60px;
-     display: flex;
-     justify-content: space-between;
-     gap: 20px;
-     /* 兩張表之間的間距 */
-     padding: 20px;
+  margin-top: 25px;
+  margin-right: 60px;
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;  /* 兩張表之間的間距 */
+  padding: 20px;
 }
 
+/* 可展開主列：藍系 → 橘系 */
 tr.main-row {
-     cursor: pointer;
-     background-color: #e8f0fe;
-     font-weight: bold;
-     user-select: none;
-     transition: background-color 0.3s;
+  cursor: pointer;
+  background-color: var(--accent-weak); /* 原 #e8f0fe → 淡橘 */
+  font-weight: bold;
+  user-select: none;
+  transition: background-color 0.3s;
 }
+tr.main-row:hover { background-color: #ffe9d8; }
 
-tr.main-row:hover {
-     background-color: #c6dafc;
-}
-
-/* 子列隱藏 */
 tr.sub-row {
-     background-color: #fafafa;
-     display: none;
+  background-color: #fafafa;
+  display: none;
 }
+tr.sub-row.show { display: table-row; }
 
-tr.sub-row.show {
-     display: table-row;
-}
-
-/* 子列縮排 */
+/* 子列縮排：只改字色 */
 tr.sub-row td:nth-child(1) {
-     padding-left: 30px;
-     font-weight: normal;
-     color: #555;
+  padding-left: 30px;
+  font-weight: normal;
+  color: var(--muted); /* 原 #555 → 次文字色 */
 }
 
-/* 右側數字靠右 */
-td.text-end {
-     text-align: right;
-}
+/* 右側數字靠右（規則不變） */
+td.text-end { text-align: right; }
 
-
-
+/* 展開箭頭：只改顏色 */
 .arrow {
-     display: inline-block;
-     line-height: 0;
-     /* 這裡設定行高為 0 */
-     vertical-align: middle;
-     width: 0;
-     height: 0;
-     margin-right: 6px;
-     border-top: 6px solid transparent;
-     border-bottom: 6px solid transparent;
-     border-left: 10px solid black;
-     transition: transform 0.3s ease;
-     transform: rotate(0deg);
+  display: inline-block;
+  line-height: 0;       /* 這裡設定行高為 0 */
+  vertical-align: middle;
+  width: 0;
+  height: 0;
+  margin-right: 6px;
+  border-top: 6px solid transparent;
+  border-bottom: 6px solid transparent;
+  border-left: 10px solid var(--text); /* 原 black → 主文字色 */
+  transition: transform 0.3s ease;
+  transform: rotate(0deg);
 }
+.main-row.expanded .arrow { transform: rotate(90deg); }
 
-.main-row.expanded .arrow {
-     transform: rotate(90deg);
-}
-
+/* 固定表頭外框：只換邊線顏色 */
 .tableFixHead {
-     width: 50%;
-     max-height: 800px;
-     /* 你可以依需要調整這個高度 */
-     overflow-y: auto;
-     border: 1px solid #ccc;
-     /* 可選：加個邊框更明顯 */
+  width: 50%;
+  max-height: 800px;   /* 你可以依需要調整這個高度 */
+  overflow-y: auto;
+  border: 1px solid var(--border); /* 原 #ccc → 邊線色 */
+  /* 可選：加個邊框更明顯（保留你的註解） */
 }
+
+/* 表格基礎：維持你的設定 */
 .my-table {
-    border-collapse: separate !important; /* 改用 separate 才能確保上下邊框不合併 */
-    border-spacing: 0; /* 消除空隙 */
-    width: 100%;
+  border-collapse: separate !important; /* 改用 separate 才能確保上下邊框不合併 */
+  border-spacing: 0; /* 消除空隙 */
+  width: 100%;
 }
-
 .my-table td,
-.my-table th {
-    border: none; /* 先清掉預設邊框 */
-}
+.my-table th { border: none; }
 
+/* 小節/總計線條：保持黑色規則 */
 .total-row td:nth-child(3),
 .total-row td:nth-child(4){
-    border-top: 1px solid black; /* 小節合計：上單線 */
+  border-top: 1px solid black; /* 小節合計：上單線 */
 }
-
-/* 小計 (第 3 欄) 與 百分比 (第 4 欄) */
 .final-total-row td:nth-child(3),
 .final-total-row td:nth-child(4) {
-    border-bottom: 4px double black !important;
-}
-
-/* 如果還要保留上方的單線，可以加這個 */
-.final-total-row td:nth-child(3),
-.final-total-row td:nth-child(4) {
-    border-top: 1px solid black !important;
+  border-bottom: 4px double black !important;
+  border-top: 1px solid black !important; /* 保留你的上單線 */
 }

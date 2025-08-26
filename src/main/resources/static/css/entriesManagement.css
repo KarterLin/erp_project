@@ -1,327 +1,167 @@
-/* 🌐 全域設定 */
-body {
-    margin: 0;
-    font-family: "Lato", sans-serif;
-    background-color: #f5f7fa;
+/* ===== 白底＋橘色品牌（只改色、不動排版） ===== */
+:root{
+  --accent:#f97316;        /* 主橘 */
+  --accent-weak:#fff7ed;   /* 淡橘（hover/底） */
+  --text:#0f172a;          /* 主文字 */
+  --muted:#6b7280;         /* 次文字 */
+  --surface:#ffffff;       /* 白底 */
+  --border:#e5e7eb;        /* 邊線 */
 }
 
-/* 📌 Title 標題樣式 */
-.title {
-    white-space: nowrap;
-    margin: 0;
-    font-size: 40px;
-    font-weight: bold;
+/* 🌐 全域設定（只改底色與字色） */
+body{
+  margin:0;
+  font-family:"Lato",sans-serif;
+  background-color:var(--surface); /* 原 #f5f7fa → 白 */
+  color:var(--text);
 }
 
-@media (max-width: 768px) {
-    .title {
-        font-size: 28px;
-        margin-left: 0;
-        margin-top: 8px;
-        flex: 1;
-    }
+/* 📌 Title 標題樣式（只加字色） */
+.title{
+  white-space:nowrap;
+  margin:0;
+  font-size:40px;
+  font-weight:bold;
+  color:var(--text);
+}
+@media (max-width:768px){
+  .title{ font-size:28px; margin-left:0; margin-top:8px; flex:1; }
 }
 
-/* 🔠 標題區與查詢欄 */
-.d1 {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 10px 20px;
+/* 🔠 標題區與查詢欄（保留原排版） */
+.d1{
+  display:flex; align-items:center; justify-content:space-between;
+  padding:10px 20px;
+}
+.left-group{ display:flex; align-items:center; gap:10px; }
+@media (max-width:768px){
+  .d1{ flex-direction:column; align-items:flex-start; margin-left:0; flex-wrap:wrap; }
 }
 
-.left-group {
-    display: flex;
-    align-items: center;
-    gap: 10px;
+/* 🔍 查詢區塊（保留原排版） */
+.d2{
+  display:flex; gap:10px; margin-top:10px; margin-right:35px;
+}
+@media (max-width:768px){
+  .d2{ margin-left:0; margin-right:0; }
+  .d3{ margin-left:10px; }
 }
 
-@media (max-width: 768px) {
-    .d1 {
-        flex-direction: column;
-        align-items: flex-start;
-        margin-left: 0;
-        flex-wrap: wrap;
-    }
+.ds{
+  display:flex; flex-wrap:wrap; gap:16px; padding:10px 0;
+}
+.ds label{
+  font-size:20px; font-weight:bold; margin-bottom:4px; color:var(--text);
 }
 
-/* 🔍 查詢區塊 */
-.d2 {
-    display: flex;
-    gap: 10px;
-    margin-top: 10px;
-    margin-right: 35px;
-}
-
-@media (max-width: 768px) {
-    .d2 {
-        margin-left: 0;
-        margin-right: 0;
-    }
-    .d3{
-        margin-left: 10px;
-    }
-}
-
-.ds {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 16px;
-    padding: 10px 0;
-}
-
-.ds label {
-    font-size: 20px;
-    font-weight: bold;
-    margin-bottom: 4px;
-}
-
+/* 輸入/選單：只改色 */
 .ds input[type="text"],
-.ds .select-wrapper select {
-    width: 100%;
-    height: 38px;
-    padding: 6px 10px;
-    font-size: 16px;
-    border: 1px solid #ccc;
-    border-radius: 6px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-    box-sizing: border-box;
-    text-align: center;
-    appearance: none;
-    background-color: white;
-    cursor: pointer;
+.ds .select-wrapper select{
+  width:100%; height:38px; padding:6px 10px; font-size:16px; text-align:center;
+  border:1px solid var(--border); border-radius:6px; box-sizing:border-box;
+  box-shadow:0 2px 4px rgba(0,0,0,.05);
+  appearance:none; background-color:#fff; color:var(--text); cursor:pointer;
+}
+.ds input[type="text"]:focus,
+.ds .select-wrapper select:focus{
+  outline:none;
+  border-color:var(--accent);
+  box-shadow:0 0 0 .2rem rgba(249,115,22,.15);
 }
 
-/* 科目選擇器樣式 */
-.account-selector {
-    position: relative;
-    display: inline-block;
-    width: 100%;
+/* 科目選擇器樣式（只改色） */
+.account-selector{ position:relative; display:inline-block; width:100%; }
+.account-input{
+  width:100%; height:38px; padding:6px 10px; font-size:16px; text-align:center;
+  border:1px solid var(--border); border-radius:6px; box-sizing:border-box;
+  box-shadow:0 2px 4px rgba(0,0,0,.05);
+  appearance:none; background-color:#fff; color:var(--text); cursor:pointer;
+}
+.account-input:focus{
+  border-color:var(--accent);
+  outline:none;
+  box-shadow:0 0 0 .2rem rgba(249,115,22,.15);
 }
 
-.account-input {
-    width: 100%;
-    height: 38px;
-    padding: 6px 10px;
-    font-size: 16px;
-    border: 1px solid #ccc;
-    border-radius: 6px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-    box-sizing: border-box;
-    text-align: center;
-    appearance: none;
-    background-color: white;
-    cursor: pointer;
+.account-dropdown{
+  position:absolute; top:100%; left:0; right:0;
+  background:#fff; border:1px solid var(--border); border-top:none;
+  border-radius:0 0 6px 6px; max-height:200px; overflow-y:auto; z-index:1000;
+  display:none; box-shadow:0 8px 20px rgba(0,0,0,.12);
+}
+.account-dropdown.show{ display:block; }
+
+.account-option{
+  padding:10px 12px; cursor:pointer; border-bottom:1px solid #f1f5f9;
+  font-size:15px; text-align:left; color:var(--text);
+}
+.account-option:last-child{ border-bottom:none; }
+.account-option:hover{ background-color:var(--accent-weak); }
+.account-option.highlighted{ background-color:var(--accent); color:#fff; }
+.no-results{ padding:10px 12px; color:var(--muted); font-style:italic; font-size:15px; text-align:left; }
+
+/* 下拉選單箭頭：只改色 */
+.select-wrapper{ position:relative; width:100%; }
+.select-wrapper::after{
+  content:""; position:absolute; top:50%; right:12px; width:0; height:0; pointer-events:none;
+  border-left:6px solid transparent; border-right:6px solid transparent;
+  border-top:6px solid var(--muted); transform:translateY(-50%);
 }
 
-.account-input:focus {
-    border-color: #007acc;
-    outline: none;
-    box-shadow: 0 0 5px rgba(0,122,204,0.3);
+/* 欄位排版（維持原尺寸） */
+.field{
+  display:flex; flex-direction:column;
+  min-width:220px; max-width:250px; flex:1 1 0;
 }
+.field label{ font-size:14px; margin-bottom:4px; font-weight:bold; color:var(--text); }
 
-.account-dropdown {
-    position: absolute;
-    top: 100%;
-    left: 0;
-    right: 0;
-    background: white;
-    border: 1px solid #ddd;
-    border-top: none;
-    border-radius: 0 0 6px 6px;
-    max-height: 200px;
-    overflow-y: auto;
-    z-index: 1000;
-    display: none;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+.fieldbtngroup{ margin-bottom:20px; }
+@media (max-width:768px){ .fieldbtngroup{ margin-left:15px; } }
+
+/* 🔘 按鈕（只改色，不動尺寸/圓角/粗細） */
+.btn1, .btn2{
+  cursor:pointer; background-color:#fff; color:var(--text);
+  border:1px solid var(--border); border-radius:4px;
 }
+.btn1{ font-size:25px; height:50px; width:150px; padding:4px 12px; }
+.btn2{ font-size:25px; height:50px; width:75px;  padding:4px 5px; }
+.btn1:hover, .btn2:hover{ background-color:var(--accent-weak); border-color:var(--accent); }
 
-.account-dropdown.show {
-    display: block;
+.btn-group{ flex-direction:row; justify-content:center; gap:10px; }
+
+/* 📋 資料表格（只改色） */
+.table-container{ overflow-x:auto; width:100%; }
+@media (max-width:768px){ .table-container{ margin-left:15px; } }
+
+.tableFixHead{ height:400px; overflow-y:auto; }
+
+.data-table{
+  width:95%; table-layout:fixed; border-collapse:collapse;
 }
-
-.account-option {
-    padding: 10px 12px;
-    cursor: pointer;
-    border-bottom: 1px solid #f0f0f0;
-    font-size: 15px;
-    text-align: left;
-}
-
-.account-option:hover {
-    background-color: #f0f8ff;
-}
-
-.account-option:last-child {
-    border-bottom: none;
-}
-
-.account-option.highlighted {
-    background-color: #007acc;
-    color: white;
-}
-
-.no-results {
-    padding: 10px 12px;
-    color: #666;
-    font-style: italic;
-    font-size: 15px;
-    text-align: left;
-}
-
-/* 下拉選單箭頭 */
-.select-wrapper {
-    position: relative;
-    width: 100%;
-}
-
-.select-wrapper::after {
-    content: "";
-    position: absolute;
-    top: 50%;
-    right: 12px;
-    width: 0;
-    height: 0;
-    pointer-events: none;
-    border-left: 6px solid transparent;
-    border-right: 6px solid transparent;
-    border-top: 6px solid #555;
-    transform: translateY(-50%);
-}
-
-/* 欄位排版 */
-.field {
-    display: flex;
-    flex-direction: column;
-    min-width: 220px;
-    max-width: 250px;
-    flex: 1 1 0;
-}
-
-.field label {
-    font-size: 14px;
-    margin-bottom: 4px;
-    font-weight: bold;
-}
-
-.fieldbtngroup {
-    margin-bottom: 20px;
-}
-
-@media (max-width: 768px) {
-    .fieldbtngroup {
-        margin-left: 15px;
-    }
-}
-
-/* 🔘 按鈕樣式 */
-.btn1, .btn2 {
-    cursor: pointer;
-    background-color: #f0f0f0;
-    border: solid 1px blue;
-    border-radius: 4px;
-    font-size: 25px;
-    height: 50px;
-}
-
-.btn1 {
-    width: 150px;
-    padding: 4px 12px;
-}
-
-.btn2 {
-    width: 75px;
-    padding: 4px 5px;
-}
-
-.btn-group {
-    flex-direction: row;
-    justify-content: center;
-    gap: 10px;
-}
-
-/* 📋 資料表格 */
-.table-container {
-    overflow-x: auto;
-    width: 100%;
-}
-
-@media (max-width: 768px) {
-    .table-container {
-        margin-left: 15px;
-    }
-}
-
-.tableFixHead {
-    height: 400px;
-    overflow-y: auto;
-}
-
-.data-table {
-    width: 95%;
-    table-layout: fixed;
-    border-collapse: collapse;
-}
-
 .data-table th,
-.data-table td {
-    border: 1px solid #ddd;
-    padding: 8px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+.data-table td{
+  border:1px solid var(--border);   /* 原 #ddd → 邊線灰 */
+  padding:8px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+  color:var(--text);
+}
+/* 表頭：橘底白字、黏住頂端 */
+.data-table th{
+  background-color:var(--accent); color:#fff;
+  position:sticky; top:0; z-index:1;
 }
 
-.data-table th {
-    background-color: #f5f5f5;
-    position: sticky;
-    top: 0;
-    z-index: 1;
-}
+/* 既有欄寬規則保持不動 */
+.data-table th:nth-child(1), .data-table td:nth-child(1){ width:50px; }
+.data-table th:nth-child(2), .data-table td:nth-child(2){ width:120px; }
+.data-table th:nth-child(3), .data-table td:nth-child(3){ width:100px; }
+.data-table th:nth-child(4), .data-table td:nth-child(4),
+.data-table th:nth-child(5), .data-table td:nth-child(5),
+.data-table th:nth-child(6), .data-table td:nth-child(6){ width:120px; }
+.data-table th:nth-child(7), .data-table td:nth-child(7),
+.data-table th:nth-child(8), .data-table td:nth-child(8),
+.data-table th:nth-child(9), .data-table td:nth-child(9){ width:200px; }
 
-.data-table th:nth-child(1),
-.data-table td:nth-child(1) {
-    width: 50px;
-}
-
-.data-table th:nth-child(2),
-.data-table td:nth-child(2) {
-    width: 120px;
-}
-
-.data-table th:nth-child(3),
-.data-table td:nth-child(3) {
-    width: 100px;
-}
-
-.data-table th:nth-child(4),
-.data-table td:nth-child(4),
-.data-table th:nth-child(5),
-.data-table td:nth-child(5),
-.data-table th:nth-child(6),
-.data-table td:nth-child(6) {
-    width: 120px;
-}
-
-.data-table th:nth-child(7),
-.data-table td:nth-child(7),
-.data-table th:nth-child(8),
-.data-table td:nth-child(8),
-.data-table th:nth-child(9),
-.data-table td:nth-child(9) {
-    width: 200px;
-}
-
-/* 🧩 其他 */
-.query-title {
-    font-size: 25px;
-}
-
-.l1 {
-    padding-top: 3px;
-}
-
-.d3 {
-    margin-right: 50px;
-    margin-bottom: 15px;
-}
+/* 🧩 其他（只改字色） */
+.query-title{ font-size:25px; color:var(--text); }
+.l1{ padding-top:3px; color:var(--text); }
+.d3{ margin-right:50px; margin-bottom:15px; }

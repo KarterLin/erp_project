@@ -101,7 +101,7 @@ body {
 }
 
 .my-table thead th {
-     background-color: #04AA6D;
+     background-color: rgb(255, 102, 0);
      color: white;
      text-align: center;
      vertical-align: middle;

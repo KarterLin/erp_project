@@ -1,225 +1,217 @@
-/* 重置默認邊距和填充 */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+/* ===== Light + Orange Brand (全站一致) ===== */
+:root{
+  --bg:#ffffff;
+  --text:#0f172a;
+  --muted:#6b7280;
+
+  --card-bg:#ffffff;
+  --card-border:#e5e7eb;
+  --shadow:0 4px 12px rgba(0,0,0,.08);
+
+  --accent:#f97316;          /* 主橘 */
+  --accent-weak:#fff7ed;     /* 淡橘背景 (hover/底線) */
+
+  --radius:10px;
 }
 
-body {
-    margin: 0;
-    font-family: "Lato", sans-serif;
-    background-color: #f5f7fa;
+/* Reset */
+*{ margin:0; padding:0; box-sizing:border-box; }
+body{
+  margin:0;
+  font-family:"Lato","Noto Sans TC","Microsoft JhengHei",sans-serif;
+  background:var(--bg);
+  color:var(--text);
+  -webkit-font-smoothing:antialiased;
 }
-       
-/* 主要內容區域 */
-.main-content {
-    padding: 20px;
-    min-height: 100vh;
+
+/* 主內容 */
+.main-content{
+  padding:20px;
+  min-height:100vh;
 }
 
 /* 頂部連結 */
-.header-link {
-    display: inline-block;
-    margin-bottom: 20px;
-    padding: 10px 20px;
-    background-color: #3498db;
-    color: white;
-    text-decoration: none;
-    border-radius: 5px;
-    transition: background-color 0.3s;
+.header-link{
+  display:inline-block;
+  margin-bottom:20px;
+  padding:10px 16px;
+  background:#fff;
+  color:var(--text);
+  text-decoration:none;
+  border-radius:var(--radius);
+  border:1px solid var(--card-border);
+  font-weight:700;
+  transition:background .2s ease, border-color .2s ease, box-shadow .2s ease;
 }
-
-.header-link:hover {
-    background-color: #2980b9;
+.header-link:hover{
+  background:var(--accent-weak);
+  border-color:var(--accent);
+  color:var(--text);
+  box-shadow:0 2px 10px rgba(0,0,0,.06);
 }
 
 /* 表單容器 */
-.entry-form-container {
-    background-color: white;
-    padding: 30px;
-    border-radius: 8px;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-    max-width: 100%;
-    overflow-x: auto;
+.entry-form-container{
+  background:var(--card-bg);
+  padding:24px 30px;
+  border-radius:var(--radius);
+  border:1px solid var(--card-border);
+  box-shadow:var(--shadow);
+  max-width:100%;
+  overflow-x:auto;
 }
 
-/* 表格樣式 - 同時支援原有的 entries-table 和新的 fixed-asset-table, intangible-asset-table */
+/* 表格 (三種資產共用) */
 #entries-table,
 #fixed-asset-table,
-#intangible-asset-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-bottom: 20px;
-    font-size: 14px;
+#intangible-asset-table{
+  width:100%;
+  border-collapse:collapse;
+  margin-bottom:20px;
+  font-size:14px;
+  background:var(--card-bg);
 }
-
-#entries-table th,
-#entries-table td,
-#fixed-asset-table th,
-#fixed-asset-table td,
-#intangible-asset-table th,
-#intangible-asset-table td {
-    border: 1px solid #ddd;
-    padding: 12px 8px;
-    text-align: center;
+#entries-table th, #entries-table td,
+#fixed-asset-table th, #fixed-asset-table td,
+#intangible-asset-table th, #intangible-asset-table td{
+  border:1px solid var(--card-border);
+  padding:12px 8px;
+  text-align:center;
+  color:var(--text);
 }
-
 #entries-table th,
 #fixed-asset-table th,
-#intangible-asset-table th {
-    background-color: #34495e;
-    color: white;
-    font-weight: bold;
+#intangible-asset-table th{
+  background:var(--accent);
+  color:#fff;
+  font-weight:800;
+  position:sticky; top:0; z-index:1;
 }
-
 #entries-table tr:nth-child(even),
 #fixed-asset-table tr:nth-child(even),
-#intangible-asset-table tr:nth-child(even) {
-    background-color: #f9f9f9;
+#intangible-asset-table tr:nth-child(even){
+  background:#fafafa;
 }
-
 #entries-table tr:hover,
 #fixed-asset-table tr:hover,
-#intangible-asset-table tr:hover {
-    background-color: #f1f1f1;
+#intangible-asset-table tr:hover{
+  background:var(--accent-weak);
 }
 
-/* 輸入欄位樣式 */
+/* 輸入欄位 */
 input[type="text"],
 input[type="number"],
 input[type="date"],
-select {
-    width: 100%;
-    padding: 8px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    font-size: 14px;
+select{
+  width:100%;
+  padding:8px 10px;
+  border:1px solid var(--card-border);
+  border-radius:8px;
+  font-size:14px;
+  background:#fff;
+  color:var(--text);
+  transition:border-color .15s ease, box-shadow .15s ease;
+}
+input:focus, select:focus{
+  outline:none;
+  border-color:var(--accent);
+  box-shadow:0 0 0 3px rgba(249,115,22,.15);
+}
+input:disabled{
+  background:#f3f4f6;
+  color:#9ca3af;
+  cursor:not-allowed;
 }
 
-input[type="text"]:focus,
-input[type="number"]:focus,
-input[type="date"]:focus,
-select:focus {
-    outline: none;
-    border-color: #3498db;
-    box-shadow: 0 0 5px rgba(52, 152, 219, 0.3);
+/* 按鈕 */
+button{
+  padding:10px 18px;
+  margin:5px;
+  border:none;
+  border-radius:var(--radius);
+  cursor:pointer;
+  font-size:14px;
+  font-weight:700;
+  transition:transform .05s ease, background .2s ease, box-shadow .2s ease;
 }
+button:active{ transform:translateY(1px); }
 
-/* 被鎖定的輸入欄位 */
-input[type="number"]:disabled {
-    background-color: #f5f5f5;
-    color: #999;
-    cursor: not-allowed;
+#add-row{
+  background:#16a34a;
+  color:#fff;
+  box-shadow:0 2px 10px rgba(22,163,74,.25);
 }
+#add-row:hover{ background:#15803d; }
 
-/* 按鈕樣式 */
-button {
-    padding: 10px 20px;
-    margin: 5px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 14px;
-    transition: background-color 0.3s;
+button[type="submit"]{
+  background:var(--accent);
+  color:#fff;
+  box-shadow:0 2px 10px rgba(249,115,22,.25);
 }
+button[type="submit"]:hover{ background:#ea580c; }
 
-#add-row {
-    background-color: #27ae60;
-    color: white;
+.remove-row{
+  background:#ef4444;
+  color:#fff;
+  width:30px; height:30px;
+  border-radius:50%;
+  padding:0; margin:0;
+  box-shadow:0 2px 8px rgba(239,68,68,.25);
 }
+.remove-row:hover{ background:#dc2626; }
 
-#add-row:hover {
-    background-color: #219a52;
-}
-
-button[type="submit"] {
-    background-color: #3498db;
-    color: white;
-}
-
-button[type="submit"]:hover {
-    background-color: #2980b9;
-}
-
-.remove-row {
-    background-color: #e74c3c;
-    color: white;
-    width: 30px;
-    height: 30px;
-    border-radius: 50%;
-    padding: 0;
-    margin: 0;
-}
-
-.remove-row:hover {
-    background-color: #c0392b;
-}
-
-/* 資產區塊間距 */
+/* 資產區塊標題 */
 #fixed-asset-section,
-#intangible-asset-section {
-    margin-bottom: 30px;
+#intangible-asset-section{
+  margin-bottom:30px;
 }
-
 #fixed-asset-section h1,
-#intangible-asset-section h1 {
-    margin-bottom: 15px;
-    color: #34495e;
-    font-size: 24px;
+#intangible-asset-section h1{
+  margin-bottom:15px;
+  color:var(--text);
+  font-size:24px;
+  font-weight:800;
+  letter-spacing:.3px;
+  position:relative;
+}
+#fixed-asset-section h1::after,
+#intangible-asset-section h1::after{
+  content:"";
+  display:block;
+  width:64px; height:3px;
+  margin-top:6px;
+  background:linear-gradient(90deg, var(--accent), transparent);
+  border-radius:2px;
 }
 
-/* 日期選擇器和按鈕容器 */
-.date-wrapper {
-    display: flex;
-    align-items: center;
-    margin-bottom: 20px;
+/* 日期區塊 */
+.date-wrapper{
+  display:flex;
+  align-items:center;
+  margin-bottom:20px;
+}
+.date-wrapper label{
+  margin-right:10px;
+  font-weight:700;
+  color:var(--text);
+}
+.date-wrapper input[type="date"]{
+  width:auto;
+  margin-right:10px;
 }
 
-.date-wrapper label {
-    margin-right: 10px;
-    font-weight: bold;
-    color: #34495e;
+/* 響應式 */
+@media (max-width:700px){
+  .main-content{ margin-left:0; }
+  .date-wrapper{ flex-direction:column; align-items:flex-start; }
+  .date-wrapper input[type="date"], .date-wrapper button{ margin:5px 0; }
 }
-
-.date-wrapper input[type="date"] {
-    width: auto;
-    margin-right: 10px;
-}
-
-/* 響應式設計 */
-@media screen and (max-width: 700px) {
-    .main-content {
-        margin-left: 0;
-    }
-    
-    .date-wrapper {
-        flex-direction: column;
-        align-items: flex-start;
-    }
-    
-    .date-wrapper input[type="date"],
-    .date-wrapper button {
-        margin: 5px 0;
-    }
-}
-
-@media screen and (max-width: 400px) {
-    .entry-form-container {
-        padding: 15px;
-    }
-
-    #entries-table,
-    #fixed-asset-table,
-    #intangible-asset-table {
-        font-size: 12px;
-    }
-
-    #entries-table th,
-    #entries-table td,
-    #fixed-asset-table th,
-    #fixed-asset-table td,
-    #intangible-asset-table th,
-    #intangible-asset-table td {
-        padding: 8px 4px;
-    }
+@media (max-width:400px){
+  .entry-form-container{ padding:16px; }
+  #entries-table, #fixed-asset-table, #intangible-asset-table{ font-size:12px; }
+  #entries-table th, #entries-table td,
+  #fixed-asset-table th, #fixed-asset-table td,
+  #intangible-asset-table th, #intangible-asset-table td{
+    padding:8px 4px;
+  }
 }

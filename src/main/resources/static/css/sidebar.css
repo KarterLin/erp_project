@@ -1,94 +1,123 @@
-/* ---- 共用變數（可依你的實際數值調整） ---- */
-:root {
-  --sidebar-width: 200px;   /* 你的側欄寬度 */
-  --topbar-height: 64px;    /* 你的 topbar 高度（要跟 topbar.css 一致） */
+/* ---- 共用變數（這兩個要和 topbar / 版面一致） ---- */
+:root{
+  --sidebar-width: 200px;
+  --topbar-height: 64px;
 }
 
-/* ---- Sidebar ---- */
-.sidebar {
+/* ---- Sidebar：白底＋細邊＋淡陰影 ---- */
+.sidebar{
   position: fixed;
-  top: var(--topbar-height);                         /* ✅ 從 topbar 底下開始 */
+  top: var(--topbar-height);
   left: 0;
   width: var(--sidebar-width);
-  height: calc(100vh - var(--topbar-height));        /* ✅ 高度扣掉 topbar */
-  background-color:#1a1a1a;
-  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.4);
+  height: calc(100vh - var(--topbar-height));
+  background: var(--card-bg, #fff);
+  border-right: 1px solid var(--card-border, #e5e7eb);
+  box-shadow: 0 2px 10px rgba(0,0,0,.06);
   transform: translateX(0);
-  transition: transform 0.3s ease;
-  z-index: 1000;                                     /* 低於 topbar（建議 topbar 用 1200） */
+  transition: transform .3s ease, box-shadow .2s ease, background-color .2s ease;
+  z-index: 1000;
+  padding: 8px 0;
+  display: flex;
+  flex-direction: column;
 }
 
-.sidebar.open {
-  transform: translateX(0);
-}
-
-.sidebar a {
-  display: block;
-  color: #e5e7eb;
-  padding: 16px;
+/* 連結：深色字、左側重點條（active/hover 才顯示） */
+.sidebar a{
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 16px;
+  margin: 4px 8px;
+  color: var(--text, #0f172a);
   text-decoration: none;
+  border-radius: 8px;
+  border-left: 3px solid transparent;
+  transition: background-color .15s ease, color .15s ease, border-color .15s ease;
+  font-weight: 600;
 }
 
-.sidebar a.active {
-  background-color: #f97316;
-  color: white;
+/* Hover：很淡的橘背景 + 深色字 */
+.sidebar a:hover{
+  background: var(--accent-weak, #fff7ed);
+  color: var(--text, #0f172a);
 }
 
-.sidebar a:hover:not(.active) {
-  background-color: #333;
-  color: white;
+/* Active：橘色強調（左側色條 + 淡橘背景）*/
+.sidebar a.active{
+  background: linear-gradient(to right, var(--accent-weak, #fff7ed), transparent);
+  color: var(--accent, #f97316);
+  border-left-color: var(--accent, #f97316);
 }
 
-/* ---- 漢堡按鈕 ---- */
-.hamburger {
+/* 你若想讓「目前頁面」整列是橘底白字，可用這版：
+.sidebar a.active{
+  background: var(--accent, #f97316);
+  color: #fff;
+  border-left-color: var(--accent, #f97316);
+}
+*/
+
+/* ---- 漢堡按鈕（小螢幕顯示） ---- */
+.hamburger{
   display: none;
   position: fixed;
-  top: calc(10px + var(--topbar-height));            /* ✅ 也避開 topbar */
+  top: calc(10px + var(--topbar-height));
   left: 10px;
-  font-size: 35px;
-  background: none;
-  border: none;
+  font-size: 26px;
+  background: #fff;
+  color: var(--accent, #f97316);
+  border: 1px solid var(--card-border, #e5e7eb);
+  border-radius: 10px;
+  padding: 6px 10px;
   z-index: 1100;
   cursor: pointer;
-  opacity: 1;
-  pointer-events: auto;
-  transition: opacity 0.2s ease;
+  box-shadow: 0 2px 8px rgba(0,0,0,.08);
+  transition: opacity .2s ease, box-shadow .2s ease, transform .1s ease;
 }
-
-.hamburger.hidden {
-  opacity: 0;
-  pointer-events: none;
-}
+.hamburger:active{ transform: scale(.98); }
+.hamburger.hidden{ opacity: 0; pointer-events: none; }
 
 /* ---- 主內容：避開側欄 & topbar ---- */
-.page-wrapper {
-  margin-left: calc(var(--sidebar-width) + 25px);    /* 你原本用 225px，我保留 +25 的空隙 */
-  margin-top: var(--topbar-height);                  /* ✅ 避開 topbar */
-  transition: margin-left 0.3s ease;
+.page-wrapper{
+  margin-left: calc(var(--sidebar-width) + 25px);
+  margin-top: var(--topbar-height);
+  transition: margin-left .3s ease;
 }
 
-/* ---- 小螢幕 ---- */
-@media (max-width: 768px) {
-  .sidebar {
-    transform: translateX(-200px);                   /* 收起 */
-    top: var(--topbar-height);                       /* 依然從 topbar 下開始 */
+/* ---- 小螢幕：側欄抽屜式 ---- */
+@media (max-width: 768px){
+  .sidebar{
+    transform: translateX(-200px);
+    top: var(--topbar-height);
     height: calc(100vh - var(--topbar-height));
+    box-shadow: 8px 0 16px rgba(0,0,0,.08);
   }
-
-  .sidebar.open {
-    transform: translateX(0);                        /* 展開 */
-  }
-
-  .hamburger {
-    display: block;                                  /* 小螢幕顯示漢堡 */
-  }
-
-  .page-wrapper {
-    margin-left: 50px;                               /* 收起側欄時，主內容向左一些 */
+  .sidebar.open{ transform: translateX(0); }
+  .hamburger{ display: block; }
+  .page-wrapper{
+    margin-left: 50px;
     margin-top: var(--topbar-height);
   }
+  .page-wrapper.shift{ margin-left: var(--sidebar-width); }
+}
 
-  .page-wrapper.shift {
-    margin-left: var(--sidebar-width);               /* 展開側欄時，主內容再讓出空間 */
-  }
+/* ----（選配）深色主題相容：若 body 加 .theme-dark ---- */
+.theme-dark .sidebar{
+  background: #111827;
+  border-right-color: #2a2a2a;
+  box-shadow: 0 2px 12px rgba(0,0,0,.45);
+}
+.theme-dark .sidebar a{ color: #e5e7eb; }
+.theme-dark .sidebar a:hover{ background: rgba(249,115,22,.12); }
+.theme-dark .sidebar a.active{
+  color: #fff;
+  background: rgba(249,115,22,.18);
+  border-left-color: var(--accent, #f97316);
+}
+/* 漢堡鍵在深色主題下 */
+.theme-dark .hamburger{
+  background: #1f2937;
+  color: #fff;
+  border-color: #2a2a2a;
 }

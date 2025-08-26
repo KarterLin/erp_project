@@ -12,32 +12,37 @@
 
 </head>
 
-<body>
+<body class="assets-page">
     <!-- Topbar -->
     <div id="topbar-container"></div>
     <!-- Sidebar -->
     <div id="sidebar-container"></div>
-     <div class="page-wrapper">
-        <header>會計科目</header>
 
-        <div class="buttons">
-            <div class=".button-item">
-                <span class="button-label"></span>
-                <a href="./entriesManagement.html"><button>
-                    <img src="./img/documentation.png" alt="coin" width="50px" height="50px">
-                    傳票管理
-                </button>
-            </a>
+
+    <div class="page-wrapper">
+        <!-- 舊版 header 與新版 .page-title 皆支援，這裡用新版以統一 -->
+        <h1 class="page-title">會計科目</h1>
+
+
+        <!-- 建立交易 / 帳務管理 的同款結構：action-group → actions → action-card -->
+        <section class="action-group">
+            <h2 class="group-title">新增各項資料</h2>
+            <div class="actions">
+                <a class="action-card" href="./entriesManagement.html" aria-label="傳票管理">
+                    <img src="./img/documentation.png" alt="傳票管理" />
+                    <span>傳票管理</span>
+                </a>
+
+
+                <a class="action-card" href="./subjectManagement.html" aria-label="科目管理">
+                    <img src="./img/documentation.png" alt="科目管理" />
+                    <span>科目管理</span>
+                </a>
+
             </div>
-            <div class=".button-item">
-                <span class="button-label"></span>
-                <a href="./subjectManagement.html"><button>
-                    <img src="./img/documentation.png" alt="coin" width="50px" height="50px">
-                    科目管理
-                </button>
-            </a>
-            </div>
-        </div>
+        </section>
+    </div>
+        
     </div>
     <script src="js/sidebar.js"></script>
     <script src="js/topnavbar.js"></script>

@@ -1,215 +1,125 @@
+/* ===== 明細分類帳：白底＋橘色品牌（只改色） ===== */
+:root{
+  --accent: #f97316;        /* 橘 */
+  --accent-weak: #fff7ed;   /* 淡橘 */
+  --text: #0f172a;          /* 主文字 */
+  --muted: #6b7280;         /* 次文字 */
+  --surface: #ffffff;       /* 白底 */
+  --border: #e5e7eb;        /* 邊線 */
+}
+
+/* 全域底色與字色 */
 body {
-     margin: 0;
-     font-family: "Lato", sans-serif;
-     background-color: #f5f7fa;
+  margin: 0;
+  font-family: "Lato", sans-serif;
+  background-color: var(--surface);
+  color: var(--text);
 }
 
+/* 標題只換字色 */
 .title {
-     white-space: nowrap;
-     font-size: 40px;
-     font-weight: bold;
-     margin: 0;
-     flex-shrink: 0;
-     /* 不縮小 */
-     /* 可用 max-width 限制 */
-     max-width: 300px;
+  white-space: nowrap;
+  font-size: 40px;
+  font-weight: bold;
+  margin: 0;
+  flex-shrink: 0;
+  max-width: 300px;
+  color: var(--text);
 }
-
 @media (max-width: 768px) {
-     .title {
-          font-size: 28px;
-          margin-left: 0;
-          margin-top: 8px;
-          flex: 1;
-     }
+  .title { font-size: 28px; margin-left: 0; margin-top: 8px; flex: 1; }
 }
 
-/* 🔠 標題區與查詢欄 */
+/* 標題區與查詢欄（保留原排版設定） */
 .ds {
-     margin-left: -20px;
-     display: flex;
-     flex-wrap: wrap;
-     align-items: center;
-     justify-content: space-between;
-     padding: 10px 20px;
-     gap: 10px;
+  margin-left: -20px;
+  display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between;
+  padding: 10px 20px; gap: 10px;
 }
-
-.d2 {
-     flex: 0 0 auto;
-     /* 固定大小，不撐開 */
-     margin-left: 15px;
-}
-
-
-.left-group {
-     display: flex;
-     align-items: center;
-     gap: 20px;
-     flex-wrap: nowrap;
-     /* 不使用 flex-grow */
-     flex: 0 1 auto;
-}
-
+.d2 { flex: 0 0 auto; margin-left: 15px; }
+.left-group { display: flex; align-items: center; gap: 20px; flex-wrap: nowrap; flex: 0 1 auto; }
 @media (max-width: 768px) {
-     .d1 {
-          flex-direction: column;
-          align-items: flex-start;
-          margin-left: 0;
-          flex-wrap: wrap;
-     }
+  .d1 { flex-direction: column; align-items: flex-start; margin-left: 0; flex-wrap: wrap; }
 }
 
-.field {
-     min-width: 250px;
-     flex-shrink: 0;
-     /* 不縮小 */
+/* 日期欄位：只改色 */
+.field { min-width: 250px; flex-shrink: 0; }
+.field label { font-size: 20px; margin-bottom: 4px; font-weight: bold; color: var(--text); }
+.ds input[type="text"]{
+  width: 100%; height: 38px; padding: 6px 10px; font-size: 16px; text-align: center;
+  border: 1px solid var(--border); border-radius: 6px; background-color: #fff; color: var(--text);
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05); appearance: none; cursor: pointer; box-sizing: border-box;
+}
+.ds input[type="text"]:focus{
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 .2rem rgba(249,115,22,.15);
 }
 
-.field label {
-     font-size: 20px;
-     margin-bottom: 4px;
-     font-weight: bold;
+/* 按鈕：只換色，不動尺寸與圓角/粗細 */
+.btn1{
+  cursor: pointer;
+  background-color: #fff;               /* 原 #f0f0f0 → 白 */
+  color: var(--text);
+  border: solid 1px var(--border);      /* 原 blue → 灰（保留 1px） */
+  border-radius: 4px; font-size: 25px; height: 50px; width: 150px; padding: 4px 12px;
+}
+.btn2, .btn3{
+  cursor: pointer;
+  background-color: #fff;               /* 原 #f0f0f0 → 白 */
+  color: var(--text);
+  border: solid 1px var(--border);      /* 原 blue → 灰（保留 1px） */
+  border-radius: 4px; font-size: 18px; height: 40px; padding: 4px 12px;
+}
+.btn2{ margin-left: 25px; }
+.btn1:hover, .btn2:hover, .btn3:hover{
+  background-color: var(--accent-weak);
+  border-color: var(--accent);
 }
 
-.ds input[type="text"] {
-     width: 100%;
-     height: 38px;
-     padding: 6px 10px;
-     font-size: 16px;
-     border: 1px solid #ccc;
-     border-radius: 6px;
-     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-     box-sizing: border-box;
-     text-align: center;
-     appearance: none;
-     background-color: white;
-     cursor: pointer;
+/* 科目選擇區（只改色） */
+.subjectsrange{ display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.subjectsrange label{ color: var(--text); }
+.range{
+  padding: 10px; font-size: 16px; border-radius: 5px; width: 200px;
+  background:#fff; color: var(--text); border:1px solid var(--border);
 }
+.range:focus{ outline:none; border-color: var(--accent); box-shadow: 0 0 0 .2rem rgba(249,115,22,.12); }
 
-.btn1 {
-     cursor: pointer;
-     background-color: #f0f0f0;
-     border: solid 1px blue;
-     border-radius: 4px;
-     font-size: 25px;
-     height: 50px;
-     width: 150px;
-     padding: 4px 12px;
+.btn-group{ display: flex; gap: 10px; flex-shrink: 0; white-space: nowrap; }
+
+/* 表格容器（保留原距離） */
+.table-container{ margin-top: 25px; overflow-x: auto; width: 100%; }
+@media (max-width: 768px){ .table-container{ margin-left: 15px; } }
+.tableFixHead{ height: 400px; overflow-y: auto; }
+
+/* 表格：只改色，不動排版/寬度 */
+.data-table{
+  width: 95%;
+  table-layout: fixed;
+  border-collapse: collapse;
 }
-
-.btn2 {
-     cursor: pointer;
-     background-color: #f0f0f0;
-     border: solid 1px blue;
-     border-radius: 4px;
-     font-size: 18px;
-     height: 40px;
-     padding: 4px 12px;
-     margin-left: 25px;
-}
-
-.btn3 {
-     cursor: pointer;
-     background-color: #f0f0f0;
-     border: solid 1px blue;
-     border-radius: 4px;
-     font-size: 18px;
-     height: 40px;
-     padding: 4px 12px;
-}
-
-.subjectsrange {
-     display: flex;
-     align-items: center;
-     gap: 10px;
-     flex-wrap: wrap;
-     /* 允許換行 */
-}
-
-.range {
-     padding: 10px;
-     font-size: 16px;
-     border-radius: 5px;
-     width: 200px;
-}
-
-
-.btn-group {
-     display: flex;
-     gap: 10px;
-     flex-shrink: 0;
-     /* 不縮小 */
-     white-space: nowrap;
-     /* 防止內部按鈕換行 */
-}
-
-.table-container {
-     margin-top: 25px;
-     overflow-x: auto;
-     width: 100%;
-}
-
-@media (max-width: 768px) {
-     .table-container {
-          margin-left: 15px;
-     }
-}
-
-.tableFixHead {
-     height: 400px;
-     overflow-y: auto;
-}
-
-.data-table {
-     width: 95%;
-     table-layout: fixed;
-     border-collapse: collapse;
-}
-
 .data-table th,
-.data-table td {
-     border: 1px solid #ddd;
-     padding: 8px;
-     white-space: nowrap;
-     overflow: hidden;
-     text-overflow: ellipsis;
+.data-table td{
+  border: 1px solid var(--border);   /* 原 #ddd → 灰 */
+  padding: 8px;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  color: var(--text);
 }
 
-.data-table th {
-     background-color: #f5f5f5;
-     position: sticky;
-     top: 0;
-     z-index: 1;
+/* 表頭改橘底白字（黏住上方設定不變） */
+.data-table th{
+  background-color: var(--accent);
+  color: #fff;
+  position: sticky; top: 0; z-index: 1;
 }
 
-.data-table th:nth-child(1),
-.data-table td:nth-child(1) {
-     width: 50px;
-}
-
-.data-table th:nth-child(2),
-.data-table td:nth-child(2) {
-     width: 120px;
-}
-
-.data-table th:nth-child(3),
-.data-table td:nth-child(3) {
-     width: 100px;
-}
-
-.data-table th:nth-child(4),
-.data-table td:nth-child(4),
-.data-table th:nth-child(5),
-.data-table td:nth-child(5),
-.data-table th:nth-child(6),
-.data-table td:nth-child(6) {
-     width: 120px;
-}
-
-.data-table th:nth-child(7),
-.data-table td:nth-child(7),
-.data-table th:nth-child(8),
-.data-table td:nth-child(8) {
-     width: 200px;
-}
+/* 既有欄寬規則保留（不動） */
+.data-table th:nth-child(1), .data-table td:nth-child(1){ width: 50px; }
+.data-table th:nth-child(2), .data-table td:nth-child(2){ width: 120px; }
+.data-table th:nth-child(3), .data-table td:nth-child(3){ width: 100px; }
+.data-table th:nth-child(4), .data-table td:nth-child(4),
+.data-table th:nth-child(5), .data-table td:nth-child(5),
+.data-table th:nth-child(6), .data-table td:nth-child(6){ width: 120px; }
+.data-table th:nth-child(7), .data-table td:nth-child(7),
+.data-table th:nth-child(8), .data-table td:nth-child(8){ width: 200px; }

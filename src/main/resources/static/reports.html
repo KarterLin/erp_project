@@ -13,47 +13,47 @@
 
 </head>
 
-<body>
+<body class="assets-page">
     <!-- Topbar -->
     <div id="topbar-container"></div>
     <!-- Sidebar -->
     <div id="sidebar-container"></div>
-    <div class="page-wrapper">
-        <header>我的報表</header>
 
-        <div class="buttons">
-            <div class=".button-item">
-                <span class="button-label">會計報表</span>
-                <a href="./balanceSheet.html"><button>
-                    <img src="./img/report.png" alt="coin" width="50px" height="50px">
-                    資產負債表
-                </button>
-            </a>
+
+    <div class="page-wrapper">
+        <!-- 舊版 header 與新版 .page-title 皆支援，這裡用新版以統一 -->
+        <h1 class="page-title">我的報表</h1>
+
+
+        <!-- 建立交易 / 帳務管理 的同款結構：action-group → actions → action-card -->
+        <section class="action-group">
+            <h2 class="group-title">新增各項資料</h2>
+            <div class="actions">
+                <a class="action-card" href="./balanceSheet.html" aria-label="資產負債表">
+                    <img src="./img/report.png" alt="資產負債表" />
+                    <span>資產負債表</span>
+                </a>
+
+
+                <a class="action-card" href="./incomeStatement.html" aria-label="損益表">
+                    <img src="./img/report.png" alt="損益表" />
+                    <span>損益表</span>
+                </a>
+
+
+                <a class="action-card" href="./subsidiaryLedger.html" aria-label="明細分類帳">
+                    <img src="./img/report (1).png" alt="明細分類帳" />
+                    <span>明細分類帳</span>
+                </a>
+
+
+                <a class="action-card" href="./trialBalance.html" aria-label="試算表">
+                    <img src="./img/seo-report.png" alt="試算表" />
+                    <span>試算表</span>
+                </a>
             </div>
-            <div class=".button-item">
-                <span class="button-label"></span>
-                <a href="./incomeStatement.html"><button>
-                    <img src="./img/report.png" alt="coin" width="50px" height="50px">
-                    損益表
-                </button>
-            </a>
-            </div>
-            <div class=".button-item">
-                <span class="button-label"></span>
-                <a href="./subsidiaryLedger.html"><button>
-                    <img src="./img/report (1).png" alt="coin" width="50px" height="50px">
-                    明細分類帳
-                </button>
-            </a>
-            </div>
-            <div class=".button-item">
-                <span class="button-label"></span>
-                <a href="./trialBalance.html"><button>
-                    <img src="./img/seo-report.png" alt="coin" width="50px" height="50px">
-                    試算表
-                </button>
-            </a>
-            </div>
+        </section>
+    </div>
         
     </div>
     <script src="js/topnavbar.js"></script>
