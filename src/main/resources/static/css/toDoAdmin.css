@@ -48,15 +48,14 @@ body {
 /* 表單容器 */
 .entry-form-container {
     background-color: transparent;
-    /* ✅ 改透明 */
     padding: 30px;
     border-radius: 8px;
     box-shadow: none;
-    /* ✅ 不要陰影 */
 }
 
 /* 表格樣式 */
-#entries-table {
+#entries-table,
+.entries-table {
     width: 100%;
     border-collapse: collapse;
     margin-bottom: 20px;
@@ -64,23 +63,28 @@ body {
 }
 
 #entries-table th,
-#entries-table td {
+#entries-table td,
+.entries-table th,
+.entries-table td {
     border: 1px solid #ddd;
     padding: 12px 8px;
     text-align: center;
 }
 
-#entries-table th {
+#entries-table th,
+.entries-table th {
     background-color: #34495e;
     color: white;
     font-weight: bold;
 }
 
-#entries-table tr:nth-child(even) {
+#entries-table tr:nth-child(even),
+.entries-table tbody tr:nth-child(even) {
     background-color: #f9f9f9;
 }
 
-#entries-table tr:hover {
+#entries-table tr:hover,
+.entries-table tbody tr:hover {
     background-color: #f1f1f1;
 }
 
@@ -155,29 +159,143 @@ button[type="submit"]:hover {
     background-color: #c0392b;
 }
 
+/* 管理員專用樣式 */
+.loading {
+    text-align: center;
+    padding: 20px;
+    color: #666;
+    font-size: 16px;
+}
+
+.error {
+    text-align: center;
+    padding: 20px;
+    color: #d32f2f;
+    background-color: #ffebee;
+    border-radius: 4px;
+    margin: 20px;
+    border: 1px solid #f8bbd9;
+}
+
+.voucher-group {
+    border-top: 2px solid #3498db;
+}
+
+/* 狀態選擇器樣式 */
+.status-select {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 14px;
+    background-color: white;
+}
+
+.status-select:focus {
+    border-color: #3498db;
+    box-shadow: 0 0 5px rgba(52, 152, 219, 0.3);
+}
+
+.status-select option[value="approved"] {
+    color: #27ae60;
+}
+
+.status-select option[value="rejected"] {
+    color: #e74c3c;
+}
+
+/* 原因輸入框樣式 */
+.reason-input {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+.reason-input:focus {
+    border-color: #f39c12;
+    box-shadow: 0 0 5px rgba(243, 156, 18, 0.3);
+}
+
+/* 確認按鈕樣式 */
+.edit-button {
+    background-color: #2c3e50;
+    color: white;
+    padding: 8px 16px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 13px;
+    transition: all 0.3s ease;
+}
+
+.edit-button:hover {
+    background-color: #34495e;
+    transform: translateY(-1px);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+
+.edit-button:active {
+    transform: translateY(0);
+    box-shadow: none;
+}
+
 /* 響應式設計 */
+@media screen and (max-width: 1200px) {
+    #entries-table,
+    .entries-table {
+        font-size: 12px;
+    }
+    
+    #entries-table th,
+    #entries-table td,
+    .entries-table th,
+    .entries-table td {
+        padding: 8px 4px;
+    }
+    
+    .edit-button {
+        padding: 6px 12px;
+        font-size: 12px;
+    }
+}
+
 @media screen and (max-width: 700px) {
-
-
     .main-content {
         margin-left: 0;
+    }
+    
+    .entry-form-container {
+        padding: 15px;
+    }
+    
+    #entries-table,
+    .entries-table {
+        font-size: 11px;
+    }
+    
+    .edit-button {
+        padding: 4px 8px;
+        font-size: 11px;
     }
 }
 
 @media screen and (max-width: 400px) {
-
-
     .entry-form-container {
-        padding: 15px;
+        padding: 10px;
     }
 
-    #entries-table {
-        font-size: 12px;
+    #entries-table,
+    .entries-table {
+        font-size: 10px;
     }
 
     #entries-table th,
-    #entries-table td {
-        padding: 8px 4px;
+    #entries-table td,
+    .entries-table th,
+    .entries-table td {
+        padding: 6px 3px;
     }
 }
 
@@ -193,7 +311,8 @@ button[type="submit"]:hover {
     font-weight: 800;
     margin: 0;
 }
+
 .page-header-right .info-text {
-  font-size: 16px;   /* ✅ 右上角小一點 */
-  color: #555;       /* 可以順便改成灰色 */
+    font-size: 16px;
+    color: #555;
 }

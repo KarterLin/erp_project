@@ -56,7 +56,8 @@ body {
 }
 
 /* 表格樣式 */
-#entries-table {
+#entries-table,
+.entries-table {
     width: 100%;
     border-collapse: collapse;
     margin-bottom: 20px;
@@ -64,23 +65,28 @@ body {
 }
 
 #entries-table th,
-#entries-table td {
+#entries-table td,
+.entries-table th,
+.entries-table td {
     border: 1px solid #ddd;
     padding: 12px 8px;
     text-align: center;
 }
 
-#entries-table th {
+#entries-table th,
+.entries-table th {
     background-color: #34495e;
     color: white;
     font-weight: bold;
 }
 
-#entries-table tr:nth-child(even) {
+#entries-table tr:nth-child(even),
+.entries-table tbody tr:nth-child(even) {
     background-color: #f9f9f9;
 }
 
-#entries-table tr:hover {
+#entries-table tr:hover,
+.entries-table tbody tr:hover {
     background-color: #f1f1f1;
 }
 
@@ -155,28 +161,64 @@ button[type="submit"]:hover {
     background-color: #c0392b;
 }
 
+/* 待辦事項特定樣式 */
+.loading {
+    text-align: center;
+    padding: 20px;
+    color: #666;
+    font-size: 16px;
+}
+
+.error {
+    text-align: center;
+    padding: 20px;
+    color: #d32f2f;
+    background-color: #ffebee;
+    border-radius: 4px;
+    margin: 20px;
+    border: 1px solid #f8bbd9;
+}
+
+.status-pending {
+    color: #f39c12;
+    font-weight: bold;
+}
+
+.status-approved {
+    color: #27ae60;
+    font-weight: bold;
+}
+
+.status-rejected {
+    color: #e74c3c;
+    font-weight: bold;
+}
+
+.voucher-group {
+    border-top: 2px solid #3498db;
+}
+
 /* 響應式設計 */
 @media screen and (max-width: 700px) {
-
-
     .main-content {
         margin-left: 0;
     }
 }
 
 @media screen and (max-width: 400px) {
-
-
     .entry-form-container {
         padding: 15px;
     }
 
-    #entries-table {
+    #entries-table,
+    .entries-table {
         font-size: 12px;
     }
 
     #entries-table th,
-    #entries-table td {
+    #entries-table td,
+    .entries-table th,
+    .entries-table td {
         padding: 8px 4px;
     }
 }
@@ -193,7 +235,8 @@ button[type="submit"]:hover {
     font-weight: 800;
     margin: 0;
 }
+
 .page-header-right .info-text {
-  font-size: 16px;   /* ✅ 右上角小一點 */
-  color: #555;       /* 可以順便改成灰色 */
+    font-size: 16px;   /* ✅ 右上角小一點 */
+    color: #555;       /* 可以順便改成灰色 */
 }
