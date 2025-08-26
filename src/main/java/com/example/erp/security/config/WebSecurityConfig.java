@@ -30,7 +30,7 @@ public class WebSecurityConfig{
     private final CustomAccessDeniedHandler accessDeniedHandler;
 	
     private static final Long MAX_AGE = 3600L;  // 瀏覽器快取存活時間
-    private static final int CORS_FILTER_ORDER = -102;  // Filter 註冊順序
+    private static final int CORS_FILTER_ORDER = -100;  // Filter 註冊順序
     
 	public WebSecurityConfig(JwtAuthenticationFilter jwtAuthenticationFilter, AuthenticationProvider authenticationProvider,
 													Http401UnauthorizedEntryPoint unauthorizedEntryPoint, CustomAccessDeniedHandler accessDeniedHandler) {
@@ -64,24 +64,24 @@ public class WebSecurityConfig{
 	        
 	    return http.build();
 	}
-/*	
+	
 	@Bean
-	public FilterRegistrationBean corsFilter() {
+	public FilterRegistrationBean<CorsFilter> corsFilter() {
 	    UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
 	    CorsConfiguration config = new CorsConfiguration();
 	    config.setAllowCredentials(true);
+	    config.addAllowedOriginPattern("http://127.0.0.1:5501");
 	    config.addAllowedOriginPattern("http://localhost:4200");  // 一般for Angular/React，待改
 	    config.addAllowedHeader(CorsConfiguration.ALL);
 	    config.addAllowedMethod(CorsConfiguration.ALL);
 	    config.setMaxAge(MAX_AGE);
 	    source.registerCorsConfiguration("/**", config);
-	    FilterRegistrationBean bean = new FilterRegistrationBean(new CorsFilter(source));
+	    FilterRegistrationBean<CorsFilter> bean = new FilterRegistrationBean<>(new CorsFilter(source));
 
 	    // should be set order to -100 because we need to CorsFilter before SpringSecurityFilter
 	    bean.setOrder(CORS_FILTER_ORDER);
 	    return bean;
 	}
-*/	
 	
 	
 }
