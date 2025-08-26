@@ -20,6 +20,7 @@ public class SecurityWhitelist {
             "/js/**",
             "/css/**",
             "/images/**",
+            "/img/**",
             "/static/**",
             "/*.html",
             "/journalEntries.html",

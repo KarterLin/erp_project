@@ -85,4 +85,12 @@ public class JournalEntry {
 	}
 
     // getters and setters
+
+    // public void setStatus(EntryStatus entryStatus) {
+    //     throw new UnsupportedOperationException("Not supported yet.");
+    // }
+
+    // public void setStatus(EntryStatus entryStatus) {
+    //     throw new UnsupportedOperationException("Not supported yet.");
+    // }
 }
