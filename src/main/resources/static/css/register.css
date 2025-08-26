@@ -1,0 +1,117 @@
+.wrap {
+  background-image: linear-gradient(rgba(255, 255, 255, 0.85), rgba(255, 255, 255, 0.85)),url(../img/logo3.jpg);
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+.logo {
+  display: flex;
+  align-items: center;
+  text-decoration-line: none;
+  color: #005757;
+  font-weight: bolder;
+}
+.logoimg {
+    width: 50px;
+    margin-right: 10px;
+}
+.navbar {
+  display: flex;
+  align-items: center;justify-content: space-between;
+  margin: 5px;
+  margin-right: 10px;
+}
+.loginBtn {
+  background-color: #2ecc71;
+  font-size: 20px;
+  padding: 5px;
+}
+.registerBtn {
+  background-color: #3498db;
+  font-size: 20px;
+  padding: 5px;
+}
+.container {
+  height: 90%; 
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+.regForm {
+  width: 80%;
+  margin: 10px;
+  border: 1px solid #000;
+  border-radius: 15px;
+  box-shadow: 2px 5px 10px #005757;
+  padding: 10px;
+  box-sizing: border-box;
+  overflow-y: auto;
+}
+h1 {
+  text-align: center;
+}
+.content {
+  display: flex;
+  flex-direction: column;
+  width: 90%;
+  margin-left: auto;
+  margin-right: auto;
+}
+input {
+  margin-top: 10px;
+  border-radius: 5px;
+}
+label {
+  margin-bottom: -10px;
+}
+.checkboxLabel {
+  display: inline-flex;
+  align-items: center;
+  margin-left: auto;
+}
+.checkbox1 {
+  margin-top: 10px;
+}
+.inputGroup {
+  display: inline-flex;
+  position: relative;
+}
+.inputGroup input {
+  width: 100%;
+}
+.inputGroupImg {
+  position: absolute;
+  right: 5px;
+  top: 30%;
+}
+input:focus {
+  background-color: #C4E1E1;
+}
+#eyeIcon {
+  cursor:pointer;
+  width: 24px;
+}
+input[type="button"] {
+  background-color: lightgray;  /* #00AEAE */
+  border: 2px solid #fff;
+  border-radius: 15px;
+  color: #fff;
+  font-weight: bolder ;
+  font-size: larger;
+  padding: 5px;
+  /* cursor: pointer; */
+}
+.help {
+  display: inline-flex;
+  justify-content: center;
+  margin-top: 5px;
+}
+.note {
+  color: gray;
+  font-size: 10px;
+  text-align: center;
+}
+.footer {
+  text-align: center;
+  margin-top: 10px;
+}
