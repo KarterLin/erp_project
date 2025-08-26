@@ -1,32 +1,68 @@
-body {
-    margin: 0;
-    font-family: "Lato", sans-serif;
-    background-color: #f5f7fa;
+/* ===== 白底＋橘色品牌：只改色、不動排版 ===== */
+:root{
+  --accent:#f97316;        /* 橘 */
+  --accent-hover:#ea580c;  /* 深橘 */
+  --accent-weak:#fff7ed;   /* 淡橘 */
+  --text:#0f172a;          /* 主文字 */
+  --muted:#6b7280;         /* 次文字 */
+  --surface:#ffffff;       /* 白底 */
+  --border:#e5e7eb;        /* 邊線 */
 }
 
-header {
-    padding: 16px;
-    font-size: 40px;
-    font-weight: bold;
+/* 🌐 全域 */
+*{ box-sizing:border-box; }
+body{
+  margin:0;
+  font-family:"Lato","Noto Sans TC","Microsoft JhengHei",sans-serif;
+  background-color:var(--surface);   /* 原 #f5f7fa → 白 */
+  color:var(--text);
 }
 
-/* 重置默認邊距和填充 */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+/* 頁首（保持你的尺寸，只換字色） */
+header{ padding:16px; font-size:40px; font-weight:bold; color:var(--text); }
+
+.page-header{
+  display:flex; justify-content:space-between; align-items:center; padding:16px 24px;
+}
+.page-title{ font-size:40px; font-weight:800; margin:0; color:var(--text); }
+.page-header-right .info-text{ font-size:16px; color:var(--muted); }
+
+/* 主要內容區域（不動間距） */
+.main-content{ padding:20px; min-height:100vh; }
+
+/* 回上一頁連結：改成白底橘框 */
+.header-link{
+  display:inline-block;
+  margin-bottom:20px;
+  padding:10px 20px;
+  background-color:#fff;
+  color:var(--text);
+  text-decoration:none;
+  border-radius:5px;
+  border:1px solid var(--border);
+  transition: background-color .2s ease, border-color .2s ease, color .2s ease, box-shadow .2s ease;
+}
+.header-link:hover{
+  background-color:var(--accent-weak);
+  border-color:var(--accent);
+  color:var(--text);
+  box-shadow:0 2px 10px rgba(0,0,0,.06);
 }
 
-body {
-    margin: 0;
-    font-family: "Lato", sans-serif;
-    background-color: #f5f7fa;
+/* 表單容器：維持透明/無陰影 */
+.entry-form-container{
+  background-color:transparent;
+  padding:30px;
+  border-radius:8px;
+  box-shadow:none;
 }
 
-/* 主要內容區域 */
-.main-content {
-    padding: 20px;
-    min-height: 100vh;
+/* 表格：只改色，不動排版 */
+#entries-table{
+  width:100%;
+  border-collapse:collapse;
+  margin-bottom:20px;
+  font-size:14px;
 }
 
 /* 頂部連結 */
@@ -77,6 +113,8 @@ body {
     color: white;
     font-weight: bold;
 }
+#entries-table tr:nth-child(even){ background-color:#fafafa; }
+#entries-table tr:hover{ background-color:var(--accent-weak); }
 
 #entries-table tr:nth-child(even),
 .entries-table tbody tr:nth-child(even) {
@@ -92,44 +130,58 @@ body {
 input[type="text"],
 input[type="number"],
 input[type="date"],
-select {
-    width: 100%;
-    padding: 8px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    font-size: 14px;
+select{
+  width:100%;
+  padding:8px;
+  border:1px solid var(--border);
+  border-radius:4px;
+  font-size:14px;
+  background:#fff;
+  color:var(--text);
 }
-
 input[type="text"]:focus,
 input[type="number"]:focus,
 input[type="date"]:focus,
-select:focus {
-    outline: none;
-    border-color: #3498db;
-    box-shadow: 0 0 5px rgba(52, 152, 219, 0.3);
+select:focus{
+  outline:none;
+  border-color:var(--accent);
+  box-shadow:0 0 0 3px rgba(249,115,22,.15); /* 橘色 focus */
+}
+input[type="number"]:disabled{
+  background-color:#f5f5f5;
+  color:#999;
+  cursor:not-allowed;
 }
 
-/* 被鎖定的輸入欄位 */
-input[type="number"]:disabled {
-    background-color: #f5f5f5;
-    color: #999;
-    cursor: not-allowed;
+/* 按鈕：保留大小，只換色 */
+button{
+  padding:10px 20px;
+  margin:5px;
+  border:none;
+  border-radius:5px;
+  cursor:pointer;
+  font-size:14px;
+  transition: background-color .2s ease, border-color .2s ease, box-shadow .2s ease, color .2s ease;
 }
 
-/* 按鈕樣式 */
-button {
-    padding: 10px 20px;
-    margin: 5px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 14px;
-    transition: background-color 0.3s;
-}
+/* 若頁面有新增列/送出按鈕，可沿用這兩條（沒有就無視） */
+#add-row{ background-color:#16a34a; color:#fff; }
+#add-row:hover{ background-color:#15803d; }
 
-#add-row {
-    background-color: #27ae60;
-    color: white;
+button[type="submit"]{ background-color:var(--accent); color:#fff; }
+button[type="submit"]:hover{ background-color:var(--accent-hover); }
+
+/* 刪除圓鈕（若有） */
+.remove-row{
+  background-color:#ef4444; color:#fff;
+  width:30px; height:30px; border-radius:50%;
+  padding:0; margin:0;
+}
+.remove-row:hover{ background-color:#dc2626; }
+
+/* RWD（沿用你的原設定） */
+@media screen and (max-width:700px){
+  .main-content{ margin-left:0; }
 }
 
 #add-row:hover {
