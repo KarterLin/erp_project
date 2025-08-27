@@ -146,7 +146,7 @@ function renderTable(data) {
       <td>${item.accountName}</td>
       <td>${item.parentId !== undefined && item.parentId !== null ? item.parentId : ''}</td>
       <td><!-- 上期餘額 如果有資料再補 --></td>
-      <td>${item.balance.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>
+      <td>${item.balance.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 2 })}</td>
     `;
     tbody.appendChild(tr);
   });

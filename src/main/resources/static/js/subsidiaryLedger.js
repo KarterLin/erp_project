@@ -210,7 +210,7 @@ function renderLedgerTable(data) {
 function formatAmount(amount) {
   if (amount === 0 || amount === null || amount === undefined) return '0.00';
   return parseFloat(amount).toLocaleString(undefined, { 
-    minimumFractionDigits: 2, 
+    minimumFractionDigits: 0, 
     maximumFractionDigits: 2 
   });
 }

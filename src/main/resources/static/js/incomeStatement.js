@@ -220,7 +220,7 @@ function updateIncomeStatement(data) {
 // 顯示金額工具函式
 function formatAmountForDisplay(amount, type) {
   const absAmount = Math.abs(amount);
-  const formatted = absAmount.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  const formatted = absAmount.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 2 });
 
   if (type === "income") {
     // 收入負數 → 顯示正數
