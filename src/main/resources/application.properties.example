@@ -11,7 +11,16 @@ spring.jpa.properties.hibernate.format_sql=true
 spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.MySQL8Dialect
 
 # Server
-server.port=8080
+#server.port=8080
+
+ # Server SSL															
+server.port=8443
+server.address=127.0.0.1
+server.ssl.enabled=true
+server.ssl.key-store=classpath:static/certs/keystore.p12
+server.ssl.key-store-type=PKCS12
+server.ssl.key-store-password=yourpassword
+server.ssl.key-alias=youralias
 
 # Logging
 logging.level.org.springframework=INFO

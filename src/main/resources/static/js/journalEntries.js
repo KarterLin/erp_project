@@ -228,7 +228,7 @@ function setDefaultDates() {
 
 async function loadAccountsData() {
     try {
-        const response = await fetch('http://localhost:8080/api/accounts');
+        const response = await fetch('http://127.0.0.1:8443/api/accounts');
         if (response.ok) {
             accountsData = await response.json();
         } else {
