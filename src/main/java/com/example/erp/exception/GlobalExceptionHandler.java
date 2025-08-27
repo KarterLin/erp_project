@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import com.example.erp.payload.response.ApiResponse;
 
+
+
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
@@ -24,8 +26,13 @@ public class GlobalExceptionHandler {
                 .body(body);
     }
     
-    @ExceptionHandler(PasswordUpdateException.class)
-    public ResponseEntity<ApiResponse> handlePasswordUpdateException(PasswordUpdateException ex) {
+    @ExceptionHandler(NotFoundException.class)
+    public ResponseEntity<ApiResponse> handleIllegalException(NotFoundException ex) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .body(ApiResponse.error(ex.getMessage()));
+    }
+	@ExceptionHandler(PasswordUpdateException.class)
+    public ResponseEntity<ApiResponse> handleIllegalException(PasswordUpdateException ex) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                 .body(ApiResponse.error(ex.getMessage()));
     }
