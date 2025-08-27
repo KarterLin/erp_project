@@ -1,5 +1,5 @@
 // API endpoint
-const API_URL = "http://localhost:8080/api/register";
+const API_URL = "https://localhost:8080/api/register";
 
 // 啟用按鈕 
 const submitBtn = document.getElementById("submitBtn");
