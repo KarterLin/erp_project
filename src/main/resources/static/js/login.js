@@ -1,5 +1,5 @@
 // API endpoint
-const API_BASE = "http://localhost:8080/api/v1/auth";
+const API_BASE = "https://127.0.0.1:8443/api/v1/auth";
 
 const loginBtn = document.getElementById("loginBtn");
 const emailInput = document.getElementById("email");
