@@ -43,7 +43,7 @@ public class EmailService {
          // 最後的 token = uuid + "_" + paddedCId
             String token = rawToken+ paddedCId;
             String subject = "帳號驗證信";
-            String verificationUrl = "http://localhost:8080/api/register/confirm/" +token;
+            String verificationUrl = "https://localhost:8443/api/register/confirm/" +token;
             String content = "<p>您好，</p>"
                     + "<p>請點擊以下連結完成驗證：</p>"
                     + "<p><a href=\"" + verificationUrl + "\">驗證帳號</a></p>"

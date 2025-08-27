@@ -37,14 +37,15 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 	        				request.getUEmail(),
 	        				request.getPassword()
 	        ));
-	    	log.info("Login request: email={}, rawPassword={}", request.getUEmail(), request.getPassword());   
+
 	    	// 查詢使用者
 	        var user = userRepository.findByUEmail(request.getUEmail()).orElseThrow(() -> 
 	        						new IllegalArgumentException("Invalid email or password."));
 	        // 檢查帳號狀態 (避免未啟用帳號登入)
 	        if (user.getStatus() == null || user.getStatus() == 0) {
 	            throw new IllegalStateException("帳號尚未啟用，請先完成 Email 驗證");
-	        };
+	        }
+	        log.info("Login request: email={}", request.getUEmail());
 	        // 產生 JWT 與 Refresh Token
 	        CustomUserDetails userDetails = new CustomUserDetails(user);
 	        var jwt = jwtService.generateToken(userDetails);

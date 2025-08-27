@@ -170,11 +170,11 @@ function clearTable() {
 
 // 格式化金額（負數用括弧）
 function formatAmount(amount) {
-    if (amount == null) return '0.00';
+    if (amount == null) return '0';
     if (amount < 0) {
-        return '(' + Math.abs(amount).toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2}) + ')';
+        return '(' + Math.abs(amount).toLocaleString(undefined, {minimumFractionDigits: 0, maximumFractionDigits: 2}) + ')';
     } else {
-        return amount.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2});
+        return amount.toLocaleString(undefined, {minimumFractionDigits: 0, maximumFractionDigits: 2});
     }
 }
 

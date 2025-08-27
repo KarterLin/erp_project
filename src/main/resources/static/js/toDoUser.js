@@ -25,52 +25,79 @@ async function loadToDoEntries() {
 }
 
 function displayEntries(entries) {
-    const loadingDiv = document.getElementById('loading');
-    const errorDiv = document.getElementById('error');
-    const table = document.getElementById('entries-table');
-    const tbody = document.getElementById('entries-tbody');
+  const loadingDiv = document.getElementById('loading');
+  const errorDiv = document.getElementById('error');
+  const table = document.getElementById('entries-table');
+  const tbody = document.getElementById('entries-tbody');
 
-    // 隱藏載入中提示
-    loadingDiv.style.display = 'none';
-    errorDiv.style.display = 'none';
+  loadingDiv.style.display = 'none';
+  errorDiv.style.display = 'none';
+  tbody.innerHTML = '';
 
-    if (!entries || entries.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="8" style="text-align: center;">目前沒有待辦事項</td></tr>';
-        table.style.display = 'table';
-        return;
-    }
+  if (!entries || entries.length === 0) {
+    tbody.innerHTML = '<tr><td colspan="8" style="text-align:center;">目前沒有待辦事項</td></tr>';
+    table.style.display = 'table';
+    return;
+  }
 
-    tbody.innerHTML = '';
+  entries.forEach(entry => {
+    const details = entry.details || [];
+    if (details.length === 0) return;
 
-    entries.forEach(entry => {
-        const details = entry.details || [];
-        
-        // 為每個傳票的詳細資料生成行
-        details.forEach((detail, index) => {
-            const row = document.createElement('tr');
-            
-            // 如果是第一筆詳細資料，添加傳票分組樣式
-            if (index === 0) {
-                row.classList.add('voucher-group');
-            }
+    const span = details.length; // 這張傳票有幾列分錄
 
-            row.innerHTML = `
-                <td>${index === 0 ? formatDate(entry.entryDate) : ''}</td>
-                <td>${index === 0 ? entry.voucherNumber || '' : ''}</td>
-                <td>${detail.accountCode || ''}</td>
-                <td>${detail.accountName || ''}</td>
-                <td style="text-align: right;">${formatAmount(detail.debitAmount)}</td>
-                <td style="text-align: right;">${formatAmount(detail.creditAmount)}</td>
-                <td>${detail.description || ''}</td>
-                <td class="${getStatusClass(entry.status)}">${index === 0 ? entry.status || '' : ''}</td>
-            `;
-            
-            tbody.appendChild(row);
-        });
+    details.forEach((detail, idx) => {
+      const tr = document.createElement('tr');
+      if (idx === 0) tr.classList.add('voucher-group');
+
+      // 第一列才放「日期」並跨列
+      if (idx === 0) {
+        const tdDate = document.createElement('td');
+        tdDate.textContent = formatDate(entry.entryDate);
+        tdDate.rowSpan = span;
+        tr.appendChild(tdDate);
+
+        const tdVoucher = document.createElement('td');
+        tdVoucher.textContent = entry.voucherNumber || '';
+        tdVoucher.rowSpan = span;
+        tr.appendChild(tdVoucher);
+      }
+
+      // 固定每列都顯示的欄位
+      tr.appendChild(td(detail.accountCode || ''));
+      tr.appendChild(td(detail.accountName || ''));
+      tr.appendChild(td(formatAmount(detail.debitAmount), 'right'));
+      tr.appendChild(td(formatAmount(detail.creditAmount), 'right'));
+      tr.appendChild(td(detail.description || ''));
+
+      // 第一列才放「審核狀態」並跨列
+      if (idx === 0) {
+        const tdStatus = document.createElement('td');
+        tdStatus.textContent = entry.status || '';
+        tdStatus.rowSpan = span;
+        tdStatus.className = getStatusClass(entry.status);
+        tr.appendChild(tdStatus);
+      }
+
+      tbody.appendChild(tr);
     });
 
-    table.style.display = 'table';
+    // 群組間分隔線（可選）
+    const sep = document.createElement('tr');
+    sep.innerHTML = `<td colspan="8" style="padding:0;border:0;height:6px;"></td>`;
+    tbody.appendChild(sep);
+  });
+
+  table.style.display = 'table';
+
+  function td(text, align) {
+    const cell = document.createElement('td');
+    cell.textContent = text ?? '';
+    if (align === 'right') cell.style.textAlign = 'right';
+    return cell;
+  }
 }
+
 
 function showError(message) {
     const loadingDiv = document.getElementById('loading');
