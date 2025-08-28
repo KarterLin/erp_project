@@ -20,7 +20,7 @@
     <!-- Sidebar -->
     <div id="sidebar-container"></div>
     <div class="page-wrapper">
-        <div class="ds">
+        <div class="d1">
             <div class="left-group">
                 <h1 class="title">明細分類帳</h1>
                 <div class="field">
@@ -29,24 +29,34 @@
                 </div>
             </div>
             <div class="d2">
-                <button class="btn1">匯出檔案</button>
+                <button class="btn1" id="exportBtn">匯出檔案</button>
             </div>
         </div>
-        <div class="subjectsrange">
-            <label for="accountstart">科目選擇：</label>
-            <select id="accountstart" class="range">
-                <option value="">-請選擇科目-</option>
-            </select>
-            <!-- 隱藏科目範圍的終止選項，因為現有API只支援單一科目 -->
-            <select id="accountend" class="range" style="display: none;">
-                <option value="">-請選擇終止科目-</option>
-            </select>
-            <span style="display: none;">～</span>
-            <div class="btn-group">
-                <button class="btn2">清空</button>
-                <button class="btn3">查詢</button>
-            </div>
+        
+        <div class="d3">
+            <fieldset class="query-box">
+                <legend class="query-title">查詢條件</legend>
+                <div class="ds">
+                    <div class="field">
+                        <label for="suject" class="l1">科目名稱：</label>
+                        <div class="account-selector">
+                            <input type="text" 
+                                   id="suject" 
+                                   class="account-input" 
+                                   placeholder="搜尋科目代碼或名稱..."
+                                   autocomplete="off">
+                            <div class="account-dropdown" id="subject-dropdown"></div>
+                        </div>
+                    </div>
+                </div>
+            </fieldset>
         </div>
+        
+        <div class="fieldbtngroup">
+            <button class="btn2" id="searchBtn">查詢</button>
+            <button class="btn2" id="clearBtn">清空</button>
+        </div>
+        
         <div class="table-container">
             <div class="tableFixHead">
                 <table class="data-table">
@@ -54,23 +64,36 @@
                         <tr>
                             <th>日期</th>
                             <th>傳票編號</th>
-                            <th>摘要</th>
+                            <th>科目代碼</th>
+                            <th>科目名稱</th>
                             <th>借方金額</th>
                             <th>貸方金額</th>
                             <th>借/貸</th>
+                            <th>摘要</th>
                         </tr>
                     </thead>
+                    <tbody id="ledgerTableBody">
+                        <!-- 動態插入數據 -->
+                    </tbody>
                 </table>
             </div>
         </div>
-      </div>
+        
+        <!-- Loading 狀態 -->
+        <div id="loadingMessage" style="display: none; text-align: center; padding: 20px;">
+            載入中...
+        </div>
+        
+        <!-- 無數據提示 -->
+        <div id="noDataMessage" style="display: none; text-align: center; padding: 20px;">
+            查無資料
+        </div>
     </div>
-  </div>
 
-  <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
-  <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/zh.js"></script>
-  <script src="js/sidebar.js"></script>
-  <script src="js/topnavbar.js"></script>
-  <script src="js/subsidiaryLedger.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/zh.js"></script>
+    <script src="js/sidebar.js"></script>
+    <script src="js/topnavbar.js"></script>
+    <script src="js/subsidiaryLedger.js"></script>
 </body>
 </html>

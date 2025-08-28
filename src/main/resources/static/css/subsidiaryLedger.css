@@ -1,14 +1,14 @@
-/* ===== 明細分類帳：白底＋橘色品牌（只改色） ===== */
+/* ===== 明細分類帳：白底＋橘色品牌（參考 entriesManagement.css 樣式） ===== */
 :root {
-  --accent: #f97316;        /* 橘 */
-  --accent-weak: #fff7ed;   /* 淡橘 */
+  --accent: #f97316;        /* 主橘 */
+  --accent-weak: #fff7ed;   /* 淡橘（hover/底） */
   --text: #0f172a;          /* 主文字 */
   --muted: #6b7280;         /* 次文字 */
   --surface: #ffffff;       /* 白底 */
   --border: #e5e7eb;        /* 邊線 */
 }
 
-/* 全域底色與字色（僅限本頁，不影響 topbar） */
+/* 🌐 全域設定 */
 body {
   margin: 0;
   font-family: "Lato", sans-serif;
@@ -16,18 +16,16 @@ body {
   color: var(--text);
 }
 
-/* 標題只作用在本頁內容區，避免覆蓋 topbar 的漸層字 */
-.page-wrapper .title {
+/* 📌 Title 標題樣式 */
+.title {
   white-space: nowrap;
+  margin: 0;
   font-size: 40px;
   font-weight: bold;
-  margin: 0;
-  flex-shrink: 0;
-  max-width: 300px;
-  color: var(--text); /* 黑色字 */
+  color: var(--text);
 }
 @media (max-width: 768px) {
-  .page-wrapper .title {
+  .title {
     font-size: 28px;
     margin-left: 0;
     margin-top: 8px;
@@ -35,34 +33,72 @@ body {
   }
 }
 
-/* 標題區與查詢欄 */
-.ds {
-  margin-left: -20px;
-  display: flex; flex-wrap: wrap;
-  align-items: center; justify-content: space-between;
-  padding: 10px 20px; gap: 10px;
+/* 🔠 標題區與查詢欄 */
+.d1 {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 20px;
 }
-.d2 { flex: 0 0 auto; margin-left: 15px; }
 .left-group {
-  display: flex; align-items: center; gap: 20px;
-  flex-wrap: nowrap; flex: 0 1 auto;
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
 @media (max-width: 768px) {
-  .d1 { flex-direction: column; align-items: flex-start; margin-left: 0; flex-wrap: wrap; }
+  .d1 {
+    flex-direction: column;
+    align-items: flex-start;
+    margin-left: 0;
+    flex-wrap: wrap;
+  }
 }
 
-/* 日期欄位 */
-.field { min-width: 250px; flex-shrink: 0; }
-.field label {
-  font-size: 20px; margin-bottom: 4px;
-  font-weight: bold; color: var(--text);
+/* 🔍 查詢區塊 */
+.d2 {
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+  margin-right: 35px;
 }
+@media (max-width: 768px) {
+  .d2 {
+    margin-left: 0;
+    margin-right: 0;
+  }
+  .d3 {
+    margin-left: 10px;
+  }
+}
+
+.ds {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  padding: 10px 0;
+}
+.ds label {
+  font-size: 20px;
+  font-weight: bold;
+  margin-bottom: 4px;
+  color: var(--text);
+}
+
+/* 輸入/選單樣式 */
 .ds input[type="text"] {
-  width: 100%; height: 38px; padding: 6px 10px; font-size: 16px;
-  text-align: center; border: 1px solid var(--border);
-  border-radius: 6px; background-color: #fff; color: var(--text);
-  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-  appearance: none; cursor: pointer; box-sizing: border-box;
+  width: 100%;
+  height: 38px;
+  padding: 6px 10px;
+  font-size: 16px;
+  text-align: center;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  box-sizing: border-box;
+  box-shadow: 0 2px 4px rgba(0,0,0,.05);
+  appearance: none;
+  background-color: #fff;
+  color: var(--text);
+  cursor: pointer;
 }
 .ds input[type="text"]:focus {
   outline: none;
@@ -70,60 +106,144 @@ body {
   box-shadow: 0 0 0 .2rem rgba(249,115,22,.15);
 }
 
-/* 按鈕 */
-.btn1 {
+/* 科目選擇器樣式（參考 entriesManagement.css） */
+.account-selector {
+  position: relative;
+  display: inline-block;
+  width: 100%;
+}
+
+.account-input {
+  width: 100%;
+  height: 38px;
+  padding: 6px 10px;
+  font-size: 16px;
+  text-align: center;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  box-sizing: border-box;
+  box-shadow: 0 2px 4px rgba(0,0,0,.05);
+  appearance: none;
+  background-color: #fff;
+  color: var(--text);
+  cursor: pointer;
+}
+.account-input:focus {
+  border-color: var(--accent);
+  outline: none;
+  box-shadow: 0 0 0 .2rem rgba(249,115,22,.15);
+}
+
+.account-dropdown {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: #fff;
+  border: 1px solid var(--border);
+  border-top: none;
+  border-radius: 0 0 6px 6px;
+  max-height: 200px;
+  overflow-y: auto;
+  z-index: 1000;
+  display: none;
+  box-shadow: 0 8px 20px rgba(0,0,0,.12);
+}
+.account-dropdown.show {
+  display: block;
+}
+
+.account-option {
+  padding: 10px 12px;
+  cursor: pointer;
+  border-bottom: 1px solid #f1f5f9;
+  font-size: 15px;
+  text-align: left;
+  color: var(--text);
+}
+.account-option:last-child {
+  border-bottom: none;
+}
+.account-option:hover {
+  background-color: var(--accent-weak);
+}
+.account-option.highlighted {
+  background-color: var(--accent);
+  color: #fff;
+}
+.no-results {
+  padding: 10px 12px;
+  color: var(--muted);
+  font-style: italic;
+  font-size: 15px;
+  text-align: left;
+}
+
+/* 欄位排版 */
+.field {
+  display: flex;
+  flex-direction: column;
+  min-width: 220px;
+  max-width: 250px;
+  flex: 1 1 0;
+}
+.field label {
+  font-size: 14px;
+  margin-bottom: 4px;
+  font-weight: bold;
+  color: var(--text);
+}
+
+.fieldbtngroup {
+  margin-bottom: 20px;
+}
+@media (max-width: 768px) {
+  .fieldbtngroup {
+    margin-left: 15px;
+  }
+}
+
+/* 🔘 按鈕樣式 */
+.btn1, .btn2 {
   cursor: pointer;
   background-color: #fff;
   color: var(--text);
-  border: solid 1px var(--border);
+  border: 1px solid var(--border);
   border-radius: 4px;
-  font-size: 25px; height: 50px; width: 150px;
+}
+.btn1 {
+  font-size: 25px;
+  height: 50px;
+  width: 150px;
   padding: 4px 12px;
 }
-.btn2, .btn3 {
-  cursor: pointer;
-  background-color: #fff;
-  color: var(--text);
-  border: solid 1px var(--border);
-  border-radius: 4px;
-  font-size: 18px; height: 40px; padding: 4px 12px;
+.btn2 {
+  font-size: 25px;
+  height: 50px;
+  width: 75px;
+  padding: 4px 5px;
 }
-.btn2 { margin-left: 25px; }
-.btn1:hover, .btn2:hover, .btn3:hover {
+.btn1:hover, .btn2:hover {
   background-color: var(--accent-weak);
   border-color: var(--accent);
 }
 
-/* 科目選擇區 */
-.subjectsrange {
-  display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
-}
-.subjectsrange label { color: var(--text); }
-.range {
-  padding: 10px; font-size: 16px;
-  border-radius: 5px; width: 200px;
-  background:#fff; color: var(--text);
-  border:1px solid var(--border);
-}
-.range:focus {
-  outline:none; border-color: var(--accent);
-  box-shadow: 0 0 0 .2rem rgba(249,115,22,.12);
-}
-.btn-group {
-  display: flex; gap: 10px;
-  flex-shrink: 0; white-space: nowrap;
-}
-
-/* 表格容器 */
+/* 📋 資料表格 */
 .table-container {
-  margin-top: 25px; overflow-x: auto; width: 100%;
+  overflow-x: auto;
+  width: 100%;
 }
 @media (max-width: 768px) {
-  .table-container { margin-left: 15px; }
+  .table-container {
+    margin-left: 15px;
+  }
 }
-.tableFixHead { height: 400px; overflow-y: auto; }
 
-/* 表格樣式 */
+.tableFixHead {
+  height: 400px;
+  overflow-y: auto;
+}
+
 .data-table {
   width: 95%;
   table-layout: fixed;
@@ -133,22 +253,53 @@ body {
 .data-table td {
   border: 1px solid var(--border);
   padding: 8px;
-  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
   color: var(--text);
 }
 
-/* 表頭：橘底白字（sticky） */
+/* 表頭：橘底白字、黏住頂端 */
 .data-table th {
   background-color: var(--accent);
   color: #fff;
-  position: sticky; top: 0; z-index: 1;
+  position: sticky;
+  top: 0;
+  z-index: 1;
 }
 
-/* 既有欄寬規則保留（不動） */
-.data-table th:nth-child(1), .data-table td:nth-child(1){ width: 100px; }
-.data-table th:nth-child(2), .data-table td:nth-child(2){ width: 120px; }
-.data-table th:nth-child(3), .data-table td:nth-child(3){ width: 100px; }
-.data-table th:nth-child(4), .data-table td:nth-child(4){ width: 100px; }
-.data-table th:nth-child(5), .data-table td:nth-child(5){ width: 100px; }
-.data-table th:nth-child(6), .data-table td:nth-child(6){ width: 20px; }
+/* 調整欄位寬度以適應新增的科目代碼和科目名稱欄位 */
+.data-table th:nth-child(1), .data-table td:nth-child(1) { width: 100px; } /* 日期 */
+.data-table th:nth-child(2), .data-table td:nth-child(2) { width: 120px; } /* 傳票編號 */
+.data-table th:nth-child(3), .data-table td:nth-child(3) { width: 100px; } /* 科目代碼 */
+.data-table th:nth-child(4), .data-table td:nth-child(4) { width: 150px; } /* 科目名稱 */
+.data-table th:nth-child(5), .data-table td:nth-child(5) { width: 120px; } /* 借方金額 */
+.data-table th:nth-child(6), .data-table td:nth-child(6) { width: 120px; } /* 貸方金額 */
+.data-table th:nth-child(7), .data-table td:nth-child(7) { width: 60px; }  /* 借/貸 */
+.data-table th:nth-child(8), .data-table td:nth-child(8) { width: 200px; } /* 摘要 */
 
+/* 金額欄位右對齊 */
+.data-table .amount {
+  text-align: right;
+}
+
+/* 🧩 其他樣式 */
+.query-title {
+  font-size: 25px;
+  color: var(--text);
+}
+.l1 {
+  padding-top: 3px;
+  color: var(--text);
+}
+.d3 {
+  margin-right: 50px;
+  margin-bottom: 15px;
+}
+
+.query-box {
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 15px;
+  margin: 10px 0;
+}
