@@ -190,10 +190,15 @@ function updateBalanceSheet(data) {
 
     if (!Array.isArray(data.details)) return;
 
-    // 計算總額用來算百分比
-    const totalAssets = (data.currentAssetsTotal || 0) + (data.nonCurrentAssetsTotal || 0);
-    const totalLiabilities = (data.currentLiabilitiesTotal || 0) + (data.nonCurrentLiabilitiesTotal || 0);
-    const totalEquity = (data.capitalTotal || 0) + (data.retainedEarningsTotal || 0);
+    // 計算各類別合計用來算百分比
+    const categoryTotals = {
+        currentAssets: data.currentAssetsTotal || 0,
+        nonCurrentAssets: data.nonCurrentAssetsTotal || 0,
+        currentLiabilities: data.currentLiabilitiesTotal || 0,
+        nonCurrentLiabilities: data.nonCurrentLiabilitiesTotal || 0,
+        capital: data.capitalTotal || 0,
+        retainedEarnings: data.retainedEarningsTotal || 0
+    };
 
     data.details.forEach(item => {
         const subjectTd = document.querySelector(`td[data-parent-id='${item.parentId}']`);
@@ -209,12 +214,25 @@ function updateBalanceSheet(data) {
         const percentTd = tr.children[3];
         let percent = 0;
 
-        if (item.parentId >= 1000 && item.parentId < 2000) {
-            percent = totalAssets ? (item.balance / totalAssets) * 100 : 0;
-        } else if (item.parentId >= 2000 && item.parentId < 3000) {
-            percent = totalLiabilities ? (item.balance / totalLiabilities) * 100 : 0;
-        } else if (item.parentId >= 3000 && item.parentId < 4000) {
-            percent = totalEquity ? (item.balance / totalEquity) * 100 : 0;
+        // 根據不同的科目ID範圍計算百分比
+        if (item.parentId >= 1100 && item.parentId < 1500) {
+            // 流動資產項目
+            percent = categoryTotals.currentAssets ? (item.balance / categoryTotals.currentAssets) * 100 : 0;
+        } else if (item.parentId >= 1500 && item.parentId < 2000) {
+            // 非流動資產項目
+            percent = categoryTotals.nonCurrentAssets ? (item.balance / categoryTotals.nonCurrentAssets) * 100 : 0;
+        } else if (item.parentId >= 2100 && item.parentId < 2400) {
+            // 流動負債項目
+            percent = categoryTotals.currentLiabilities ? (item.balance / categoryTotals.currentLiabilities) * 100 : 0;
+        } else if (item.parentId >= 2400 && item.parentId < 3000) {
+            // 非流動負債項目
+            percent = categoryTotals.nonCurrentLiabilities ? (item.balance / categoryTotals.nonCurrentLiabilities) * 100 : 0;
+        } else if (item.parentId >= 3100 && item.parentId < 3200) {
+            // 股本項目
+            percent = categoryTotals.capital ? (item.balance / categoryTotals.capital) * 100 : 0;
+        } else if (item.parentId >= 3300 && item.parentId < 4000) {
+            // 保留盈餘項目
+            percent = categoryTotals.retainedEarnings ? (item.balance / categoryTotals.retainedEarnings) * 100 : 0;
         }
 
         percentTd.textContent = formatPercent(percent);
@@ -232,6 +250,60 @@ function updateBalanceSheet(data) {
     document.getElementById('capitalTotal').textContent = formatAmount(data.capitalTotal);
     document.getElementById('retainedEarningsTotal').textContent = formatAmount(data.retainedEarningsTotal);
     document.getElementById('totalEquity').textContent = formatAmount(data.totalEquity);
+
+    // 更新合計行的百分比 - 流動資產合計、非流動資產合計等顯示100%
+    updateSubtotalPercentages();
+
+    // 清除最終合計行的百分比顯示
+    clearFinalTotalPercentages();
+}
+
+// 更新子合計行的百分比（只在有實際數據時顯示100%）
+function updateSubtotalPercentages() {
+    // 流動資產合計
+    const currentAssetsTotalRow = document.getElementById('currentAssetsTotal').parentElement;
+    const currentAssetsAmount = parseFloat(document.getElementById('currentAssetsTotal').textContent.replace(/[(),]/g, '')) || 0;
+    currentAssetsTotalRow.children[3].textContent = currentAssetsAmount > 0 ? '100.00%' : '';
+
+    // 非流動資產合計
+    const nonCurrentAssetsTotalRow = document.getElementById('nonCurrentAssetsTotal').parentElement;
+    const nonCurrentAssetsAmount = parseFloat(document.getElementById('nonCurrentAssetsTotal').textContent.replace(/[(),]/g, '')) || 0;
+    nonCurrentAssetsTotalRow.children[3].textContent = nonCurrentAssetsAmount > 0 ? '100.00%' : '';
+
+    // 流動負債合計
+    const currentLiabilitiesTotalRow = document.getElementById('currentLiabilitiesTotal').parentElement;
+    const currentLiabilitiesAmount = parseFloat(document.getElementById('currentLiabilitiesTotal').textContent.replace(/[(),]/g, '')) || 0;
+    currentLiabilitiesTotalRow.children[3].textContent = currentLiabilitiesAmount > 0 ? '100.00%' : '';
+
+    // 非流動負債合計
+    const nonCurrentLiabilitiesTotalRow = document.getElementById('nonCurrentLiabilitiesTotal').parentElement;
+    const nonCurrentLiabilitiesAmount = parseFloat(document.getElementById('nonCurrentLiabilitiesTotal').textContent.replace(/[(),]/g, '')) || 0;
+    nonCurrentLiabilitiesTotalRow.children[3].textContent = nonCurrentLiabilitiesAmount > 0 ? '100.00%' : '';
+
+    // 股本合計
+    const capitalTotalRow = document.getElementById('capitalTotal').parentElement;
+    const capitalAmount = parseFloat(document.getElementById('capitalTotal').textContent.replace(/[(),]/g, '')) || 0;
+    capitalTotalRow.children[3].textContent = capitalAmount > 0 ? '100.00%' : '';
+
+    // 保留盈餘合計
+    const retainedEarningsTotalRow = document.getElementById('retainedEarningsTotal').parentElement;
+    const retainedEarningsAmount = parseFloat(document.getElementById('retainedEarningsTotal').textContent.replace(/[(),]/g, '')) || 0;
+    retainedEarningsTotalRow.children[3].textContent = retainedEarningsAmount > 0 ? '100.00%' : '';
+}
+
+// 清除最終合計行的百分比顯示
+function clearFinalTotalPercentages() {
+    // 資產合計
+    const totalAssetsRow = document.getElementById('totalAssets').parentElement;
+    totalAssetsRow.children[3].textContent = '';
+
+    // 負債合計
+    const totalLiabilitiesRow = document.getElementById('totalLiabilities').parentElement;
+    totalLiabilitiesRow.children[3].textContent = '';
+
+    // 股東權益合計
+    const totalEquityRow = document.getElementById('totalEquity').parentElement;
+    totalEquityRow.children[3].textContent = '';
 }
 
 // ==================== 匯出 Excel 功能 ====================
@@ -302,7 +374,7 @@ function prepareBalanceSheetData(startDate, endDate) {
     
     // 流動資產合計
     const currentAssetsTotal = document.getElementById('currentAssetsTotal').textContent;
-    data.push(['流動資產合計', '', currentAssetsTotal, '']);
+    data.push(['流動資產合計', '', currentAssetsTotal, '100.00%']);
     data.push([]); // 空行
     
     // 非流動資產
@@ -316,7 +388,7 @@ function prepareBalanceSheetData(startDate, endDate) {
     
     // 非流動資產合計
     const nonCurrentAssetsTotal = document.getElementById('nonCurrentAssetsTotal').textContent;
-    data.push(['非流動資產合計', '', nonCurrentAssetsTotal, '']);
+    data.push(['非流動資產合計', '', nonCurrentAssetsTotal, '100.00%']);
     
     // 資產合計
     const totalAssets = document.getElementById('totalAssets').textContent;
@@ -338,7 +410,7 @@ function prepareBalanceSheetData(startDate, endDate) {
     
     // 流動負債合計
     const currentLiabilitiesTotal = document.getElementById('currentLiabilitiesTotal').textContent;
-    data.push(['流動負債合計', '', currentLiabilitiesTotal, '']);
+    data.push(['流動負債合計', '', currentLiabilitiesTotal, '100.00%']);
     data.push([]); // 空行
     
     // 非流動負債
@@ -351,7 +423,7 @@ function prepareBalanceSheetData(startDate, endDate) {
     
     // 非流動負債合計
     const nonCurrentLiabilitiesTotal = document.getElementById('nonCurrentLiabilitiesTotal').textContent;
-    data.push(['非流動負債合計', '', nonCurrentLiabilitiesTotal, '']);
+    data.push(['非流動負債合計', '', nonCurrentLiabilitiesTotal, '100.00%']);
     
     // 負債合計
     const totalLiabilities = document.getElementById('totalLiabilities').textContent;
@@ -369,7 +441,7 @@ function prepareBalanceSheetData(startDate, endDate) {
     
     // 股本合計
     const capitalTotal = document.getElementById('capitalTotal').textContent;
-    data.push(['股本合計', '', capitalTotal, '']);
+    data.push(['股本合計', '', capitalTotal, '100.00%']);
     data.push([]); // 空行
     
     // 保留盈餘
@@ -382,7 +454,7 @@ function prepareBalanceSheetData(startDate, endDate) {
     
     // 保留盈餘合計
     const retainedEarningsTotal = document.getElementById('retainedEarningsTotal').textContent;
-    data.push(['保留盈餘合計', '', retainedEarningsTotal, '']);
+    data.push(['保留盈餘合計', '', retainedEarningsTotal, '100.00%']);
     
     // 股東權益合計
     const totalEquity = document.getElementById('totalEquity').textContent;

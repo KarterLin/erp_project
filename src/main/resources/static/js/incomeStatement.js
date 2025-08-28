@@ -138,39 +138,34 @@ function loadIncomeStatement(startDate, endDate) {
 
 // --- 更新損益表內容 ---
 function updateIncomeStatement(data) {
-  // 3. 清空 total-row 小計
+  // 清空所有百分比欄位
   document.querySelectorAll("tr.total-row").forEach(tr => {
     tr.children[2].textContent = "0.00";
-    tr.children[3].textContent = "0%";
+    tr.children[3].textContent = "";
   });
 
-  // 1. 更新主要計算欄位（營業毛利、營業淨利、稅前淨利、本期淨利）
+  document.querySelectorAll("tr.sub-row").forEach(tr => {
+    tr.children[2].textContent = "0.00";
+    tr.children[3].textContent = "";
+  });
+
+  // 更新主要計算欄位（營業毛利、營業淨利、稅前淨利、本期淨利）
   setText("#grossProfit", data.grossProfit, "profit");
   setText("#operatingIncome", data.operatingIncome, "profit");
   setText("#preTaxIncome", data.preTaxIncome, "profit");
   setText("#netIncome", data.netIncome, "profit");
 
-  // 2. 清空所有子列小計與百分比欄位
-  document.querySelectorAll("tr.sub-row").forEach(tr => {
-    tr.children[2].textContent = "0.00"; // 小計欄
-    tr.children[3].textContent = "0%";   // 百分比欄
-  });
-
-  // 4. 計算所有子列總額，用於百分比
-  let totalAmount = data.details.reduce((sum, item) => sum + Number(item.amount), 0);
-
-  // 5. 暫存每個 group 的合計與類型
+  // 暫存每個 group 的合計與類型
   const groupTotals = {};
   const groupTypes = {}; // income / expense
 
-  // 6. 填子列金額並累計 group
+  // 填子列金額並累計 group
   data.details.forEach(item => {
     const td = document.querySelector(`td[data-parent-id='${item.parentId}']`);
     if (!td) return;
 
     const tr = td.parentElement;
     const subtotalTd = tr.children[2];
-    const percentTd = tr.children[3];
 
     // 判斷 group 類型
     const groupClass = Array.from(tr.classList).find(c => c.startsWith('group'));
@@ -183,11 +178,6 @@ function updateIncomeStatement(data) {
     // 顯示金額
     subtotalTd.textContent = formatAmountForDisplay(item.amount, type);
 
-    // 百分比
-    percentTd.textContent = totalAmount !== 0
-      ? ((item.amount / totalAmount) * 100).toFixed(2) + "%"
-      : "0%";
-
     // 累計 group 合計
     if (groupClass) {
       if (!groupTotals[groupClass]) groupTotals[groupClass] = 0;
@@ -195,7 +185,10 @@ function updateIncomeStatement(data) {
     }
   });
 
-  // 7. 更新 total-row 金額
+  // 計算並設定百分比
+  calculateAndSetPercentages(groupTotals, data.details);
+
+  // 更新 total-row 金額
   Object.keys(groupTotals).forEach(groupClass => {
     const totalRow = Array.from(document.querySelectorAll('tr.total-row'))
       .find(tr => {
@@ -210,11 +203,84 @@ function updateIncomeStatement(data) {
     if (totalRow) {
       const type = groupTypes[groupClass] || "income";
       totalRow.children[2].textContent = formatAmountForDisplay(groupTotals[groupClass], type);
-      totalRow.children[3].textContent = totalAmount !== 0
-        ? ((groupTotals[groupClass] / totalAmount) * 100).toFixed(2) + "%"
-        : "0%";
+      
+      // total-row 不顯示百分比（根據需求）
+      totalRow.children[3].textContent = "";
     }
   });
+}
+
+// 新增：計算並設定百分比的函數
+function calculateAndSetPercentages(groupTotals, details) {
+  // 先為所有子項目設定預設的 0%
+  document.querySelectorAll("tr.sub-row").forEach(tr => {
+    tr.children[3].textContent = "0%";
+  });
+
+  details.forEach(item => {
+    const td = document.querySelector(`td[data-parent-id='${item.parentId}']`);
+    if (!td) return;
+
+    const tr = td.parentElement;
+    const percentTd = tr.children[3];
+    const groupClass = Array.from(tr.classList).find(c => c.startsWith('group'));
+    
+    if (!groupClass) return;
+
+    let percentage = "0%"; // 預設為 0%
+
+    // 根據不同組別計算百分比
+    if (groupClass === 'group1') {
+      // 營業收入：單一項目，有金額顯示 100%，沒金額顯示 0%
+      percentage = item.amount !== 0 ? "100%" : "0%";
+    } else if (groupClass === 'group2') {
+      // 營業成本：單一項目，有金額顯示 100%，沒金額顯示 0%
+      percentage = item.amount !== 0 ? "100%" : "0%";
+    } else if (groupClass === 'group3') {
+      // 營業費用：以營業費用合計為 100% 計算
+      const groupTotal = Math.abs(groupTotals[groupClass] || 0);
+      if (groupTotal !== 0) {
+        percentage = ((Math.abs(item.amount) / groupTotal) * 100).toFixed(2) + "%";
+      } else {
+        percentage = "0%";
+      }
+    } else if (groupClass === 'group4') {
+      // 營業外收入及支出：以營業外收入及支出合計為 100% 計算
+      const groupTotal = Math.abs(groupTotals[groupClass] || 0);
+      if (groupTotal !== 0) {
+        percentage = ((Math.abs(item.amount) / groupTotal) * 100).toFixed(2) + "%";
+      } else {
+        percentage = "0%";
+      }
+    }
+
+    percentTd.textContent = percentage;
+  });
+
+  // 清空不需要百分比的行（這些項目完全不顯示百分比）
+  // 營業淨利(損)
+  const operatingIncomeRow = document.getElementById('operatingIncome')?.closest('tr');
+  if (operatingIncomeRow) {
+    operatingIncomeRow.children[3].textContent = "";
+  }
+
+  // 稅前淨利(損)
+  const preTaxIncomeRow = document.getElementById('preTaxIncome')?.closest('tr');
+  if (preTaxIncomeRow) {
+    preTaxIncomeRow.children[3].textContent = "";
+  }
+
+  // 所得稅費用
+  const taxRow = document.querySelector(`td[data-parent-id='7950']`)?.parentElement;
+  if (taxRow) {
+    taxRow.children[3].textContent = "";
+  }
+
+  // 本期淨利(損)
+  const netIncomeRow = document.getElementById('netIncome')?.closest('tr');
+  if (netIncomeRow) {
+    netIncomeRow.children[3].textContent = "";
+  }
 }
 
 // 顯示金額工具函式
@@ -268,7 +334,7 @@ function addIncomeAccountData(data, accounts) {
             const percent = tr.children[3].textContent;
             data.push(['', account.name, amount, percent]);
         } else {
-            data.push(['', account.name, '0.00', '0%']);
+            data.push(['', account.name, '0.00', '']);
         }
     });
 }
@@ -314,7 +380,7 @@ function calculateNonOperatingTotal() {
             // 根據科目性質調整符號
             if (id === '7100') { // 其他收入 - 正數
                 total += amount;
-            } else if (id === '7230') { // 其他利益及損失 - 可能正負
+            } else if (id === '7230') { // 其他利益及損失 - 可能正負 
                 total += amount;
             } else if (id === '7050') { // 財務成本 - 負數
                 total -= Math.abs(amount);
@@ -407,7 +473,7 @@ function prepareIncomeStatementData(startDate, endDate) {
 
 // 匯出 Excel 功能
 function exportIncomeStatementToExcel() {
-    // 獲取當前日期範圍
+    // 取得當前日期範圍
     const dateInput = document.getElementById('dateRange');
     const dateRangeValue = dateInput.value;
     
