@@ -28,6 +28,7 @@ public interface IncomeStatementRepository extends JpaRepository<JournalDetail, 
     JOIN jd.journalEntry je
     WHERE je.entryDate >= :startDate
       AND je.entryDate <= :endDate
+      AND je.status = com.example.erp.entity.EntryStatus.APPROVED
     GROUP BY a.parentId
 """)
 List<ParentCategoryAmount> findAmountsByDateRange(
