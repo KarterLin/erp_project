@@ -35,7 +35,7 @@ async function loadUsers() {
                 let editCell = "";
                 if (currentRoles.includes("ROLE_ADMIN") || user.email === currentEmail) {
                     editCell = `
-                        <a href="setting_userUpdate.html?email=${encodeURIComponent(user.email)}">
+                        <a href="setting_userUpdate.html?id=${encodeURIComponent(user.id)}">
                             <img src="./img/icon1.png" alt="edit">
                         </a>`;
                 } else {
@@ -43,12 +43,12 @@ async function loadUsers() {
                     editCell = `<img src="./img/icon1.png" alt="edit" style="opacity:0.3; cursor:not-allowed;">`;
                 }
                 let roleText = "";
-                if (user.role == "ADMIN") {
+                if (user.role === "ADMIN") {
                     roleText = "財會主管"
-                }else if (user.role == "USER") {
+                } else if (user.role === "USER") {
                     roleText = "一般財會人員"
                 }
-                
+
                 const row = `
                     <tr>
                         <td>${user.account ?? ""}</td>

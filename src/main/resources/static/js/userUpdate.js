@@ -1,14 +1,15 @@
+// API endpoint
+const API_URL = "https://127.0.0.1:8443/api";
+
 const uAccountEl = document.getElementById("uAccount");
-const uNameEl = document.getElementById("uName");
 const uEmailEl = document.getElementById("uEmail");
 const jobTitleEl = document.getElementById("jobTitle");
 
-const initialFormData ={};
+const initialFormData = {};
 
 // 欄位與驗證規則定義
 const fieldMap = [
     { el: uAccountEl, name: "帳號", required: true },
-    { el: uNameEl, name: "姓名", required: true },
     { el: uEmailEl, name: "Email", required: true, pattern: /^[^\s@]+@[^\s@]+\.[^\s@]+$/, formatMsg: "信箱格式錯誤" },
     { el: jobTitleEl, name: "職稱", required: true }
 ];
@@ -17,11 +18,49 @@ fieldMap.forEach(({ el }) => {
     initialFormData[el.id] = el.value;
 });
 
-// API endpoint
-const API_URL = "https://127.0.0.1:8443/api/company";
+// 網址取得id
+function getQueryParam(name) {
+    const params = new URLSearchParams(window.location.search);
+    return params.get(name);
+}
 
+async function loadUserDetail() {
+    const id = getQueryParam("id");
+    if (!id) {
+        alert("缺少 id 參數");
+        return;
+    }
 
+    try {
+        const response = await fetch(`${API_URL}/users/${id}`, {
+            method: "GET",
+            credentials: "include"
+        });
+        if (!response.ok) throw new Error("取得使用者資料失敗");
 
+        const result = await response.json();
+        if (result.status === 200 && result.data) {
+            const user = result.data;
+            document.getElementById("uAccount").value = user.account ?? "";
+            document.getElementById("uEmail").value = user.email ?? "";
+            let roleCode = "";
+                if (user.role === "USER") {
+                    roleCode = "1"
+                } else if (user.role === "ADMIN") {
+                    roleCode = "2"
+                }
+            document.getElementById("jobTitle").value = roleCode;
+            if (user.statusCode === 1) {
+                document.getElementById("isActive").checked = true;
+            } else if (user.statusCode === 2) {
+                document.getElementById("notActive").checked = true;
+            }
+        }
+    } catch (err) {
+        console.error("Error loading user detail:", err);
+        alert("無法載入使用者資料");
+    }
+}
 
 // 清除錯誤格式
 function clearErrType() {
@@ -32,7 +71,6 @@ function clearErrType() {
 }
 // form格式驗證
 document.getElementById("userUpdate").addEventListener("submit", function (e) {
-    // 擋submit
     e.preventDefault();
     // clearErrType();
 
@@ -97,3 +135,7 @@ function showError(element, message) {
     // element.focus();
     // alert(message);
 }
+
+
+
+document.addEventListener("DOMContentLoaded", loadUserDetail);
