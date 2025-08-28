@@ -1,0 +1,71 @@
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.createBtn {
+    background-color: #3498db;
+    margin-right: 10px;
+}
+table {
+    margin-top: 20px;
+    table-layout: fixed; /* 保持欄寬一致 */
+    overflow: hidden;
+}
+tbody {
+    display: table-row;
+}
+th, td {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+td img {
+    max-height: 25px;
+    vertical-align: middle;
+}
+/* 斑馬線 + hover 效果 */
+tbody tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+tbody tr:hover {
+  background-color: #eefaf1;
+}
+th:nth-child(1),
+td:nth-child(1),
+th:nth-child(2),
+td:nth-child(2),
+th:nth-child(4),
+td:nth-child(4),
+th:nth-child(5),
+td:nth-child(5),
+th:nth-child(6),
+td:nth-child(6) {
+    width: 15%;
+}
+th:nth-child(3),
+td:nth-child(3) {
+    width: 25%;
+}
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 85%;
+  margin: 20px auto 0 auto; 
+}
+.pagination a {
+  text-decoration: none;
+  color: #3498db;
+  padding: 6px 12px;
+  margin: 0 5px;
+  /* border-radius: 4px; */
+  /* background: #f4f4f4; */
+  /* border: 1px solid #ddd; */
+  transition: background-color 0.3s;
+}
+/* .note {
+  font-size: 16px;
+  color: lightgray;
+  margin-left: auto; 
+} */

@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="./css/sidebar.css">
+    <link rel="stylesheet" href="./css/topnavbar.css">
+    <link rel="stylesheet" href="./css/main.css">
+    <link rel="stylesheet" href="./css/userManage.css">
+</head>
+
+<body>
+    <!-- Topbar -->
+    <div id="topbar-container"></div>
+    <div id="sidebar-container"></div>
+    <div class="main page-wrapper">
+        <div class="header">
+            <h1>帳號管理列表</h1>
+            <a href="setting_userCreate.html">
+                <button class="createBtn">+ 建立新帳號</button>
+            </a>
+        </div>
+        <hr>
+        <table>
+            <thead>
+                <tr>
+                    <th>帳號</th>
+                    <th>email</th>
+                    <th>職務</th>
+                    <th>狀態</th>
+                    <th>操作</th>
+                </tr>
+            </thead>
+            <tbody>
+                
+            </tbody>
+        </table>
+
+        <div class="pagination">
+            <a href="#">«</a>
+            <a href="#" class="active">1</a>
+            <a href="#">»</a>
+            <!-- <span class="note">共1頁，1筆紀錄</span> -->
+        </div>
+
+    </div>
+    <script src="js/sidebar.js"></script>
+    <script src="js/topnavbar.js"></script>
+    <script src="js/setting_userManage.js"></script>
+</body>
+
+</html>
