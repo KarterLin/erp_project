@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>柴務豹表</title>
+    <link rel="stylesheet" href="css/sidebar.css">
+    <link rel="stylesheet" href="./css/topnavbar.css">
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/setting_info.css">
+
+</head>
+
+<body>
+    <!-- Topbar -->
+    <div id="topbar-container"></div>
+    <!-- Sidebar -->
+    <div id="sidebar-container"></div>
+
+    <div class="main page-wrapper">
+
+        <h1>基本資料</h1>
+        <hr>
+        <div class="row">
+            <div class="col title">
+                <p>公司基本資料</p>
+            </div>
+
+            <div class="col form">
+                <button class="editBtn" id="editBtn">編輯</button><br>
+                <form id="cForm">
+                    <label for="cName" class="required">公司名稱</label><br>
+                    <input type="text" id="cName" disabled><br>
+                    <label for="taxID" class="required">公司統編</label><br>
+                    <input type="text" id="taxID" disabled><br>
+                    <label for="rName" class="required">負責人姓名</label><br>
+                    <input type="text" id="rName" disabled ><br>
+                    <label for="rTel" class="required">負責人連絡電話</label><br>
+                    <input type="tel" id="rTel" disabled><br>
+                    <label for="cEmail" class="required">電子信箱</label><br>
+                    <input type="email" id="cEmail" disabled><br>
+
+                    <span class="endEdit">
+                        <button type="button" class="cancelBtn" onclick="cancelEdit()">取消更新</button>
+                        <button type="submit" class="submitBtn">確認更新</button>
+                    </span>
+                </form>
+            </div>
+
+            <div class="col blank"></div>
+        </div>
+
+    </div>
+    <script src="js/sidebar.js"></script>
+    <script src="js/topnavbar.js"></script>
+    <script src="js/setting_info.js"></script>
+</body>
+
+</html>
