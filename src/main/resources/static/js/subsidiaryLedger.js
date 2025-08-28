@@ -194,12 +194,10 @@ function renderLedgerTable(data) {
     tr.innerHTML = `
       <td>${item.voucherDate || ''}</td>
       <td>${item.voucherNumber || ''}</td>
-      <td>${item.remarks || ''}</td>
       <td>${item.description || item.summary || ''}</td>
       <td>${debitAmount > 0 ? formatAmount(debitAmount) : ''}</td>
       <td>${creditAmount > 0 ? formatAmount(creditAmount) : ''}</td>
       <td>${direction}</td>
-      <td>${formatAmount(item.balance || 0)}</td>
     `;
     
     tbody.appendChild(tr);
@@ -243,12 +241,10 @@ function exportToExcel() {
   excelData.push([
     '日期',
     '傳票編號',
-    '備註',
     '摘要',
     '借方金額',
     '貸方金額',
     '借/貸',
-    '餘額'
   ]);
 
   // 加入資料行
@@ -265,7 +261,6 @@ function exportToExcel() {
       debitAmount > 0 ? debitAmount : '',
       creditAmount > 0 ? creditAmount : '',
       direction,
-      item.balance || 0
     ]);
   });
 
@@ -277,12 +272,10 @@ function exportToExcel() {
   const colWidths = [
     { wch: 12 }, // 日期
     { wch: 15 }, // 傳票編號
-    { wch: 20 }, // 備註
     { wch: 25 }, // 摘要
     { wch: 15 }, // 借方金額
     { wch: 15 }, // 貸方金額
     { wch: 8 },  // 借/貸
-    { wch: 15 }  // 餘額
   ];
   ws['!cols'] = colWidths;
 
@@ -292,20 +285,16 @@ function exportToExcel() {
     // 借方金額 (第5欄, index 4)
     const cellAddress4 = XLSX.utils.encode_cell({ r: R, c: 4 });
     if (ws[cellAddress4] && typeof ws[cellAddress4].v === 'number') {
-      ws[cellAddress4].z = '#,##0.00';
+      ws[cellAddress4].z = '#,##0.##';
     }
     
     // 貸方金額 (第6欄, index 5)
     const cellAddress5 = XLSX.utils.encode_cell({ r: R, c: 5 });
     if (ws[cellAddress5] && typeof ws[cellAddress5].v === 'number') {
-      ws[cellAddress5].z = '#,##0.00';
+      ws[cellAddress5].z = '#,##0.##';
     }
     
-    // 餘額 (第8欄, index 7)
-    const cellAddress7 = XLSX.utils.encode_cell({ r: R, c: 7 });
-    if (ws[cellAddress7] && typeof ws[cellAddress7].v === 'number') {
-      ws[cellAddress7].z = '#,##0.00';
-    }
+    
   }
 
   // 加入工作表到工作簿
