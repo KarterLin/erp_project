@@ -8,7 +8,6 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import com.example.erp.dto.ParentCategoryAmount;
 import com.example.erp.entity.Account;
 import com.example.erp.entity.JournalDetail;
 
@@ -37,22 +36,20 @@ public interface BalanceSheetRepository extends JpaRepository<JournalDetail, Lon
     List<Account> findUsedRevenueAndExpenseAccounts();
 
     // 計算父科目餘額（native SQL）
-    @Query("""
-       SELECT new com.example.erp.dto.ParentCategoryAmount(
-              a.parentId,
-              SUM(jd.debit) - SUM(jd.credit)
-       )
-       FROM JournalDetail jd
-       JOIN jd.account a
-       JOIN jd.journalEntry e
-       WHERE a.isActive = true
-       AND jd.isActive = true
-       AND e.status = com.example.erp.entity.EntryStatus.APPROVED
-       AND e.entryDate BETWEEN :startDate AND :endDate
-       GROUP BY a.parentId
-       """)
-       List<ParentCategoryAmount> findParentBalancesByDateRange(
-       @Param("startDate") LocalDate startDate,
-       @Param("endDate") LocalDate endDate
-       );
-       }
+    @Query(value = """
+        SELECT a.parent_id AS parentId,
+               SUM(j.debit) - SUM(j.credit) AS balance
+        FROM journal_detail j
+        JOIN account a ON j.account_id = a.id
+        JOIN journal_entry e ON j.journal_entry_id = e.id
+        WHERE a.is_active = 1
+          AND j.is_active = 1
+          AND e.status = 'APPROVED'
+          AND e.entry_date BETWEEN :startDate AND :endDate
+        GROUP BY a.parent_id
+        """, nativeQuery = true)
+    List<Object[]> findParentBalancesByDateRange(
+        @Param("startDate") LocalDate startDate,
+        @Param("endDate") LocalDate endDate
+    );
+}
