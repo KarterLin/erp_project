@@ -28,7 +28,7 @@ function formatDate(dateString) {
 function formatNumber(number) {
     if (number === null || number === undefined) return '0.00';
     return parseFloat(number).toLocaleString('zh-TW', {
-        minimumFractionDigits: 2,
+        minimumFractionDigits: 0,
         maximumFractionDigits: 2
     });
 }

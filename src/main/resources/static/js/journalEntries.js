@@ -344,20 +344,32 @@ function setupAmountInputs(debitInput, creditInput) {
     }
 }
 
+function formatAmount(num) {
+    return num.toLocaleString(undefined, { 
+        minimumFractionDigits: 0, 
+        maximumFractionDigits: 2 
+    });
+}
+
 function updateBalanceSummary() {
     let totalDebit = 0;
     let totalCredit = 0;
+
     document.querySelectorAll('input[name="debit[]"]').forEach(input => {
         totalDebit += parseFloat(input.value || '0');
     });
+
     document.querySelectorAll('input[name="credit[]"]').forEach(input => {
         totalCredit += parseFloat(input.value || '0');
     });
+
     const diff = totalDebit - totalCredit;
-    document.getElementById('total-debit').textContent = totalDebit.toFixed(2);
-    document.getElementById('total-credit').textContent = totalCredit.toFixed(2);
+
+    document.getElementById('total-debit').textContent = formatAmount(totalDebit);
+    document.getElementById('total-credit').textContent = formatAmount(totalCredit);
+
     const diffSpan = document.getElementById('balance-diff');
-    diffSpan.textContent = diff.toFixed(2);
+    diffSpan.textContent = formatAmount(diff);
     diffSpan.style.color = diff === 0 ? 'green' : 'red';
 }
 
