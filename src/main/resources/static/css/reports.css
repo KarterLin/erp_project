@@ -10,8 +10,10 @@
   --shadow: 0 4px 12px rgba(0,0,0,.08);
 }
 
-/* 全域背景/字體 */
-html, body{
+/* 只影響報表頁，不干擾 sidebar */
+.reports-page,
+.reports-page html,
+.reports-page body{
   background: var(--bg);
   color: var(--text);
   font-family: "Lato","Noto Sans TC","Microsoft JhengHei",sans-serif;
@@ -19,7 +21,7 @@ html, body{
 }
 
 /* 頁面標題 */
-.page-title{
+.reports-page .page-title{
   margin: 16px 24px 8px;
   font-size: 40px;
   font-weight: 800;
@@ -27,18 +29,18 @@ html, body{
   color: var(--text);
 }
 @media (max-width:600px){
-  .page-title{ font-size: 32px; }
+  .reports-page .page-title{ font-size: 32px; }
 }
 
-/* 群組標題（建立交易 / 帳務管理） */
-.group-title{
+/* 小節標題 */
+.reports-page .group-title{
   margin: 18px 24px 12px;
   font-size: 20px;
   font-weight: 700;
   color: var(--text);
   position: relative;
 }
-.group-title::after{
+.reports-page .group-title::after{
   content:"";
   display:block;
   width: 64px;
@@ -49,7 +51,7 @@ html, body{
 }
 
 /* 動作容器 */
-.actions{
+.reports-page .actions{
   display: flex;
   flex-wrap: wrap;
   gap: 20px;
@@ -57,7 +59,7 @@ html, body{
 }
 
 /* 卡片 */
-.action-card{
+.reports-page .action-card{
   flex: 0 0 180px;       /* 固定寬度 */
   height: 160px;
   display:flex;
@@ -75,18 +77,18 @@ html, body{
 }
 
 /* a / button 都可 */
-a.action-card{ display:flex; }
-button.action-card{
+.reports-page a.action-card{ display:flex; }
+.reports-page button.action-card{
   border:none;
   background: var(--card-bg);
 }
 
 /* 卡片內容 */
-.action-card img{
+.reports-page .action-card img{
   width: 56px; height: 56px;
   object-fit: contain;
 }
-.action-card span{
+.reports-page .action-card span{
   margin-top: 12px;
   font-size: 16px;
   font-weight: 700;
@@ -94,7 +96,7 @@ button.action-card{
 }
 
 /* hover 狀態：橘色感 */
-.action-card:hover{
+.reports-page .action-card:hover{
   transform: translateY(-4px);
   border-color: var(--accent);
   box-shadow: 0 8px 20px rgba(0,0,0,.12);
@@ -103,7 +105,7 @@ button.action-card{
 
 /* 手機調整 */
 @media (max-width:600px){
-  .action-card{
+  .reports-page .action-card{
     flex: 1 1 100%;
     height: 150px;
   }

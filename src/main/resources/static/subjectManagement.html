@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-Hant">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
@@ -23,78 +23,71 @@
     </div>
 
     <!-- 科目資訊卡片 -->
-<section class="subject-card">
-  <div class="card-header">科目資訊</div>
+    <section class="subject-card">
+      <div class="card-header">科目資訊</div>
 
-  <div class="accordion-container">
-    <div class="accordion-item">
-      <button class="accordion-header" data-type="asset">
-        <span class="name">資產</span>
-        <span class="badge" id="asset-count">0</span>
-        <span class="chevron" aria-hidden="true"></span>
-      </button>
-      <div class="accordion-content">
-        <ul id="asset-list"></ul>
+      <div class="accordion-container">
+        <div class="accordion-item">
+          <button class="accordion-header" data-type="asset">
+            <span class="name">資產</span>
+            <span class="chevron" aria-hidden="true"></span>
+          </button>
+          <div class="accordion-content">
+            <ul id="asset-list"></ul>
+          </div>
+        </div>
+
+        <div class="accordion-item">
+          <button class="accordion-header" data-type="liability">
+            <span class="name">負債</span>
+            <span class="chevron" aria-hidden="true"></span>
+          </button>
+          <div class="accordion-content">
+            <ul id="liability-list"></ul>
+          </div>
+        </div>
+
+        <div class="accordion-item">
+          <button class="accordion-header" data-type="equity">
+            <span class="name">權益</span>
+            <span class="chevron" aria-hidden="true"></span>
+          </button>
+          <div class="accordion-content">
+            <ul id="equity-list"></ul>
+          </div>
+        </div>
+
+        <div class="accordion-item">
+          <button class="accordion-header" data-type="revenue">
+            <span class="name">營業收入</span>
+            <span class="chevron" aria-hidden="true"></span>
+          </button>
+          <div class="accordion-content">
+            <ul id="revenue-list"></ul>
+          </div>
+        </div>
+
+        <div class="accordion-item">
+          <button class="accordion-header" data-type="cost">
+            <span class="name">營業成本</span>
+            <span class="chevron" aria-hidden="true"></span>
+          </button>
+          <div class="accordion-content">
+            <ul id="cost-list"></ul>
+          </div>
+        </div>
+
+        <div class="accordion-item">
+          <button class="accordion-header" data-type="expense">
+            <span class="name">營業費用</span>
+            <span class="chevron" aria-hidden="true"></span>
+          </button>
+          <div class="accordion-content">
+            <ul id="expense-list"></ul>
+          </div>
+        </div>
       </div>
-    </div>
-
-    <div class="accordion-item">
-      <button class="accordion-header" data-type="liability">
-        <span class="name">負債</span>
-        <span class="badge" id="liability-count">0</span>
-        <span class="chevron" aria-hidden="true"></span>
-      </button>
-      <div class="accordion-content">
-        <ul id="liability-list"></ul>
-      </div>
-    </div>
-
-    <div class="accordion-item">
-      <button class="accordion-header" data-type="equity">
-        <span class="name">權益</span>
-        <span class="badge" id="equity-count">0</span>
-        <span class="chevron" aria-hidden="true"></span>
-      </button>
-      <div class="accordion-content">
-        <ul id="equity-list"></ul>
-      </div>
-    </div>
-
-    <div class="accordion-item">
-      <button class="accordion-header" data-type="revenue">
-        <span class="name">營業收入</span>
-        <span class="badge" id="revenue-count">0</span>
-        <span class="chevron" aria-hidden="true"></span>
-      </button>
-      <div class="accordion-content">
-        <ul id="revenue-list"></ul>
-      </div>
-    </div>
-
-    <div class="accordion-item">
-      <button class="accordion-header" data-type="cost">
-        <span class="name">營業成本</span>
-        <span class="badge" id="cost-count">0</span>
-        <span class="chevron" aria-hidden="true"></span>
-      </button>
-      <div class="accordion-content">
-        <ul id="cost-list"></ul>
-      </div>
-    </div>
-
-    <div class="accordion-item">
-      <button class="accordion-header" data-type="expense">
-        <span class="name">營業費用</span>
-        <span class="badge" id="expense-count">0</span>
-        <span class="chevron" aria-hidden="true"></span>
-      </button>
-      <div class="accordion-content">
-        <ul id="expense-list"></ul>
-      </div>
-    </div>
-  </div>
-</section>
-
+    </section>
   </div>
 
   <!-- 新增科目 Modal -->
@@ -120,13 +113,13 @@
             <option value="liability">負債</option>
             <option value="equity">權益</option>
             <option value="revenue">收入</option>
-            <option value="cost">成本</option>
+            <option value="cost">成本（轉 expense 傳後端）</option>
             <option value="expense">費用</option>
           </select>
         </div>
         <div class="form-group">
           <label for="parentId">父科目ID：</label>
-          <input type="number" id="parentId" placeholder="請輸入父科目ID（可選）">
+          <input type="number" id="parentId" placeholder="可留空">
         </div>
       </div>
       <div class="form-btn">
@@ -150,8 +143,9 @@
     </div>
   </div>
 
+  <!-- JS -->
   <script src="./js/subjectManagement.js"></script>
-  <script src="js/sidebar.js"></script>
-  <script src="js/topnavbar.js"></script>
+  <script src="./js/sidebar.js"></script>
+  <script src="./js/topnavbar.js"></script>
 </body>
 </html>

@@ -1,67 +1,84 @@
-/* ====== 全局 ====== */
-body {
-  margin: 0;
-  font-family: "Lato", sans-serif;
-  background-color: #f5f7fa;
+:root{
+  --bg: #ffffff;
+  --card-bg: #ffffff;
+  --card-border: #e5e7eb;
+  --text: #0f172a;
+  --muted: #6b7280;
+  --accent: #f97316;
+  --accent-weak: #fff7ed;
+  --radius: 14px;
+  --shadow: 0 4px 12px rgba(0,0,0,.08);
 }
 
-header {
-  padding: 16px;
+html, body{
+  background: var(--bg);
+  color: var(--text);
+  font-family: "Lato","Noto Sans TC","Microsoft JhengHei",sans-serif;
+}
+
+/* 頁面標題 */
+.page-title{
+  margin: 16px 24px 8px;
   font-size: 40px;
-  font-weight: bold;
+  font-weight: 800;
+  letter-spacing: .5px;
+}
+@media (max-width:600px){
+  .page-title{ font-size: 32px; }
 }
 
-/* ====== 區塊：按鈕區容器 ======
-   一個 .buttons 代表一個小節（如：帳號設定 / 開帳設定）
-   小標在上、按鈕列在下
-================================ */
-.buttons {
-  display: flex;
-  flex-direction: column;   /* 小標在上，按鈕群在下 */
-  align-items: flex-start;  /* 靠左 */
-  margin-left: 25px;        /* 與 header 左對齊 */
-  margin-top: 30px;
-  gap: 10px;                /* 小標與按鈕群的間距 */
+/* 小節標題 */
+.group-title{
+  margin: 18px 24px 12px;
+  font-size: 20px;
+  font-weight: 700;
+}
+.group-title::after{
+  content:"";
+  display:block;
+  width: 64px;
+  height: 3px;
+  margin-top: 6px;
+  background: linear-gradient(90deg, var(--accent), transparent);
+  border-radius: 2px;
 }
 
-/* 小標（帳號設定 / 開帳設定） */
-.button-label {
-  font-size: 25px;
-  color: #534e4e;
-  font-weight: 500;
-  line-height: 1.2;
+/* 卡片區 */
+.actions{
+  display:flex;
+  flex-wrap:wrap;
+  gap:20px;
+  padding: 0 24px 24px;
 }
 
-/* 按鈕群：橫向排列 */
-.button-group {
-  display: flex;
-  gap: 20px;                /* 每顆按鈕的間距 */
+/* 卡片 */
+.action-card{
+  flex:0 0 180px;
+  height:160px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  border:1px solid var(--card-border);
+  border-radius: var(--radius);
+  background: var(--card-bg);
+  color: var(--text);
+  text-decoration: none;
+  box-shadow: var(--shadow);
+  transition: all .2s ease;
+}
+.action-card img{ width:56px; height:56px; object-fit:contain; }
+.action-card span{ margin-top:12px; font-size:16px; font-weight:700; }
+
+/* hover */
+.action-card:hover{
+  transform: translateY(-4px);
+  border-color: var(--accent);
+  background: var(--accent-weak);
+  box-shadow: 0 8px 20px rgba(0,0,0,.12);
 }
 
-/* ====== 按鈕樣式 ====== */
-.buttons button {
-  display: flex;
-  flex-direction: column;   /* 圖片在上、文字在下 */
-  align-items: center;
-  justify-content: center;
-  width: 150px;
-  height: 150px;
-  gap: 8px;
-  font-size: 16px;
-
-  border: none;
-  border-radius: 5px;
-  background-color: #fff;
-  cursor: pointer;
-}
-
-.buttons button:hover {
-  background-color: #f0f0f0;
-}
-
-/* ====== 響應式（可依需要調整） ====== */
-@media screen and (max-width: 700px) {
-  header { margin-left: 0; }
-  .buttons { margin-left: 16px; }
-  .button-group { flex-wrap: wrap; } /* 窄螢幕自動換行 */
+/* RWD */
+@media (max-width:600px){
+  .action-card{ flex:1 1 100%; height:150px; }
 }

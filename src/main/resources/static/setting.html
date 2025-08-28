@@ -1,62 +1,56 @@
 <!DOCTYPE html>
-<html lang="en">
-
+<html lang="zh-Hant">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <link rel="stylesheet" href="./css/sidebar.css">
-    <link rel="stylesheet" href="./css/setting.css">
-    <link rel="stylesheet" href="./css/topnavbar.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>設定</title>
+  <link rel="stylesheet" href="./css/management.css">
+  <link rel="stylesheet" href="./css/sidebar.css">
+  <link rel="stylesheet" href="./css/topnavbar.css">
 </head>
+<body class="setting-page">
+  <!-- Topbar -->
+  <div id="topbar-container"></div>
+  <!-- Sidebar -->
+  <div id="sidebar-container"></div>
 
-<body>
-    <!-- Topbar -->
-    <div id="topbar-container"></div>
-    <div id="sidebar-container"></div>
-    <div class="page-wrapper">
-        <header>設定</header>
+  <div class="page-wrapper">
+    <h1 class="page-title">設定</h1>
 
-        <div class="buttons">
-            <!-- 小標籤獨立出來 -->
-            <span class="button-label">帳號設定</span>
+    <!-- 帳號設定 -->
+    <section class="action-group">
+      <h2 class="group-title">帳號設定</h2>
+      <div class="actions">
+        <a class="action-card" href="./setting_info.html" aria-label="基本資料">
+          <img src="./img/folder1.png" alt="基本資料">
+          <span>基本資料</span>
+        </a>
 
-            <!-- 按鈕區 -->
-            <div class="button-group">
-                <a href="./setting_info.html">
-                    <button>
-                        <img src="./img/folder1.png" alt="coin" width="50" height="50">
-                        基本資料
-                    </button>
-                </a>
-                <a href="./setting_userCreate.html">
-                    <button>
-                        <img src="./img/folder2.png" alt="coin" width="50" height="50">
-                        新增帳號
-                    </button>
-                </a>
-                <a href="./setting_userManage.html">
-                    <button>
-                        <img src="./img/folder1.png" alt="coin" width="50" height="50">
-                        帳號管理
-                    </button>
-                </a>
-            </div>
-        </div>
-        <div class="buttons">
-            <div class=".button-item">
-                <span class="button-label">開帳設定</span>
-                <a href="./setting_opening.html"><button>
-                        <img src="./img/folder1.png" alt="coin" width="50px" height="50px">
-                        開帳設定
-                    </button>
-                </a>
-            </div>
-        </div>
-    </div>
-    <script src="js/sidebar.js"></script>
-    <script src="js/topnavbar.js"></script>
-    
+        <a class="action-card" href="./setting_userCreate.html" aria-label="新增帳號">
+          <img src="./img/folder2.png" alt="新增帳號">
+          <span>新增帳號</span>
+        </a>
+
+        <a class="action-card" href="./setting_userManage.html" aria-label="帳號管理">
+          <img src="./img/folder1.png" alt="帳號管理">
+          <span>帳號管理</span>
+        </a>
+      </div>
+    </section>
+
+    <!-- 開帳設定 -->
+    <section class="action-group">
+      <h2 class="group-title">開帳設定</h2>
+      <div class="actions">
+        <a class="action-card" href="./setting_opening.html" aria-label="開帳設定">
+          <img src="./img/folder1.png" alt="開帳設定">
+          <span>開帳設定</span>
+        </a>
+      </div>
+    </section>
+  </div>
+
+  <script src="js/sidebar.js"></script>
+  <script src="js/topnavbar.js"></script>
 </body>
-
 </html>

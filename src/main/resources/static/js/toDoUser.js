@@ -105,7 +105,6 @@ function displayEntries(entries) {
 }
 
 
-
 function showError(message) {
     const loadingDiv = document.getElementById('loading');
     const errorDiv = document.getElementById('error');

@@ -1,5 +1,5 @@
 /* ===== 明細分類帳：白底＋橘色品牌（只改色） ===== */
-:root{
+:root {
   --accent: #f97316;        /* 橘 */
   --accent-weak: #fff7ed;   /* 淡橘 */
   --text: #0f172a;          /* 主文字 */
@@ -8,7 +8,7 @@
   --border: #e5e7eb;        /* 邊線 */
 }
 
-/* 全域底色與字色 */
+/* 全域底色與字色（僅限本頁，不影響 topbar） */
 body {
   margin: 0;
   font-family: "Lato", sans-serif;
@@ -16,99 +16,129 @@ body {
   color: var(--text);
 }
 
-/* 標題只換字色 */
-.title {
+/* 標題只作用在本頁內容區，避免覆蓋 topbar 的漸層字 */
+.page-wrapper .title {
   white-space: nowrap;
   font-size: 40px;
   font-weight: bold;
   margin: 0;
   flex-shrink: 0;
   max-width: 300px;
-  color: var(--text);
+  color: var(--text); /* 黑色字 */
 }
 @media (max-width: 768px) {
-  .title { font-size: 28px; margin-left: 0; margin-top: 8px; flex: 1; }
+  .page-wrapper .title {
+    font-size: 28px;
+    margin-left: 0;
+    margin-top: 8px;
+    flex: 1;
+  }
 }
 
-/* 標題區與查詢欄（保留原排版設定） */
+/* 標題區與查詢欄 */
 .ds {
   margin-left: -20px;
-  display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between;
+  display: flex; flex-wrap: wrap;
+  align-items: center; justify-content: space-between;
   padding: 10px 20px; gap: 10px;
 }
 .d2 { flex: 0 0 auto; margin-left: 15px; }
-.left-group { display: flex; align-items: center; gap: 20px; flex-wrap: nowrap; flex: 0 1 auto; }
+.left-group {
+  display: flex; align-items: center; gap: 20px;
+  flex-wrap: nowrap; flex: 0 1 auto;
+}
 @media (max-width: 768px) {
   .d1 { flex-direction: column; align-items: flex-start; margin-left: 0; flex-wrap: wrap; }
 }
 
-/* 日期欄位：只改色 */
+/* 日期欄位 */
 .field { min-width: 250px; flex-shrink: 0; }
-.field label { font-size: 20px; margin-bottom: 4px; font-weight: bold; color: var(--text); }
-.ds input[type="text"]{
-  width: 100%; height: 38px; padding: 6px 10px; font-size: 16px; text-align: center;
-  border: 1px solid var(--border); border-radius: 6px; background-color: #fff; color: var(--text);
-  box-shadow: 0 2px 4px rgba(0,0,0,0.05); appearance: none; cursor: pointer; box-sizing: border-box;
+.field label {
+  font-size: 20px; margin-bottom: 4px;
+  font-weight: bold; color: var(--text);
 }
-.ds input[type="text"]:focus{
+.ds input[type="text"] {
+  width: 100%; height: 38px; padding: 6px 10px; font-size: 16px;
+  text-align: center; border: 1px solid var(--border);
+  border-radius: 6px; background-color: #fff; color: var(--text);
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+  appearance: none; cursor: pointer; box-sizing: border-box;
+}
+.ds input[type="text"]:focus {
   outline: none;
   border-color: var(--accent);
   box-shadow: 0 0 0 .2rem rgba(249,115,22,.15);
 }
 
-/* 按鈕：只換色，不動尺寸與圓角/粗細 */
-.btn1{
+/* 按鈕 */
+.btn1 {
   cursor: pointer;
-  background-color: #fff;               /* 原 #f0f0f0 → 白 */
+  background-color: #fff;
   color: var(--text);
-  border: solid 1px var(--border);      /* 原 blue → 灰（保留 1px） */
-  border-radius: 4px; font-size: 25px; height: 50px; width: 150px; padding: 4px 12px;
+  border: solid 1px var(--border);
+  border-radius: 4px;
+  font-size: 25px; height: 50px; width: 150px;
+  padding: 4px 12px;
 }
-.btn2, .btn3{
+.btn2, .btn3 {
   cursor: pointer;
-  background-color: #fff;               /* 原 #f0f0f0 → 白 */
+  background-color: #fff;
   color: var(--text);
-  border: solid 1px var(--border);      /* 原 blue → 灰（保留 1px） */
-  border-radius: 4px; font-size: 18px; height: 40px; padding: 4px 12px;
+  border: solid 1px var(--border);
+  border-radius: 4px;
+  font-size: 18px; height: 40px; padding: 4px 12px;
 }
-.btn2{ margin-left: 25px; }
-.btn1:hover, .btn2:hover, .btn3:hover{
+.btn2 { margin-left: 25px; }
+.btn1:hover, .btn2:hover, .btn3:hover {
   background-color: var(--accent-weak);
   border-color: var(--accent);
 }
 
-/* 科目選擇區（只改色） */
-.subjectsrange{ display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
-.subjectsrange label{ color: var(--text); }
-.range{
-  padding: 10px; font-size: 16px; border-radius: 5px; width: 200px;
-  background:#fff; color: var(--text); border:1px solid var(--border);
+/* 科目選擇區 */
+.subjectsrange {
+  display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
 }
-.range:focus{ outline:none; border-color: var(--accent); box-shadow: 0 0 0 .2rem rgba(249,115,22,.12); }
+.subjectsrange label { color: var(--text); }
+.range {
+  padding: 10px; font-size: 16px;
+  border-radius: 5px; width: 200px;
+  background:#fff; color: var(--text);
+  border:1px solid var(--border);
+}
+.range:focus {
+  outline:none; border-color: var(--accent);
+  box-shadow: 0 0 0 .2rem rgba(249,115,22,.12);
+}
+.btn-group {
+  display: flex; gap: 10px;
+  flex-shrink: 0; white-space: nowrap;
+}
 
-.btn-group{ display: flex; gap: 10px; flex-shrink: 0; white-space: nowrap; }
+/* 表格容器 */
+.table-container {
+  margin-top: 25px; overflow-x: auto; width: 100%;
+}
+@media (max-width: 768px) {
+  .table-container { margin-left: 15px; }
+}
+.tableFixHead { height: 400px; overflow-y: auto; }
 
-/* 表格容器（保留原距離） */
-.table-container{ margin-top: 25px; overflow-x: auto; width: 100%; }
-@media (max-width: 768px){ .table-container{ margin-left: 15px; } }
-.tableFixHead{ height: 400px; overflow-y: auto; }
-
-/* 表格：只改色，不動排版/寬度 */
-.data-table{
+/* 表格樣式 */
+.data-table {
   width: 95%;
   table-layout: fixed;
   border-collapse: collapse;
 }
 .data-table th,
-.data-table td{
-  border: 1px solid var(--border);   /* 原 #ddd → 灰 */
+.data-table td {
+  border: 1px solid var(--border);
   padding: 8px;
   white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
   color: var(--text);
 }
 
-/* 表頭改橘底白字（黏住上方設定不變） */
-.data-table th{
+/* 表頭：橘底白字（sticky） */
+.data-table th {
   background-color: var(--accent);
   color: #fff;
   position: sticky; top: 0; z-index: 1;

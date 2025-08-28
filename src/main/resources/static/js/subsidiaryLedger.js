@@ -66,34 +66,34 @@ async function loadAccountOptions() {
 function populateAccountSelects() {
   const startSelect = document.getElementById('accountstart');
   const endSelect = document.getElementById('accountend');
-  
-  // 修改標籤為單一科目選擇
+
+  // 單一科目選擇
   startSelect.innerHTML = '<option value="">-請選擇科目-</option>';
-  endSelect.style.display = 'none'; // 隱藏終止科目選擇
-  document.querySelector('span').style.display = 'none'; // 隱藏波浪號
-  
-  // 檢查資料是否存在且有效
+  if (endSelect) endSelect.style.display = 'none';
+
+  // 只隱藏科目區域內的波浪號，不要動到 topbar 的 <span>
+  const sep = document.querySelector('.subjectsrange > span'); // 或 '.range-sep'
+  if (sep) sep.style.display = 'none';
+
   if (!allAccounts || !Array.isArray(allAccounts)) {
     console.error('科目資料格式錯誤:', allAccounts);
     return;
   }
-  
-  // 按科目代碼排序 (修正欄位名稱)
+
   const sortedAccounts = allAccounts.sort((a, b) => {
     const codeA = a.code || '';
     const codeB = b.code || '';
     return codeA.localeCompare(codeB);
   });
-  
-  // 加入科目選項 (修正欄位名稱)
+
   sortedAccounts.forEach(account => {
     if (account.code && account.name) {
       const optionText = `${account.code} - ${account.name}`;
-      const startOption = new Option(optionText, account.code);
-      startSelect.appendChild(startOption);
+      startSelect.appendChild(new Option(optionText, account.code));
     }
   });
 }
+
 
 // 綁定按鈕事件
 function bindButtonEvents() {

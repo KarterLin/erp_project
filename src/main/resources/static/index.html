@@ -1,16 +1,18 @@
 <!DOCTYPE html>
 <html lang="zh-Hant">
+
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>營運組成分析</title>
   <link rel="stylesheet" href="./css/index.css">
   <link rel="stylesheet" href="./css/sidebar.css"><!-- 你的側欄樣式 -->
   <link rel="stylesheet" href="./css/topnavbar.css"><!-- 你的頂部導航欄樣式 -->
 </head>
+
 <body class="theme-dark">
   <!-- Topbar -->
-    <div id="topbar-container"></div>
+  <div id="topbar-container"></div>
   <!-- Sidebar -->
   <div id="sidebar-container"></div>
 
@@ -23,28 +25,28 @@
       <!-- KPI 卡片 -->
       <div class="card income">
         <h4>2025年總收入</h4>
-        <div class="amount">$ 0</div>
-        <div class="circle"></div>
+        <div class="amount" data-bind="incomeTotal">$ 0</div>
+        <div class="circle" data-chart="income"></div>
       </div>
 
       <div class="card expense">
         <h4>2025年總支出</h4>
-        <div class="amount">$ 100</div>
-        <div class="circle"></div>
+        <div class="amount" data-bind="expenseTotal">$ 0</div>
+        <div class="circle" data-chart="expense"></div>
       </div>
 
       <div class="card financial-summary">
         <div class="item">
           <h4>2025年總收入</h4>
-          <div class="amount">$ 0</div>
+          <div class="amount" data-bind="incomeTotal">$ 0</div>
         </div>
         <div class="item">
           <h4>2025年總支出</h4>
-          <div class="amount">$ 100</div>
+          <div class="amount" data-bind="expenseTotal">$ 0</div>
         </div>
         <div class="item">
           <h4>2025年總損益</h4>
-          <div class="amount">$ -100</div>
+          <div class="amount" data-bind="profitTotal">$ 0</div>
         </div>
       </div>
 
@@ -83,5 +85,7 @@
 
   <script src="js/sidebar.js"></script>
   <script src="js/topnavbar.js"></script>
+  <script src="js/index.js"></script>
 </body>
+
 </html>
