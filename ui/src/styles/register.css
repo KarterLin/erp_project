@@ -1,0 +1,117 @@
+/* ===== Page / Navbar ===== */
+.wrap {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: #f6f8fb;
+}
+.navbar {
+  height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 16px;
+}
+.logo { display: flex; align-items: center; gap: 8px; text-decoration: none; color: #005757; font-weight: 800; }
+.logoimg { width: 36px; height: 36px; object-fit: contain; }
+.loginBtn, .registerBtn { border: 0; border-radius: 10px; padding: 8px 14px; color: #fff; cursor: pointer; }
+.loginBtn { background: #2ecc71; }
+.registerBtn { background: #3498db; }
+
+/* ===== Center Container ===== */
+.container {
+  flex: 1;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 24px 16px 32px;
+}
+
+/* ===== Large Card like original HTML ===== */
+.regForm {
+  width: 1180px;               /* 大卡片寬度（接近原圖）*/
+  max-width: 95vw;
+  background: #fff;
+  border: 1px solid #c9dede;
+  border-radius: 12px;
+  box-shadow: 0 10px 24px rgba(0,0,0,.08);
+  padding: 22px 24px 18px;
+}
+.regForm h1 {
+  text-align: center;
+  margin: 0 0 10px;
+  font-size: 28px;
+  font-weight: 800;
+}
+.regForm hr {
+  border: none;
+  border-top: 1px solid #c9dede;
+  margin: 8px 0 18px;
+}
+
+.content { display: block; width: 100%; }
+
+/* label & input look */
+label { display: block; margin: 14px 0 8px; color: #333; font-weight: 600; }
+.input, .input-full {
+  width: 100%;
+  height: 42px;
+  padding: 0 12px;
+  border: 1px solid #bcc6d0;
+  border-radius: 8px;
+  background: #fff;
+  outline: none;
+}
+.input:focus, .input-full:focus {
+  border-color: #60a5fa; box-shadow: 0 0 0 3px rgba(96,165,250,.25);
+}
+
+/* ===== Rows ===== */
+.row { display: flex; gap: 12px; align-items: center; }
+.row > .col { flex: 1; }
+
+/* 統編 + 右側 checkbox（跟舊畫面一樣） */
+.tax-row { display: flex; align-items: center; gap: 12px; }
+.tax-row .tax-input { flex: 1; }
+.tax-row .inline-checkbox {
+  display: inline-flex; align-items: center; gap: 6px;
+  white-space: nowrap; font-size: 14px; color: #333;
+}
+
+/* 密碼欄位的眼睛 icon */
+.inputGroup { position: relative; }
+.inputGroupImg {
+  position: absolute; right: 10px; top: 50%; transform: translateY(-50%);
+  width: 22px; height: 22px; opacity: .7; cursor: pointer;
+}
+#eyeIcon { width: 100%; height: 100%; }
+
+/* checkbox 一般樣式 */
+.checkboxLabel { display: inline-flex; align-items: center; gap: 8px; margin: 8px 0 4px; }
+
+/* Button */
+#submitBtn, #loginBtn {
+  width: 100%;
+  height: 44px;
+  border-radius: 10px;
+  background: #111827;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  margin-top: 14px;
+}
+#submitBtn:disabled, #loginBtn:disabled { opacity: .6; cursor: not-allowed; }
+
+.error { color: #dc2626; font-size: 12px; min-height: 16px; margin: 4px 0 0; }
+.note { color: #6b7280; font-size: 12px; text-align: center; margin-top: 8px; }
+.footer { text-align: center; color:#9ca3af; font-size: 12px; padding: 12px 0; }
+
+/* ===== RWD：手機縮成窄卡片 ===== */
+@media (max-width: 900px) {
+  .regForm { width: 560px; }
+  .tax-row { flex-direction: column; align-items: flex-start; }
+  .inline-checkbox { margin-left: 2px; }
+}
+@media (max-width: 640px) {
+  .regForm { width: 420px; max-width: 95vw; }
+}

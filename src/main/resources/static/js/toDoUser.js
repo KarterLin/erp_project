@@ -35,7 +35,7 @@ function displayEntries(entries) {
   tbody.innerHTML = '';
 
   if (!entries || entries.length === 0) {
-    tbody.innerHTML = '<tr><td colspan="8" style="text-align:center;">目前沒有待辦事項</td></tr>';
+    tbody.innerHTML = '<tr><td colspan="9" style="text-align:center;">目前沒有待辦事項</td></tr>';
     table.style.display = 'table';
     return;
   }
@@ -50,7 +50,7 @@ function displayEntries(entries) {
       const tr = document.createElement('tr');
       if (idx === 0) tr.classList.add('voucher-group');
 
-      // 第一列才放「日期」並跨列
+      // 第一列才放「日期」「傳票編號」並跨列
       if (idx === 0) {
         const tdDate = document.createElement('td');
         tdDate.textContent = formatDate(entry.entryDate);
@@ -63,15 +63,21 @@ function displayEntries(entries) {
         tr.appendChild(tdVoucher);
       }
 
-      // 固定每列都顯示的欄位
+      // 明細層欄位（每列都要有，維持欄位數一致）
       tr.appendChild(td(detail.accountCode || ''));
       tr.appendChild(td(detail.accountName || ''));
       tr.appendChild(td(formatAmount(detail.debitAmount), 'right'));
       tr.appendChild(td(formatAmount(detail.creditAmount), 'right'));
       tr.appendChild(td(detail.description || ''));
 
-      // 第一列才放「審核狀態」並跨列
+      // 第一列才放「輸入人員」「審核狀態」並跨列（傳票層級）
       if (idx === 0) {
+        const tdUser = document.createElement('td');
+        // 後端欄位名稱可能不同，這裡多做幾個別名保險
+        tdUser.textContent = entry.inputUser || entry.createdBy || entry.enteredBy || '';
+        tdUser.rowSpan = span;
+        tr.appendChild(tdUser);
+
         const tdStatus = document.createElement('td');
         tdStatus.textContent = entry.status || '';
         tdStatus.rowSpan = span;
@@ -84,7 +90,7 @@ function displayEntries(entries) {
 
     // 群組間分隔線（可選）
     const sep = document.createElement('tr');
-    sep.innerHTML = `<td colspan="8" style="padding:0;border:0;height:6px;"></td>`;
+    sep.innerHTML = `<td colspan="9" style="padding:0;border:0;height:6px;"></td>`;
     tbody.appendChild(sep);
   });
 
@@ -97,6 +103,7 @@ function displayEntries(entries) {
     return cell;
   }
 }
+
 
 
 function showError(message) {

@@ -64,7 +64,7 @@ public class JwtServiceImpl implements JwtService{
                 .maxAge(24 * 60 * 60) // 24 hours
                 .httpOnly(true)
                 .secure(true)
-                .sameSite("Strict")
+                .sameSite("None")  		// 前後端跨來源必須None
                 .build();
     }
     

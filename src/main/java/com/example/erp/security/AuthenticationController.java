@@ -6,7 +6,6 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -38,7 +37,6 @@ public class AuthenticationController {
 
     private final AuthenticationService authenticationService;
     private final RefreshTokenService refreshTokenService;
-    private final AuthenticationManager authenticationManager;
     private final JwtService jwtService;
     private static final Logger log = LoggerFactory.getLogger(AuthenticationController.class);
 /*    
@@ -71,8 +69,10 @@ public class AuthenticationController {
         ResponseCookie jwtCookie = jwtService.generateJwtCookie(authenticationResponse.getAccessToken());
         ResponseCookie refreshTokenCookie = refreshTokenService.generateRefreshTokenCookie(authenticationResponse.getRefreshToken());
         return ResponseEntity.ok()
-                .header(HttpHeaders.SET_COOKIE,jwtCookie.toString())
-                .header(HttpHeaders.SET_COOKIE,refreshTokenCookie.toString())
+        		.headers(h -> {
+                    h.add(HttpHeaders.SET_COOKIE, jwtCookie.toString());
+                    h.add(HttpHeaders.SET_COOKIE, refreshTokenCookie.toString());
+                })
                 .body(authenticationResponse);
     }
     /* 新accessToken 用body傳到前端，安全性低

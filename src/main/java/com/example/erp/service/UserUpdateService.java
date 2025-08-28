@@ -1,6 +1,5 @@
 package com.example.erp.service;
 
-
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
@@ -11,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.example.erp.entity.UserInfo;
+import com.example.erp.exception.NotFoundException;
 import com.example.erp.exception.PasswordUpdateException;
 import com.example.erp.payload.request.UpdatePasswordRequest;
 import com.example.erp.payload.request.UpdateUserByAdminRequest;
@@ -28,8 +28,7 @@ public class UserUpdateService {
 	private final UserInfoService userService;
 	private final UserInfoRepository userRepository;
 	private final PasswordEncoder passwordEncoder;
-	
-	
+
 	@Transactional
 	@PreAuthorize("hasRole('USER')")
 	public ResponseEntity<ApiResponse> userUpdate(UpdateUserRequest request) {
@@ -37,32 +36,34 @@ public class UserUpdateService {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		UserDetails user = (CustomUserDetails) authentication.getPrincipal();
 		String uEmail = user.getUsername();
-		
-		UserInfo newUser = userRepository.findByUEmail(uEmail).get();
-		newUser.setuAccount(request.getUAccount() );
+
+		UserInfo newUser = userRepository.findByUEmail(uEmail)
+				.orElseThrow(() -> new NotFoundException("找不到目標使用者：" + uEmail));
+		newUser.setuAccount(request.getUAccount());
 		newUser.setStatus(request.getStatus());
-		
+
 		UserInfo savedUser = userService.save(newUser);
-		        
+
 		return ResponseEntity.ok(ApiResponse.success("資料更新成功！"));
 	}
-	
+
 	@Transactional
 	@PreAuthorize("hasRole('ADMIN')")
 	public ResponseEntity<ApiResponse> userUpdateByAdmin(UpdateUserByAdminRequest request) {
-		
-		UserInfo newUser = userRepository.findByUEmail(request.getTEmail()).get();
-		newUser.setuAccount(request.getUAccount() );
+
+		UserInfo newUser = userRepository.findByUEmail(request.getTEmail())
+				.orElseThrow(() -> new NotFoundException("找不到目標使用者：" + request.getTEmail()));
+		newUser.setuAccount(request.getUAccount());
 		String roleStr = request.getRole();
 		Role role = Role.valueOf(roleStr.toUpperCase());
 		newUser.setRole(role);
 		newUser.setStatus(request.getStatus());
-		
+
 		UserInfo savedUser = userService.save(newUser);
-		        
+
 		return ResponseEntity.ok(ApiResponse.success("資料更新成功！"));
 	}
-	
+
 	@Transactional
 	@PreAuthorize("hasAnyRole('USER','ADMIN')")
 	public ResponseEntity<ApiResponse> passwordUpdate(UpdatePasswordRequest request) {
@@ -70,27 +71,26 @@ public class UserUpdateService {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		UserDetails user = (CustomUserDetails) authentication.getPrincipal();
 		String uEmail = user.getUsername();
-		UserInfo newUser = userRepository.findByUEmail(uEmail)
-	            .orElseThrow(() -> new PasswordUpdateException("找不到使用者"));
-		
+		UserInfo newUser = userRepository.findByUEmail(uEmail).orElseThrow(() -> new NotFoundException("找不到使用者"));
+
 		String oldPassword = request.getOldPassword();
 		String checkPassword = request.getCheckPassword();
 		String newPassword = request.getPassword();
-		
+
 		if (!passwordEncoder.matches(oldPassword, newUser.getuPassword())) {
 			throw new PasswordUpdateException("舊密碼錯誤");
 		}
 		if (!newPassword.equals(oldPassword)) {
 			throw new PasswordUpdateException("新密碼不可與舊密碼重複");
 		}
-		if(!checkPassword.equals(newPassword)) {
+		if (!checkPassword.equals(newPassword)) {
 			throw new PasswordUpdateException("兩次密碼不一致");
 		}
 		newUser.setuPassword(passwordEncoder.encode(newPassword));
-		
+
 		UserInfo savedUser = userService.save(newUser);
-		        
+
 		return ResponseEntity.ok(ApiResponse.success("密碼更新成功！"));
 	}
-	
+
 }
