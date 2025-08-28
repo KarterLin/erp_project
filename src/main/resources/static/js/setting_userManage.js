@@ -13,7 +13,7 @@ async function loadUsers() {
         const currentUser = await getUser();
         console.log(currentUser);
         const currentEmail = currentUser.data.email;
-        const currentRoles = currentUser.data?.roles || [];
+        const currentRoles = currentUser.data?.role || [];
 
         const response = await fetch(API_URL + "/users", {
             method: "GET",

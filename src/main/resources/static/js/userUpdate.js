@@ -23,10 +23,10 @@ function getQueryParam(name) {
     const params = new URLSearchParams(window.location.search);
     return params.get(name);
 }
+let currentUser = null;
 
 async function loadUserDetail() {
     const id = getQueryParam("id");
-    let currentUser = null;
 
     try {
         const meRes = await fetch(`${API_URL}/me`, { credentials: "include" });
@@ -36,7 +36,7 @@ async function loadUserDetail() {
         currentUser = meResult.data;
 
         let targetUser = null;
-        if (currentUser.roles.includes("ROLE_ADMIN")) {
+        if (currentUser.role.includes("ROLE_ADMIN")) {
             // Admin 編輯
             const response = await fetch(`${API_URL}/users/${id}`, {
                 method: "GET",
@@ -44,6 +44,7 @@ async function loadUserDetail() {
             });
             if (!response.ok) throw new Error("取得使用者資料失敗");
             const result = await response.json();
+            console.log(result);
             targetUser = result.data;
         } else {
             // 編輯自己
@@ -59,8 +60,8 @@ async function loadUserDetail() {
         document.getElementById("uEmail").value = targetUser.email ?? "";
 
         let roleCode = "";
-        if (targetUser.roles.includes("ROLE_USER")) roleCode = "1";
-        if (targetUser.roles.includes("ROLE_ADMIN")) roleCode = "2";
+        if (targetUser.role.includes("ROLE_USER") || targetUser.role.includes("USER")) roleCode = "1";
+        if (targetUser.role.includes("ROLE_ADMIN") || targetUser.role.includes("ADMIN")) roleCode = "2";
         document.getElementById("jobTitle").value = roleCode;
 
         if (targetUser.status === 1) {
@@ -167,5 +168,11 @@ function showError(element, message) {
      alert(message);
 }
 
-
+document.getElementById("passwdBtn").addEventListener("click", function() {
+    if(uEmailEl.value !== currentUser.email){
+        alert("非本人不得更新");
+    }else {
+        location.href = `setting_userPassword.html?id=${getQueryParam("id")}`;
+    }
+})
 document.addEventListener("DOMContentLoaded", loadUserDetail);

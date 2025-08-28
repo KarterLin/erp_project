@@ -31,16 +31,16 @@ fieldMap.forEach(({ el }) => {
 
     try {
 
-        const roles = await getUserRole();
+        const role = await getUserRole();
 
 
-        if (roles.includes("ROLE_USER")) {
+        if (role.includes("ROLE_USER")) {
             // USER 禁止編輯
             editBtn.addEventListener("click", (e) => {
                 e.preventDefault();
                 alert("沒有權限編輯！");
             });
-        } else if (roles.includes("ROLE_ADMIN")) {
+        } else if (role.includes("ROLE_ADMIN")) {
             // ADMIN 正常進入編輯
             editBtn.addEventListener("click", () => {
                 enableForm();
@@ -217,9 +217,9 @@ async function getUserRole() {
     const response = await fetch("https://127.0.0.1:8443/api/me", { credentials: "include" });
     if (!response.ok) throw new Error("取得使用者資訊失敗");
     const result = await response.json();
-    const roles = result.data?.roles || [];
+    const role = result.data?.role || [];
     console.log(result);
-    return roles;
+    return role;
 }
 
 
