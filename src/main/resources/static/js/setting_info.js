@@ -218,7 +218,7 @@ async function getUserRole() {
     if (!response.ok) throw new Error("取得使用者資訊失敗");
     const result = await response.json();
     const roles = result.data?.roles || [];
-    console.log("使用者角色:", roles);
+    console.log(result);
     return roles;
 }
 
