@@ -18,7 +18,7 @@ fieldMap.forEach(({ el }) => {
     initialFormData[el.id] = el.value;
 });
 
-// 網址取得id
+// 網址取得參數
 function getQueryParam(name) {
     const params = new URLSearchParams(window.location.search);
     return params.get(name);
@@ -26,36 +26,49 @@ function getQueryParam(name) {
 
 async function loadUserDetail() {
     const id = getQueryParam("id");
-    if (!id) {
-        alert("缺少 id 參數");
-        return;
-    }
+    let currentUser = null;
 
     try {
-        const response = await fetch(`${API_URL}/users/${id}`, {
-            method: "GET",
-            credentials: "include"
-        });
-        if (!response.ok) throw new Error("取得使用者資料失敗");
+        const meRes = await fetch(`${API_URL}/me`, { credentials: "include" });
+        if (!meRes.ok) throw new Error("取得登入者資訊失敗");
+        const meResult = await meRes.json();
+        console.log(meResult);
+        currentUser = meResult.data;
 
-        const result = await response.json();
-        if (result.status === 200 && result.data) {
-            const user = result.data;
-            document.getElementById("uAccount").value = user.account ?? "";
-            document.getElementById("uEmail").value = user.email ?? "";
-            let roleCode = "";
-                if (user.role === "USER") {
-                    roleCode = "1"
-                } else if (user.role === "ADMIN") {
-                    roleCode = "2"
-                }
-            document.getElementById("jobTitle").value = roleCode;
-            if (user.statusCode === 1) {
-                document.getElementById("isActive").checked = true;
-            } else if (user.statusCode === 2) {
-                document.getElementById("notActive").checked = true;
-            }
+        let targetUser = null;
+        if (currentUser.roles.includes("ROLE_ADMIN")) {
+            // Admin 編輯
+            const response = await fetch(`${API_URL}/users/${id}`, {
+                method: "GET",
+                credentials: "include"
+            });
+            if (!response.ok) throw new Error("取得使用者資料失敗");
+            const result = await response.json();
+            targetUser = result.data;
+        } else {
+            // 編輯自己
+            targetUser = currentUser;
         }
+        if (!targetUser) {
+            alert("無法載入使用者資料");
+            return;
+        }
+        
+        // 填值
+        document.getElementById("uAccount").value = targetUser.account ?? "";
+        document.getElementById("uEmail").value = targetUser.email ?? "";
+
+        let roleCode = "";
+        if (targetUser.roles.includes("ROLE_USER")) roleCode = "1";
+        if (targetUser.roles.includes("ROLE_ADMIN")) roleCode = "2";
+        document.getElementById("jobTitle").value = roleCode;
+
+        if (targetUser.status === 1) {
+            document.getElementById("isActive").checked = true;
+        } else if (targetUser.status === 2) {
+            document.getElementById("notActive").checked = true;
+        }
+
     } catch (err) {
         console.error("Error loading user detail:", err);
         alert("無法載入使用者資料");
@@ -70,7 +83,7 @@ function clearErrType() {
     });
 }
 // form格式驗證
-document.getElementById("userUpdate").addEventListener("submit", function (e) {
+document.getElementById("userUpdate").addEventListener("submit", async function (e) {
     e.preventDefault();
     // clearErrType();
 
@@ -88,44 +101,62 @@ document.getElementById("userUpdate").addEventListener("submit", function (e) {
         }
     }
     // console.log("表單驗證通過，可以送出");
-})
+    const uAccount = uAccountEl.value.trim();
+    const uEmail = uEmailEl.value.trim();
+    const roleCode = jobTitleEl.value;
+    const status = document.getElementById("isActive").checked ? 1 : 2;
+
+    try {
+        let endpoint = "";
+        let body = {};
+        // 判斷要打哪個 API
+        if (roleCode == 2) {
+            // Admin 更新
+            endpoint = `${API_URL}/user/update/byAdmin`;
+            body = {
+                tEmail: uEmail,
+                uAccount: uAccount,
+                role: roleCode === "2" ? "ADMIN" : "USER",
+                status: status
+            };
+        } else {
+            // User 更新自己
+            endpoint = `${API_URL}/user/update/me`;
+            body = {
+                uAccount: uAccount,
+                status: status
+            };
+        }
+
+        const response = await fetch(endpoint, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            credentials: "include",
+            body: JSON.stringify(body)
+        });
+
+        if (!response.ok) throw new Error("更新失敗");
+        const result = await response.json();
+        alert(result.message || "更新成功！");
+        location.href = "setting_userManage.html";
+
+    } catch (err) {
+        console.error("Error updating user:", err);
+        alert("更新失敗");
+    }
+});
+
 
 // 取消編輯
 function cancelEdit() {
-    const selects = document.querySelectorAll("select");
-
     clearErrType();
-
     fieldMap.forEach(({ el }) => {
         el.value = initialFormData[el.id] || "";
-    });
-
-    selects.forEach(el => {
-        el.selectedIndex = 0;   // 回到預設選項
     });
 
     location.href = "setting_userManage.html";
 }
 
-// 實時移除ERRTYPE
-fieldMap.forEach(({ el, pattern }) => {
-    el.addEventListener("input", () => {
-        const value = el.value.trim();
-
-        // 判斷是否需要格式驗證
-        if (pattern) {
-            if (pattern.test(value)) {
-                el.classList.remove("error");
-                el.style.border = "";
-            }
-        } else {
-            if (value !== "") {
-                el.classList.remove("error");
-                el.style.border = "";
-            }
-        }
-    });
-});
 
 // 錯誤提示
 function showError(element, message) {
@@ -133,9 +164,8 @@ function showError(element, message) {
     element.style.border = "2px solid red";
     element.scrollIntoView({ behavior: "smooth", block: "center" });
     // element.focus();
-    // alert(message);
+     alert(message);
 }
-
 
 
 document.addEventListener("DOMContentLoaded", loadUserDetail);
