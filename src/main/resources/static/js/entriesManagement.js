@@ -531,8 +531,8 @@ function displayVouchers(vouchers) {
             <td>${voucher.voucherNumber || ''}</td>
             <td>${voucher.accountCode || ''}</td>
             <td>${voucher.accountName || ''}</td>
-            <td class="amount">${voucher.debitAmount ? formatAmount(voucher.debitAmount) : '0.00'}</td>
-            <td class="amount">${voucher.creditAmount ? formatAmount(voucher.creditAmount) : '0.00'}</td>
+            <td class="amount">${voucher.debitAmount ? formatAmount(voucher.debitAmount) : ''}</td>
+            <td class="amount">${voucher.creditAmount ? formatAmount(voucher.creditAmount) : ''}</td>
             <td>${voucher.summary || voucher.description || ''}</td>
         `;
     });
@@ -662,8 +662,8 @@ function prepareExportData(vouchers) {
         '傳票編號': voucher.voucherNumber || '',
         '科目代碼': voucher.accountCode || '',
         '科目名稱': voucher.accountName || '',
-        '借方金額': voucher.debitAmount ? formatAmount(voucher.debitAmount) : '0.00',
-        '貸方金額': voucher.creditAmount ? formatAmount(voucher.creditAmount) : '0.00',
+        '借方金額': voucher.debitAmount ? formatAmount(voucher.debitAmount) : '0',
+        '貸方金額': voucher.creditAmount ? formatAmount(voucher.creditAmount) : '0',
         '摘要': voucher.summary || voucher.description || ''
     }));
 }
