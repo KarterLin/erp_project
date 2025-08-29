@@ -5,6 +5,7 @@ document.addEventListener("DOMContentLoaded", () => {
       document.getElementById("topbar-container").innerHTML = data;
 
       loadUser();
+      startTokenRefreshTimer();
     })
     .catch(error => console.error("Topbar 載入失敗:", error));
 });
@@ -31,6 +32,7 @@ async function loadUser() {
     if (userAccountEl) {
       userAccountEl.textContent = account;
     }
+    
 
   } catch (err) {
     console.error("Error loading user detail:", err);
@@ -79,3 +81,37 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 });
+
+
+let refreshTimerStarted = false;
+// refreshToken
+function startTokenRefreshTimer() {
+  if (refreshTimerStarted) return; // 已啟動過就跳過
+  refreshTimerStarted = true;
+  // 14 分鐘自動刷新
+  const refreshInterval = 14 * 60 * 1000;
+
+  setInterval(async () => {
+    try {
+      const res = await fetch(`${API_URLBase}/v1/auth/refresh-token-cookie`, {
+        method: "POST",
+        credentials: "include"
+      });
+
+      if (res.ok) {
+        console.log("✅ accessToken 已刷新");
+      } else {
+        console.warn("⚠️ 無法刷新 accessToken，可能已過期");
+        // refreshToken 失效，跳轉登入頁
+        if (res.status === 401) {
+          window.location.href = "login.html";
+        }
+      }
+    } catch (err) {
+      console.error("刷新 accessToken 發生錯誤:", err);
+    }
+  }, refreshInterval);
+}
+
+
+

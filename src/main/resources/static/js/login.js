@@ -48,28 +48,3 @@ async function login(uEmail, password) {
     return await response.json(); // AuthenticationResponse
 }
 
-// 更新access token
-async function refreshAccessToken() {
-    const response = await fetch(`${API_BASE}/refresh-token-cookie`, {
-        method: "POST",
-        credentials: "include",
-    });
-
-    if (!response.ok) {
-        throw new Error("刷新 token 失敗");
-    }
-    return true; // accessToken 已經更新在 cookie 裡
-}
-
-// 登出 (清掉 cookie)
-async function logout() {
-    const response = await fetch(`${API_BASE}/logout`, {
-        method: "POST",
-        credentials: "include",
-    });
-
-    if (!response.ok) {
-        throw new Error("登出失敗");
-    }
-    return true;
-}
