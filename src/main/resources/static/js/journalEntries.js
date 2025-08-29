@@ -228,7 +228,7 @@ function setDefaultDates() {
 
 async function loadAccountsData() {
     try {
-        const response = await fetch('http://127.0.0.1:8443/api/accounts');
+        const response = await fetch('https://127.0.0.1:8443/api/accounts');
         if (response.ok) {
             accountsData = await response.json();
         } else {
@@ -476,7 +476,7 @@ document.getElementById('journal-entry-form').addEventListener('submit', async f
     console.log('將要發送的JSON格式:', JSON.stringify(journalEntry, null, 2));
 
     try {
-        const res = await fetch('http://localhost:8080/api/journal-entries', {
+        const res = await fetch('https://127.0.0.1:8443/api/journal-entries', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(journalEntry)

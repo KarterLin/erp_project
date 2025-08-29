@@ -50,6 +50,7 @@ public class WebSecurityConfig{
 	        .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
 	     // Authorization rules
 	        .authorizeHttpRequests(request -> request
+	        		.requestMatchers("/login.html", "/register.html", "/css/**", "/js/**").permitAll()
 	        		.requestMatchers(SecurityWhitelist.ENDPOINTS).permitAll()
 	        		.requestMatchers("/api/admin/**").hasRole("ADMIN")
 	        		.requestMatchers("/api/user/**").hasAnyRole("USER", "ADMIN")

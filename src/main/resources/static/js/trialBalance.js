@@ -173,7 +173,7 @@ function fetchAndRenderTrialBalance(date) {
   console.log("fetch資料，日期:", date);
   currentSelectedDate = date; // 儲存當前選擇的日期
   
-  fetch(`http://localhost:8080/api/trial-balance/${date}`)
+  fetch(`https://127.0.0.1:8443/api/trial-balance/${date}`)
     .then(response => {
       if (!response.ok) throw new Error('取得資料失敗');
       return response.json();
