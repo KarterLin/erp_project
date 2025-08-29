@@ -14,17 +14,6 @@ public class SecurityWhitelist {
             "/error",
             "/favicon.ico",
  
-            //  karter 開發用，請視情況移除 (請正式版後刪除)
-            "/api/**",
-            // 靜態資源與 HTML 頁面白名單
-            "/js/**",
-            "/css/**",
-            "/images/**",
-            "/img/**",
-            "/static/**",
-            "/*.html",
-            "/journalEntries.html",
-            "/fixedAssets.html"
         };
 }
  

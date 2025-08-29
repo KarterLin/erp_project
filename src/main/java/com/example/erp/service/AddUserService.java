@@ -34,7 +34,6 @@ public class AddUserService {
 		if (userService.userExists(request.getUEmail())) {
 			throw new IllegalStateException("此信箱已使用");
 		}
-		//
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		UserDetails user = (CustomUserDetails) authentication.getPrincipal();
 		String uEmail = user.getUsername();

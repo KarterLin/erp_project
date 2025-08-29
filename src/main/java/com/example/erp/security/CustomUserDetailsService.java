@@ -22,11 +22,10 @@ public class CustomUserDetailsService implements UserDetailsService {
 	
 	@Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-		log.info("Login attempt: {}, rawPassword from request = {}", email);
+		//log.info("Login attempt: {}, rawPassword from request = {}", email);
 		
 		UserInfo user = userRepository.findByUEmail(email)
 				.orElseThrow(() -> new UsernameNotFoundException("User not found" + email));
-		
 		
 		return new CustomUserDetails(user);
 		

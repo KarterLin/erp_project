@@ -24,6 +24,7 @@ public class CompanyInfoService {
 		return comRespository.save(companyInfo);
 	}
 	
+	// 僅未改公司信箱前可用
 	public Long  getCId(String uEmail) {
 		return comRespository.findByREmail(uEmail).get().getId();
 	}
