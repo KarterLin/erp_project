@@ -64,9 +64,9 @@ async function loadUserDetail() {
         if (targetUser.role.includes("ROLE_ADMIN") || targetUser.role.includes("ADMIN")) roleCode = "2";
         document.getElementById("jobTitle").value = roleCode;
 
-        if (targetUser.status === 1) {
+        if (targetUser.status === 1 || targetUser.status === "啟用") {
             document.getElementById("isActive").checked = true;
-        } else if (targetUser.status === 2) {
+        } else if (targetUser.status === 2 || targetUser.status === "停用") {
             document.getElementById("notActive").checked = true;
         }
 
