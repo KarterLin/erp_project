@@ -15,9 +15,9 @@ import lombok.NoArgsConstructor;
 @Builder
 public class ApiResponse<T> {
 	private int status;
-    private String message;
-    private Instant timestamp;
-    private T data; // 可選的回傳資料
+	private String message;
+	private Instant timestamp;
+	private T data; // 可選的回傳資料
 
 	// 成功（帶資料）
 	public static <T> ApiResponse<T> success(String message, T data) {

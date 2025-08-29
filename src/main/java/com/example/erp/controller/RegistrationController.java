@@ -15,7 +15,6 @@ import com.example.erp.service.RegistrationService;
 
 
 
-
 @RestController
 @RequestMapping("/api/register")
 public class RegistrationController {

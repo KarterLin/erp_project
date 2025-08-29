@@ -5,7 +5,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,7 +20,6 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 @Transactional
 public class AuthenticationServiceImpl implements AuthenticationService {
-	 	private final PasswordEncoder passwordEncoder;
 	    private final JwtService jwtService;
 	    private final UserInfoRepository userRepository;
 	    private final AuthenticationManager authenticationManager;

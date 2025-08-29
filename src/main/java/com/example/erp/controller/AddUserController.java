@@ -20,13 +20,13 @@ import lombok.RequiredArgsConstructor;
 @RequestMapping("/api/user/create")
 @RequiredArgsConstructor
 public class AddUserController {
-	private final AddUserService newUserService;
+	private final AddUserService addUserService;
 	
 	@PostMapping
 	@PreAuthorize("hasRole('ADMIN')")
 	public ResponseEntity<Map<String, String>> EmailVerified(@RequestBody AddUserRequest request) {	
 		
-		newUserService.newUser(request);
+		addUserService.newUser(request);
 				
 		Map<String, String> res = new HashMap<>();
 		res.put("status", "0");

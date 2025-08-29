@@ -28,41 +28,18 @@ import lombok.RequiredArgsConstructor;
 @RestController
 @RequestMapping("/api/v1/auth")
 @SecurityRequirements() 
-/*
-This API won't have any security requirements. Therefore, we need to override the default security requirement configuration
-with @SecurityRequirements()
-*/
 @RequiredArgsConstructor
 public class AuthenticationController {
 
     private final AuthenticationService authenticationService;
     private final RefreshTokenService refreshTokenService;
+    private final AuthenticationManager authenticationManager;
     private final JwtService jwtService;
     private static final Logger log = LoggerFactory.getLogger(AuthenticationController.class);
-/*    
-    @GetMapping("/ping")
-    public String ping() {
-        log.info("Ping endpoint called!");
-        return "pong";
-    }
-*/    
+
     // 登入流程
     @PostMapping("/authenticate")
-    /*
-    @Operation(
-            responses = {
-                    @ApiResponse(
-                            description = "Success",
-                            responseCode = "200"
-                    ),
-                    @ApiResponse(
-                            description = "Unauthorized",
-                            responseCode = "401",
-                            content = {@Content(schema = @Schema(implementation = ErrorResponse.class), mediaType = "application/json")}
-                    )
-            }
-    )
-     */
+
     public ResponseEntity<AuthenticationResponse> authenticate(@RequestBody AuthenticationRequest request) {
     	log.info("Received login request: uEmail={}, password={}", request.getUEmail(), request.getPassword());
     	AuthenticationResponse authenticationResponse = authenticationService.authenticate(request);

@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.example.erp.entity.UserInfo;
 
 
+
 @Repository
 public interface UserInfoRepository extends JpaRepository<UserInfo, Long>{
 	Optional<UserInfo> findByUEmail(String uEmail);

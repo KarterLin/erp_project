@@ -9,6 +9,7 @@ import com.example.erp.entity.CompanyInfo;
 
 
 
+
 @Repository
 public interface CompanyInfoRespository extends JpaRepository<CompanyInfo, Long>{
 	
@@ -16,5 +17,5 @@ public interface CompanyInfoRespository extends JpaRepository<CompanyInfo, Long>
 	
 	Optional<CompanyInfo> findByREmail(String rEmail);  // 未驗證前rEmail必等於uEmail
 	
-//	Optional<CompanyInfo> findByid(Long id);
+	Optional<CompanyInfo> findByid(Long id);
 }

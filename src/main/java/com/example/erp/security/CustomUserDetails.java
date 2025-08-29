@@ -8,6 +8,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import com.example.erp.entity.UserInfo;
 
 
+
 public class CustomUserDetails implements UserDetails {
 	private final UserInfo user;
 
@@ -23,6 +24,10 @@ public class CustomUserDetails implements UserDetails {
     @Override
     public String getPassword() {
         return user.getuPassword();
+    }
+    
+    public String getAccount() {
+        return user.getuAccount();
     }
     
     @Override

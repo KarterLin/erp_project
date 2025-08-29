@@ -1,7 +1,10 @@
 package com.example.erp.security.service;
 
 import java.security.Key;
-import java.util.*;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -11,6 +14,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.web.util.WebUtils;
 
+import com.example.erp.security.CustomUserDetails;
+
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -18,7 +23,6 @@ import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
-import com.example.erp.security.CustomUserDetails;
 
 @Service
 public class JwtServiceImpl implements JwtService{
@@ -61,10 +65,10 @@ public class JwtServiceImpl implements JwtService{
     public ResponseCookie generateJwtCookie(String jwt) {
         return ResponseCookie.from(jwtCookieName, jwt)
                 .path("/")
-                .maxAge(24 * 60 * 60) // 24 hours
+                .maxAge(24 * 60 * 60) 	// 24 hours
                 .httpOnly(true)
-                .secure(true)
-                .sameSite("None")  		// 前後端跨來源必須None
+                .secure(true) 									
+                .sameSite("None")  		// 前後端跨來源必須None，測試環境 http 用LAT
                 .build();
     }
     
