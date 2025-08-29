@@ -676,8 +676,8 @@ function prepareExportData(data) {
             '傳票編號': item.voucherNumber || '',
             '科目代碼': item.accountCode || '',
             '科目名稱': item.accountName || '',
-            '借方金額': debitAmount > 0 ? formatAmount(debitAmount) : '0.00',
-            '貸方金額': creditAmount > 0 ? formatAmount(creditAmount) : '0.00',
+            '借方金額': debitAmount > 0 ? formatAmount(debitAmount) : '0',
+            '貸方金額': creditAmount > 0 ? formatAmount(creditAmount) : '0',
             '借/貸': direction,
             '摘要': item.summary || item.description || ''
         };
