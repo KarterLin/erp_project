@@ -48,3 +48,13 @@ async function login(uEmail, password) {
     return await response.json(); // AuthenticationResponse
 }
 
+// 忘記密碼
+function pwdforget() {
+    const email = document.getElementById("lemail").value;
+    const storedHashedPassword = localStorage.getItem(email);
+    if (!storedHashedPassword) {
+        alert("查無此帳號");
+        return;
+    }
+    alert("請至信箱接收驗證信");
+}
