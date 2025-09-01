@@ -20,10 +20,11 @@ public interface TrialBalanceRepository extends JpaRepository<JournalDetail, Lon
            "FROM JournalDetail d " +
            "JOIN d.account a " +
            "JOIN d.journalEntry e " +
-           "WHERE d.isActive = true AND e.status = com.example.erp.entity.EntryStatus.APPROVED AND (" +
-	       "  (a.type IN ('revenue', 'expense') AND e.entryDate BETWEEN :start AND :end) " +
-	       "  OR (a.type IN ('asset', 'liability', 'equity') AND a.id <> 65) " +
-	       "  OR (a.id = 65 AND e.entryDate < :end)" +
+           "WHERE d.isActive = true AND e.status = com.example.erp.entity.EntryStatus.APPROVED AND " +
+           "e.entryDate <= :end AND (" +  // 所有科目都加上結束日期限制
+	       "  (a.type IN ('revenue', 'expense') AND e.entryDate >= :start) " +  // 損益科目需要在日期區間內
+	       "  OR (a.type IN ('asset', 'liability', 'equity') AND a.id <> 65) " +  // 一般資產負債權益科目累計到指定日期
+	       "  OR (a.id = 65 AND e.entryDate < :end)" +  // 特殊科目處理
 	       ") " +
            "GROUP BY a.code, a.name, a.parentId " +
            "ORDER BY a.code")
@@ -35,10 +36,11 @@ public interface TrialBalanceRepository extends JpaRepository<JournalDetail, Lon
            "FROM JournalDetail d " +
            "JOIN d.journalEntry e " +
            "JOIN d.account a " +
-           "WHERE d.isActive = true AND e.status = com.example.erp.entity.EntryStatus.APPROVED AND (" +
-           "  (a.type IN ('revenue', 'expense') AND e.entryDate BETWEEN :start AND :end) " +
-           "  OR (a.type IN ('asset', 'liability', 'equity') AND a.id <> 65) " +
-           "  OR (a.id = 65 AND e.entryDate < :end)" +
+           "WHERE d.isActive = true AND e.status = com.example.erp.entity.EntryStatus.APPROVED AND " +
+           "e.entryDate <= :end AND (" +  // 所有科目都加上結束日期限制
+           "  (a.type IN ('revenue', 'expense') AND e.entryDate >= :start) " +  // 損益科目需要在日期區間內
+           "  OR (a.type IN ('asset', 'liability', 'equity') AND a.id <> 65) " +  // 一般資產負債權益科目累計到指定日期
+           "  OR (a.id = 65 AND e.entryDate < :end)" +  // 特殊科目處理
            ") ")
     TrialBalanceSummaryDTO findSummary(@Param("start") LocalDate startDate,
                                        @Param("end") LocalDate endDate);

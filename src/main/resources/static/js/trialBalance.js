@@ -88,20 +88,34 @@ window.onSidebarLoaded = () => {
   });
 };
 
+// 替換原本的 flatpickr 初始化部分
 console.log("flatpickr初始化開始");
 flatpickr("#dateRange", {
   locale: "zh",
   dateFormat: "Y-m-d",
-  mode: "single", // 如果你只用單一天；若要區間改成 "range"
+  mode: "single",
   allowInput: true,
+  maxDate: "today", // 限制只能選擇今天及以前的日期
+  defaultDate: "today", // 預設為今天
   onChange: function (selectedDates, dateStr) {
     if (selectedDates.length === 1) {
-    const dateObj = selectedDates[0];
-    const year = dateObj.getFullYear();
-    const month = (dateObj.getMonth() + 1).toString().padStart(2, '0');
-    const day = dateObj.getDate().toString().padStart(2, '0');
-    const date = `${year}-${month}-${day}`;
-    fetchAndRenderTrialBalance(date);
+      const dateObj = selectedDates[0];
+      const year = dateObj.getFullYear();
+      const month = (dateObj.getMonth() + 1).toString().padStart(2, '0');
+      const day = dateObj.getDate().toString().padStart(2, '0');
+      const date = `${year}-${month}-${day}`;
+      fetchAndRenderTrialBalance(date);
+    }
+  },
+  // 添加驗證功能，防止用戶手動輸入未來日期
+  onValueUpdate: function(selectedDates, dateStr, instance) {
+    const today = new Date();
+    today.setHours(23, 59, 59, 999); // 設定為今天的最後一刻
+    
+    if (selectedDates.length > 0 && selectedDates[0] > today) {
+      // 如果選擇的日期是未來，重設為今天
+      instance.setDate(today, false);
+      alert('無法選擇未來日期，已重設為今天');
     }
   }
 });
