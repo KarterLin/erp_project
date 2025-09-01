@@ -35,7 +35,7 @@ function displayEntries(entries) {
     errorDiv.style.display = 'none';
 
     if (!entries || entries.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="10" style="text-align: center;">目前沒有待審核的分錄</td></tr>';
+        tbody.innerHTML = '<tr><td colspan="11" style="text-align: center;">目前沒有待審核的分錄</td></tr>';
         table.style.display = 'table';
         return;
     }
@@ -55,36 +55,39 @@ function displayEntries(entries) {
                 row.dataset.voucherNumber = entry.voucherNumber;
             }
 
+            const span = details.length; // 這張傳票有幾列分錄
+
             row.innerHTML = `
-                <td>${index === 0 ? formatDate(entry.entryDate) : ''}</td>
-                <td>${index === 0 ? entry.voucherNumber || '' : ''}</td>
+                ${index === 0 ? `<td rowspan="${span}">${formatDate(entry.entryDate)}</td>` : ''}
+                ${index === 0 ? `<td rowspan="${span}">${entry.voucherNumber || ''}</td>` : ''}
                 <td>${detail.accountCode || ''}</td>
                 <td>${detail.accountName || ''}</td>
                 <td style="text-align: right;">${formatAmount(detail.debitAmount)}</td>
                 <td style="text-align: right;">${formatAmount(detail.creditAmount)}</td>
                 <td>${detail.description || ''}</td>
-                <td>
-                    ${index === 0 ? `
+                ${index === 0 ? `<td rowspan="${span}" class="input-user">${entry.inputUser || entry.createdBy || entry.enteredBy || ''}</td>` : ''}
+                ${index === 0 ? `
+                    <td rowspan="${span}">
                         <select class="status-select" data-voucher="${entry.voucherNumber}">
                             <option value="" disabled selected>請選擇</option>
                             <option value="approved">核准</option>
                             <option value="rejected">退回</option>
                         </select>
-                    ` : ''}
-                </td>
-                <td>
-                    ${index === 0 ? `
+                    </td>
+                ` : ''}
+                ${index === 0 ? `
+                    <td rowspan="${span}">
                         <input type="text" class="reason-input" data-voucher="${entry.voucherNumber}" 
                                placeholder="請輸入原因" />
-                    ` : ''}
-                </td>
-                <td>
-                    ${index === 0 ? `
+                    </td>
+                ` : ''}
+                ${index === 0 ? `
+                    <td rowspan="${span}">
                         <button class="edit-button" onclick="confirmApproval('${entry.voucherNumber}')">
                             確認
                         </button>
-                    ` : ''}
-                </td>
+                    </td>
+                ` : ''}
             `;
             
             tbody.appendChild(row);
