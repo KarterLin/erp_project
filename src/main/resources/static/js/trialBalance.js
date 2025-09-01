@@ -109,7 +109,7 @@ console.log("flatpickr初始化結束");
 
 function fetchAndRenderTrialBalance(date) {
   console.log("fetch資料，日期:", date);
-  fetch(`http://localhost:8080/api/trial-balance/${date}`)
+  fetch(`https://127.0.0.1:8443/api/trial-balance/${date}`)
     .then(response => {
       if (!response.ok) throw new Error('取得資料失敗');
       return response.json();

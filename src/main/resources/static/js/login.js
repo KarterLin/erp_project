@@ -48,28 +48,13 @@ async function login(uEmail, password) {
     return await response.json(); // AuthenticationResponse
 }
 
-// 更新access token
-async function refreshAccessToken() {
-    const response = await fetch(`${API_BASE}/refresh-token-cookie`, {
-        method: "POST",
-        credentials: "include",
-    });
-
-    if (!response.ok) {
-        throw new Error("刷新 token 失敗");
+// 忘記密碼
+function pwdforget() {
+    const email = document.getElementById("lemail").value;
+    const storedHashedPassword = localStorage.getItem(email);
+    if (!storedHashedPassword) {
+        alert("查無此帳號");
+        return;
     }
-    return true; // accessToken 已經更新在 cookie 裡
-}
-
-// 登出 (清掉 cookie)
-async function logout() {
-    const response = await fetch(`${API_BASE}/logout`, {
-        method: "POST",
-        credentials: "include",
-    });
-
-    if (!response.ok) {
-        throw new Error("登出失敗");
-    }
-    return true;
+    alert("請至信箱接收驗證信");
 }

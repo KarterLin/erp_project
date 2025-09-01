@@ -1,5 +1,5 @@
 // API 端點配置
-const API_BASE_URL = 'http://localhost:8080/api';
+const API_BASE_URL = 'https://127.0.0.1:8443/api';
 const AMORTIZATION_API = `${API_BASE_URL}/amortization`;
 
 // 開發模式 - 設為 true 可以顯示 JSON 預覽和詳細日誌

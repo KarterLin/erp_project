@@ -7,7 +7,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
 async function loadToDoEntries() {
     try {
-        const response = await fetch('http://localhost:8080/api/todo/entries');
+        const response = await fetch('https://127.0.0.1:8443/api/todo/entries');
         
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);

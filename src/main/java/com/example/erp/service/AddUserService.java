@@ -50,7 +50,7 @@ public class AddUserService {
 		UserInfo savedUser = userService.save(newUser);
 		
 		// 發送驗證信
-		String token = emailService.sendVerificationEmail(newUser.getuEmail(),cId);
+		String token = emailService.validateEmail(newUser.getuEmail(),cId);
 				
 		// 記錄Token
 		ConfirmationTokens cToken = new ConfirmationTokens();

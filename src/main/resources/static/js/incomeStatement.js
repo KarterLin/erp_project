@@ -130,7 +130,7 @@ loadIncomeStatement(formatDateLocal(startOfMonth), formatDateLocal(today));
 
 // --- 讀取 API 並更新損益表 ---
 function loadIncomeStatement(startDate, endDate) {
-  fetch(`http://localhost:8080/api/income-statement?startDate=${startDate}&endDate=${endDate}`)
+  fetch(`https://127.0.0.1:8443/api/income-statement?startDate=${startDate}&endDate=${endDate}`)
     .then(res => res.json())
     .then(data => updateIncomeStatement(data))
     .catch(console.error);
