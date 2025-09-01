@@ -31,9 +31,9 @@
                     <input type="text" id="cname" placeholder="公司名稱"><br>
                     <label for="taxId">請輸入公司統編</label><br>
                     <input type="text" id="taxId" placeholder="公司統編">
-                    <label class="checkboxLabel" >
+                    <label class="checkboxLabel">
                         <input type="checkbox">公司申請中/尚未申請公司
-                    </label><br> 
+                    </label><br>
                     <label for="rname">請輸入負責人姓名</label><br>
                     <input type="text" id="rname" placeholder="負責人姓名"><br>
                     <label for="rtel">請輸入負責人手機</label><br>
@@ -50,6 +50,10 @@
                                 onclick="togglePassword('password','eyeIcon')">
                         </span>
                     </div><br>
+
+                    <div class="cf-turnstile" data-sitekey="0x4AAAAAABwHtdlJPV2iD42E" data-callback="onCaptchaSuccess"
+                        data-error-callback="onCaptchaError" data-expired-callback="onCaptchaExpired" data-theme="auto">
+                    </div>F
                     <input type="button" id="submitBtn" value="確認註冊">
                     <p class="note">點選「確認」即表示同意<a href="#">使用者條款</a>與<a href="#">隱私權政策</a></p>
                 </span>
@@ -57,12 +61,14 @@
 
         </div>
         <div class="footer">
-           <p> © 2025 柴務豹表 All rights reserved.</p>
+            <p> © 2025 柴務豹表 All rights reserved.</p>
         </div>
 
     </div>
 
+    <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
     <script src="js/register.js"></script>
+
 </body>
 
 
