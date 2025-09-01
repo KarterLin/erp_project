@@ -1,5 +1,5 @@
 // API endpoint
-const API_URL = "https://127.0.0.1:8443/api/register";
+const API_URL = "https://127.0.0.1:8443/api";
 
 // 啟用按鈕 
 const submitBtn = document.getElementById("submitBtn");
