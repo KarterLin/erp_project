@@ -14,7 +14,7 @@
         <div class="navbar">
             <!-- logo -->
             <a class="logo" href="officalWebsite.html">
-                <img class="logoimg" src="./img/logo1.png" alt="logo">
+                <img class="logoimg" src="./img/presentation.png" alt="logo">
                 柴務豹表
             </a>
 
@@ -30,10 +30,11 @@
                     <label for="cname">請輸入公司名稱</label><br>
                     <input type="text" id="cname" placeholder="公司名稱"><br>
                     <label for="taxId">請輸入公司統編</label><br>
-                    <input type="text" id="taxId" placeholder="公司統編">
-                    <label class="checkboxLabel">
-                        <input type="checkbox">公司申請中/尚未申請公司
-                    </label><br>
+                    <input type="text" id="taxId" placeholder="公司統編"><br>
+                    <span class="checkbox">
+                    <label class="checkboxLabel"></label>
+                    <input type="checkbox" id="pendingCompany">公司申請中/尚未申請公司<br>
+                    </span>
                     <label for="rname">請輸入負責人姓名</label><br>
                     <input type="text" id="rname" placeholder="負責人姓名"><br>
                     <label for="rtel">請輸入負責人手機</label><br>
@@ -43,7 +44,7 @@
                     <label for="account">請輸入帳號</label><br>
                     <input type="text" id="account" placeholder="輸入帳號"><br>
                     <label for="password">請輸入密碼</label><br>
-                    <div class="inputGroup">
+                    <div class="inputGroup" id="inputGroup">
                         <input type="password" id="password" placeholder="輸入密碼"><br>
                         <span class="inputGroupImg">
                             <img id="eyeIcon" src="./img/eye.png" alt="hide_password"
@@ -53,7 +54,7 @@
 
                     <div class="cf-turnstile" data-sitekey="0x4AAAAAABwHtdlJPV2iD42E" data-callback="onCaptchaSuccess"
                         data-error-callback="onCaptchaError" data-expired-callback="onCaptchaExpired" data-theme="auto">
-                    </div>F
+                    </div>
                     <input type="button" id="submitBtn" value="確認註冊">
                     <p class="note">點選「確認」即表示同意<a href="#">使用者條款</a>與<a href="#">隱私權政策</a></p>
                 </span>
