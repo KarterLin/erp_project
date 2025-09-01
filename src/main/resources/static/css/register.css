@@ -64,14 +64,13 @@ input {
 label {
   margin-bottom: -10px;
 }
-.checkboxLabel {
+.checkbox {
   display: inline-flex;
   align-items: center;
   margin-left: auto;
+  margin-top: -10px;
 }
-.checkbox1 {
-  margin-top: 10px;
-}
+
 .inputGroup {
   display: inline-flex;
   position: relative;
