@@ -1,4 +1,4 @@
-// API endpoint
+// API endpointlogo
 const API_URL = "https://127.0.0.1:8443/api";
 
 
@@ -94,7 +94,7 @@ function validateForm() {
   if (!rtelEl.value.trim()) return "負責人手機必填";
   if (!accountEl.value.trim()) return "帳號必填";
   if (!emailEl.value.trim()) return "Email 必填";
-
+  if(!pendingCheckbox.checked){if(!taxIdInput.value.trim())return "統編必填";};
   // 手機格式：台灣手機 09 開頭 + 8 碼
   const phoneRegex = /^09\d{8}$/;
   if (!phoneRegex.test(rtelEl.value.trim())) {
