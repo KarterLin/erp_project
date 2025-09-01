@@ -95,7 +95,7 @@ document.addEventListener("DOMContentLoaded", function () {
   // API 調用函數
   async function loadAccounts() {
     try {
-      const response = await fetch('http://localhost:8080/api/accounts');
+      const response = await fetch('https://127.0.0.1:8443/api/accounts');
       const data = await response.json();
       accounts = data;
       displayAccounts(accounts);
@@ -107,7 +107,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
   async function saveAccount(account) {
     try {
-      const response = await fetch('http://localhost:8080/api/accounts', {
+      const response = await fetch('https://127.0.0.1:8443/api/accounts', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -132,7 +132,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
   async function deleteAccount(id) {
     try {
-      const response = await fetch(`http://localhost:8080/api/accounts/${id}`, {
+      const response = await fetch(`https://127.0.0.1:8443/api/accounts/${id}`, {
         method: 'DELETE'
       });
 

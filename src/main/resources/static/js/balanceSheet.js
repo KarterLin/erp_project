@@ -152,7 +152,7 @@ loadBalanceSheet(startOfYear, today);
 
 // 呼叫 API 並更新表格
 function loadBalanceSheet(startDate, endDate) {
-    fetch(`http://localhost:8080/api/balance-sheet/summary?startDate=${startDate}&endDate=${endDate}`)
+    fetch(`https://127.0.0.1:8443/api/balance-sheet/summary?startDate=${startDate}&endDate=${endDate}`)
         .then(res => res.json())
         .then(data => {
             updateBalanceSheet(data);
