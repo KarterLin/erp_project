@@ -1,7 +1,7 @@
 // js/index.js
 (() => {
   // ====== 可調整區 ======
-  const API_BASE = 'http://localhost:8080';    // 你的 Spring Boot 位址
+  const API_BASE = 'https://127.0.0.1:8443';    // 你的 Spring Boot 位址
   const YEAR = 2025;                           // 想顯示哪一年（先用 2025）
   // =====================
 

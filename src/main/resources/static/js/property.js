@@ -1,5 +1,5 @@
 // API 端點配置
-const API_BASE_URL = 'http://localhost:8080/api';
+const API_BASE_URL = 'https://127.0.0.1:8443/api';
 
 // 獲取當前日期
 function getCurrentDate() {
