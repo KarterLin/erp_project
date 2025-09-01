@@ -1,29 +1,37 @@
-{
-  "properties": [
-    {
-      "name": "application.security.jwt.secret-key",
-      "type": "java.lang.String",
-      "description": "JWT HMAC secret key (prefer 256-bit or Base64)."
-    },
-    {
-      "name": "application.security.jwt.expiration",
-      "type": "java.lang.Long",
-      "description": "Access token expiration in milliseconds."
-    },
-    {
-      "name": "application.security.jwt.cookie-name",
-      "type": "java.lang.String",
-      "description": "Cookie name for access token."
-    },
-    {
-      "name": "application.security.jwt.refresh-token.cookie-name",
-      "type": "java.lang.String",
-      "description": "Cookie name for refresh token."
-    },
-    {
-      "name": "application.security.jwt.refresh-token.expiration",
-      "type": "java.lang.Long",
-      "description": "Refresh token expiration in milliseconds."
-    }
-  ]
-}
+{"properties": [
+  {
+    "name": "application.security.jwt.secret-key",
+    "type": "java.lang.String",
+    "description": "JWT HMAC secret key (prefer 256-bit or Base64)."
+  },
+  {
+    "name": "application.security.jwt.expiration",
+    "type": "java.lang.Long",
+    "description": "Access token expiration in milliseconds."
+  },
+  {
+    "name": "application.security.jwt.cookie-name",
+    "type": "java.lang.String",
+    "description": "Cookie name for access token."
+  },
+  {
+    "name": "application.security.jwt.refresh-token.cookie-name",
+    "type": "java.lang.String",
+    "description": "Cookie name for refresh token."
+  },
+  {
+    "name": "application.security.jwt.refresh-token.expiration",
+    "type": "java.lang.Long",
+    "description": "Refresh token expiration in milliseconds."
+  },
+  {
+    "name": "turnstile.site",
+    "type": "java.lang.String",
+    "description": "A description for 'turnstile.site'"
+  },
+  {
+    "name": "turnstile.secret",
+    "type": "java.lang.String",
+    "description": "A description for 'turnstile.secret'"
+  }
+]}

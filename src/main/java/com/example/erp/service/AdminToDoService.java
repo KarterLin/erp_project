@@ -13,11 +13,14 @@ import org.springframework.transaction.annotation.Transactional;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
+import lombok.extern.slf4j.Slf4j;
+
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+@Slf4j
 @Service
 public class AdminToDoService {
 
@@ -26,6 +29,8 @@ public class AdminToDoService {
     
     @PersistenceContext
     private EntityManager entityManager;
+    
+    
 
     /**
      * 獲取所有待審核的分錄（只顯示 PENDING 狀態）
@@ -113,5 +118,13 @@ public class AdminToDoService {
         
         // TODO: 這裡可以記錄審核日誌，包含審核原因
         // 可能需要創建一個審核記錄表來保存 reason
+        try {
+        	entityManager.flush(); // 讓 DB 約束錯誤現在就丟，不要拖到事務收尾
+        } catch (Exception e) {
+            Throwable r = e;
+            while (r.getCause() != null) r = r.getCause();
+            log.error("FLUSH FAILED. Root cause: {} - {}", r.getClass().getSimpleName(), r.getMessage(), e);
+            throw e;
+        }
     }
 }

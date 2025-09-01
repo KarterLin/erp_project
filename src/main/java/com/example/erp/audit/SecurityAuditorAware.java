@@ -3,6 +3,7 @@ package com.example.erp.audit;
 import java.util.Optional;
 
 import org.springframework.data.domain.AuditorAware;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
@@ -11,27 +12,22 @@ import com.example.erp.entity.UserInfo;
 import com.example.erp.repository.UserInfoRepository;
 import com.example.erp.security.CustomUserDetails;
 
-@Component
+@Component("securityAuditorAware")
 public class SecurityAuditorAware implements AuditorAware<Long> {
 
-    private final UserInfoRepository userInfoRepository;
+    @Override
+    public Optional<Long> getCurrentAuditor() {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        if (auth == null || !auth.isAuthenticated() || auth instanceof AnonymousAuthenticationToken) {
+            return Optional.empty();
+        }
 
-    SecurityAuditorAware(UserInfoRepository userInfoRepository) {
-        this.userInfoRepository = userInfoRepository;
+        Object principal = auth.getPrincipal();
+        if (principal instanceof CustomUserDetails cud) {
+            return Optional.of(cud.getId()); // ✅ 直接拿 userId，不打 DB
+        }
+
+        return Optional.empty();
     }
-  @Override
-  public Optional<Long> getCurrentAuditor() {
-    Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-    if (auth == null || !auth.isAuthenticated()) return Optional.empty();
-
-    Object principal = auth.getPrincipal();
-    if (principal instanceof CustomUserDetails cud) {
-        String email = cud.getUsername(); // 假設 username 存 email
-        return userInfoRepository.findByUEmail(email)
-                .map(UserInfo::getId)
-                .map(Long::valueOf);
-    }
-
-    return Optional.empty();
-  }
 }
+
