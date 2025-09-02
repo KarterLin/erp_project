@@ -127,23 +127,61 @@ async function login(uEmail, password) {
 }
 
 
+ // 忘記密碼
+ const forgotModal = document.getElementById("forgotEmailModal");
+  document.getElementById("forgotPasswordLink").onclick = () => forgotModal.classList.remove("hidden");
+  document.getElementById("closeForgotModalBtn").onclick = () => forgotModal.classList.add("hidden");
 
-// 忘記密碼
-async function pwdforget() {
-    const email = emailInput.value.trim();
+    document.getElementById("sendResetEmailBtn").onclick = async () => {
+    const email = document.getElementById("forgotEmailInput").value;
     if (!email) {
-        alert("請輸入信箱");
-        return;
+      alert("請輸入 Email");
+      return;
     }
-    try {
-        const response = await fetch(`${API_URL}/forgot-password`, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ email }),
-        });
-        if (!response.ok) throw new Error("查無此帳號");
-        alert("請至信箱接收驗證信");
-    } catch (err) {
-        alert("查無此帳號");
+
+    const res = await fetch(`${API_URL}/forgot-password`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email })
+    });
+
+    const data = await res.json();
+    alert(data.message || "已寄送密碼重設信件");
+    if (res.ok) {
+      forgotModal.classList.add("hidden");
     }
-}
+  };
+
+  // ==== 重設密碼 (點信件連結時開啟 modal) ====
+  const resetModal = document.getElementById("resetPasswordModal");
+  document.getElementById("closeResetModalBtn").onclick = () => resetModal.classList.add("hidden");
+
+  // 如果網址有 token，自動開啟 reset modal
+  const params = new URLSearchParams(window.location.search);
+  const token = params.get("token");
+  if (token) {
+    resetModal.classList.remove("hidden");
+  }
+
+  document.getElementById("resetPasswordBtn").onclick = async () => {
+    const newPwd = document.getElementById("newPwd").value;
+    const confirmPwd = document.getElementById("confirmPwd").value;
+
+    if (newPwd !== confirmPwd) {
+      alert("兩次密碼不一致！");
+      return;
+    }
+
+    const res = await fetch(`${API_URL}/reset-password`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ token, newPassword: newPwd })
+    });
+
+    const data = await res.json();
+    alert(data.message || "操作完成");
+
+    if (res.ok) {
+      resetModal.classList.add("hidden");
+    }
+  };
