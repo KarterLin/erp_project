@@ -46,4 +46,5 @@ application.security.jwt.cookie-name=jwt-cookie
 application.security.jwt.refresh-token.expiration=1296000000
 application.security.jwt.refresh-token.cookie-name=refresh-jwt-cookie
 
-
+#turnstile
+turnstile.secret=yoursecret
