@@ -21,6 +21,10 @@ public class CustomUserDetails implements UserDetails {
         return user.getRole().getAuthorities(); // 從 enum Role 取出
     }
     
+    public Long getId() {
+		return user.getId();
+	}
+    
     @Override
     public String getPassword() {
         return user.getuPassword();

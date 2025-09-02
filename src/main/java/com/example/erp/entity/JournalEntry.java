@@ -25,7 +25,6 @@ public class JournalEntry {
     @Column(name = "entry_date", nullable = false)
     private LocalDate entryDate;
 
-
     @Column(name = "created_at")
     private LocalDateTime createdAt;
     
@@ -40,59 +39,88 @@ public class JournalEntry {
     @Column(name = "status", nullable = false)
     private EntryStatus status = EntryStatus.PENDING; // 預設待審核
     
+    // 審核原因欄位
+    @Column(name = "reason", length = 500)
+    private String reason;
+    
     @OneToMany(mappedBy = "journalEntry", cascade = CascadeType.ALL)
     private List<JournalDetail> details;
 
-    
-    
-	public Long getId() {
-		return id;
-	}
+    // 與 UserInfo 的關係（用於查詢輸入人員資訊）
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", insertable = false, updatable = false)
+    private UserInfo userInfo;
 
-	public void setId(Long id) {
-		this.id = id;
-	}
+    // 手寫的 getter/setter 方法保持原樣
+    public Long getId() {
+        return id;
+    }
 
-	public LocalDate getEntryDate() {
-		return entryDate;
-	}
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-	public void setEntryDate(LocalDate entryDate) {
-		this.entryDate = entryDate;
-	}
+    public LocalDate getEntryDate() {
+        return entryDate;
+    }
 
+    public void setEntryDate(LocalDate entryDate) {
+        this.entryDate = entryDate;
+    }
 
-	public LocalDateTime getCreatedAt() {
-		return createdAt;
-	}
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
 
-	public void setCreatedAt(LocalDateTime createdAt) {
-		this.createdAt = createdAt;
-	}
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
 
-	public List<JournalDetail> getDetails() {
-		return details;
-	}
+    public List<JournalDetail> getDetails() {
+        return details;
+    }
 
-	public void setDetails(List<JournalDetail> details) {
-		this.details = details;
-	}
+    public void setDetails(List<JournalDetail> details) {
+        this.details = details;
+    }
 
-	public String getVoucherNumber() {
-		return voucherNumber;
-	}
+    public String getVoucherNumber() {
+        return voucherNumber;
+    }
 
-	public void setVoucherNumber(String voucherNumber) {
-		this.voucherNumber = voucherNumber;
-	}
+    public void setVoucherNumber(String voucherNumber) {
+        this.voucherNumber = voucherNumber;
+    }
 
-    // getters and setters
+    public String getReason() {
+        return reason;
+    }
 
-    // public void setStatus(EntryStatus entryStatus) {
-    //     throw new UnsupportedOperationException("Not supported yet.");
-    // }
+    public void setReason(String reason) {
+        this.reason = reason;
+    }
 
-    // public void setStatus(EntryStatus entryStatus) {
-    //     throw new UnsupportedOperationException("Not supported yet.");
-    // }
+    public EntryStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(EntryStatus status) {
+        this.status = status;
+    }
+
+    public Long getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Long userId) {
+        this.userId = userId;
+    }
+
+    public UserInfo getUserInfo() {
+        return userInfo;
+    }
+
+    public void setUserInfo(UserInfo userInfo) {
+        this.userInfo = userInfo;
+    }
 }

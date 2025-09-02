@@ -4,11 +4,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>帳務管理</title>
     <link rel="stylesheet" href="./css/accountbooks.css">
     <link rel="stylesheet" href="./css/sidebar.css">
     <link rel="stylesheet" href="./css/topnavbar.css">
-
+    
+    <!-- SheetJS 庫用於Excel匯出 -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 </head>
 
 <body>
@@ -32,15 +34,17 @@
         <section class="action-group">
             <h2 class="group-title">帳務管理</h2>
             <div class="actions">
-                <button type="button" class="action-card">
+                <button type="button" class="action-card" id="exportAccountingDataBtn">
                     <img src="./img/output.png" alt="匯出帳務資料" />
                     <span>匯出帳務資料</span>
                 </button>
             </div>
         </section>
     </div>
+    
     <script src="js/sidebar.js"></script>
     <script src="js/topnavbar.js"></script>
+    <script src="js/accountbooks.js"></script>
 </body>
 
 </html>

@@ -15,6 +15,8 @@ public class ToDoEntryDTO {
     
     private String voucherNumber;       // 傳票編號
     private String status;              // 審核狀態
+    private String inputUser;           // 輸入人員 (從 user_info.account 取得)
+    private String reason;              // 審核原因
     private List<ToDoDetailDTO> details; // 分錄詳情列表
 
     // Constructors
@@ -24,6 +26,14 @@ public class ToDoEntryDTO {
         this.entryDate = entryDate;
         this.voucherNumber = voucherNumber;
         this.status = status;
+    }
+
+    public ToDoEntryDTO(LocalDate entryDate, String voucherNumber, String status, String inputUser, String reason) {
+        this.entryDate = entryDate;
+        this.voucherNumber = voucherNumber;
+        this.status = status;
+        this.inputUser = inputUser;
+        this.reason = reason;
     }
 
     // Getters and Setters
@@ -49,6 +59,22 @@ public class ToDoEntryDTO {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public String getInputUser() {
+        return inputUser;
+    }
+
+    public void setInputUser(String inputUser) {
+        this.inputUser = inputUser;
+    }
+
+    public String getReason() {
+        return reason;
+    }
+
+    public void setReason(String reason) {
+        this.reason = reason;
     }
 
     public List<ToDoDetailDTO> getDetails() {
