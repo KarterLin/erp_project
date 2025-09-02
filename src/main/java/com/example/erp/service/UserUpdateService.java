@@ -1,7 +1,6 @@
 package com.example.erp.service;
 
 
-
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
@@ -14,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.example.erp.entity.UserInfo;
 import com.example.erp.exception.NotFoundException;
 import com.example.erp.exception.PasswordUpdateException;
+import com.example.erp.payload.request.ResetPasswordRequest;
 import com.example.erp.payload.request.UpdatePasswordRequest;
 import com.example.erp.payload.request.UpdateUserByAdminRequest;
 import com.example.erp.payload.request.UpdateUserRequest;
@@ -30,7 +30,7 @@ public class UserUpdateService {
 	private final UserInfoService userService;
 	private final UserInfoRepository userRepository;
 	private final PasswordEncoder passwordEncoder;
-	
+	private final ConfirmationTokenService confirmationTokenService;
 	
 	@Transactional
 	@PreAuthorize("hasRole('USER')")
@@ -45,7 +45,7 @@ public class UserUpdateService {
 		newUser.setuAccount(request.getUAccount() );
 		newUser.setStatus(request.getStatus());
 		
-		UserInfo savedUser = userService.save(newUser);
+		userService.save(newUser);
 		        
 		return ResponseEntity.ok(ApiResponse.success("資料更新成功！"));
 	}
@@ -62,7 +62,7 @@ public class UserUpdateService {
 		newUser.setRole(role);
 		newUser.setStatus(request.getStatus());
 		
-		UserInfo savedUser = userService.save(newUser);
+		userService.save(newUser);
 		        
 		return ResponseEntity.ok(ApiResponse.success("資料更新成功！"));
 	}
@@ -92,10 +92,25 @@ public class UserUpdateService {
 		}
 		newUser.setuPassword(passwordEncoder.encode(newPassword));
 		
-		UserInfo savedUser = userService.save(newUser);
+		userService.save(newUser);
 		        
 		return ResponseEntity.ok(ApiResponse.success("密碼更新成功！"));
 	}
 
+	@Transactional
+	public ResponseEntity<ApiResponse<?>> passwordReset(ResetPasswordRequest request) {
+
+		String token = request.getToken();
+	    String newPassword = request.getNewPassword();
 	
+	    Long userId = confirmationTokenService.getToken(token).get().getUserId();
+
+	    UserInfo user = userRepository.findById(userId)
+	    		.orElseThrow(() -> new NotFoundException("找不到使用者"));
+	    
+	    user.setuPassword(passwordEncoder.encode(newPassword));
+		userService.save(user);
+		        
+		return ResponseEntity.ok(ApiResponse.success("密碼更新成功！"));
+	}
 }
