@@ -259,7 +259,7 @@ function setupRowAccountSelectors(row) {
 
 function addDebitRow() {
   const table = document.getElementById('entriesTable');
-  const templateRow = table.querySelector('.journalRow');
+  const templateRow = table.querySelector('.debitRow');
   const newRow = templateRow.cloneNode(true);
 
   Array.from(newRow.querySelectorAll('input')).forEach(i => {
@@ -277,7 +277,7 @@ function addDebitRow() {
 
 function addCreditRow() {
   const table = document.getElementById('entriesTable');
-  const templateRow = table.querySelector('.journalRow');
+  const templateRow = table.querySelector('.creditRow');
   const newRow = templateRow.cloneNode(true);
 
   Array.from(newRow.querySelectorAll('input')).forEach(i => {
@@ -335,13 +335,8 @@ document.getElementById('submitBtn').addEventListener('click', async function ()
         body: JSON.stringify(journalEntry)
       });
       if (res.ok) {
-        alert('分錄已成功提交！');
-        this.reset();
-        setDefaultDates();
-        // 重新初始化選擇器
-        accountSelectors.clear();
-        initializeAccountSelectors();
-        updateBalanceSummary();
+        alert('已完成開帳！');
+        window.location.href = "index.html";
       } else {
         alert('提交失敗，請重試');
       }
