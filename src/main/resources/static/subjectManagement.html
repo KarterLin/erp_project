@@ -113,13 +113,75 @@
             <option value="liability">負債</option>
             <option value="equity">權益</option>
             <option value="revenue">收入</option>
-            <option value="cost">成本（轉 expense 傳後端）</option>
+            <option value="cost">成本</option>
             <option value="expense">費用</option>
           </select>
         </div>
         <div class="form-group">
-          <label for="parentId">父科目ID：</label>
-          <input type="number" id="parentId" placeholder="可留空">
+          <label for="parentSelect">父科目：<span style="color: red;">*</span></label>
+          <select id="parentSelect" required>
+            <option value="">請選擇父科目</option>
+            <optgroup label="資產">
+              <optgroup label="　流動資產">
+                <option value="1100">1100 - 現金及約當現金</option>
+                <option value="1132">1132 - 按攤銷後成本衡量之金融資產-流動</option>
+                <option value="1150">1150 - 應收票據</option>
+                <option value="1170">1170 - 應收帳款</option>
+                <option value="1180">1180 - 應收帳款-關係人</option>
+                <option value="1210">1210 - 其他應收款-關係人淨額</option>
+                <option value="1220">1220 - 本期所得稅資產</option>
+                <option value="1300">1300 - 存貨</option>
+                <option value="1410">1410 - 預付款項</option>
+              </optgroup>
+              <optgroup label="　非流動資產">
+                <option value="1600">1600 - 不動產、廠房及設備</option>
+                <option value="1780">1780 - 無形資產</option>
+                <option value="1840">1840 - 遞延所得稅資產</option>
+                <option value="1900">1900 - 其他非流動資產</option>
+              </optgroup>
+            </optgroup>
+            <optgroup label="負債">
+              <optgroup label="　流動負債">
+                <option value="2100">2100 - 銀行借款</option>
+                <option value="2170">2170 - 應付帳款</option>
+                <option value="2200">2200 - 其他應付款</option>
+                <option value="2220">2220 - 其他應付款-關係人</option>
+                <option value="2300">2300 - 其他流動負債</option>
+              </optgroup>
+              <optgroup label="　非流動負債">
+                <option value="2540">2540 - 長期借款</option>
+                <option value="2570">2570 - 遞延所得稅負債</option>
+                <option value="2600">2600 - 其他非流動負債</option>
+              </optgroup>
+            </optgroup>
+            <optgroup label="股東權益">
+              <optgroup label="　股本">
+                <option value="3100">3100 - 股本</option>
+              </optgroup>
+              <optgroup label="　保留盈餘">
+                <option value="3300">3300 - 保留盈餘及累積盈虧</option>
+                <option value="3600">3600 - 本期盈餘及盈虧</option>
+                <option value="3310">3310 - 法定盈餘公積</option>
+              </optgroup>
+            </optgroup>
+            <optgroup label="營業收入">
+              <option value="4000">4000 - 營業收入</option>
+            </optgroup>
+            <optgroup label="營業成本">
+              <option value="5000">5000 - 營業成本</option>
+            </optgroup>
+            <optgroup label="營業費用">
+              <option value="6100">6100 - 推銷費用</option>
+              <option value="6200">6200 - 管理費用</option>
+              <option value="6300">6300 - 研究發展費用</option>
+              <option value="7950">7950 - 所得稅費用</option>
+            </optgroup>
+            <optgroup label="營業外收入及支出">
+              <option value="7100">7100 - 其他收入</option>
+              <option value="7230">7230 - 其他利益及損失</option>
+              <option value="7050">7050 - 財務成本</option>
+            </optgroup>
+          </select>
         </div>
       </div>
       <div class="form-btn">

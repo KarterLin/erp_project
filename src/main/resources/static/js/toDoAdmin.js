@@ -7,7 +7,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
 async function loadPendingEntries() {
     try {
-        const response = await fetch('http://localhost:8080/api/admin/todo/pending-entries');
+        const response = await fetch('https://127.0.0.1:8443/api/admin/todo/pending-entries');
         
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
@@ -157,7 +157,7 @@ async function confirmApproval(voucherNumber) {
     }
     
     try {
-        const response = await fetch('http://localhost:8080/api/admin/todo/update-status', {
+        const response = await fetch('https://127.0.0.1:8443/api/admin/todo/update-status', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
