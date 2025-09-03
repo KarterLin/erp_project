@@ -336,12 +336,11 @@ document.getElementById('submitBtn').addEventListener('click', async function ()
       });
       if (res.ok) {
         alert('分錄已成功提交！');
-        this.reset();
+        document.getElementById('journalForm').reset();
         setDefaultDates();
         // 重新初始化選擇器
         accountSelectors.clear();
         initializeAccountSelectors();
-        updateBalanceSummary();
       } else {
         alert('提交失敗，請重試');
       }
