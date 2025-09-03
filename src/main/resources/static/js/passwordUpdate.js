@@ -5,6 +5,13 @@ const oPasswordEl = document.getElementById("oldPassword");
 const nPasswordEl = document.getElementById("newPassword");
 const cPasswordEl = document.getElementById("checkPassword");
 
+// 密碼強度檢查
+function validatePassword(password) {
+  // 至少 8 碼，英數混和
+  const regex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
+  return regex.test(password);
+}
+
 document.getElementById("passwordUpdate").addEventListener("submit", async function (e) {
     e.preventDefault();
 
@@ -19,6 +26,10 @@ document.getElementById("passwordUpdate").addEventListener("submit", async funct
         }
         if (newPassword === oldPassword) {
             alert("新密碼不可與舊密碼相同");
+            return;
+        }
+        if(validatePassword(newPassword) !== true) {
+            alert("密碼至少 8 碼，且需包含英文與數字");
             return;
         }
         if (newPassword !== checkPassword) {

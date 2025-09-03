@@ -154,9 +154,9 @@ async function handlePrepaidFormSubmission(event) {
     console.log(JSON.stringify(requestData, null, 2));
     
     try {
-        console.log('開始發送請求到:', 'http://localhost:8080/api/prepaid-expenses');
+        console.log('開始發送請求到:', 'https://127.0.0.1:8443/api/prepaid-expenses');
         
-        const response = await fetch('http://localhost:8080/api/prepaid-expenses', {
+        const response = await fetch('https://127.0.0.1:8443/api/prepaid-expenses', {
             method: 'POST',
             headers: { 
                 'Content-Type': 'application/json',

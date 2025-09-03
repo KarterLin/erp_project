@@ -11,6 +11,8 @@ import org.springframework.stereotype.Service;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
+import java.math.BigDecimal;
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -29,45 +31,39 @@ public class ToDoService {
      * 獲取所有待辦分錄，按傳票編號分組
      */
     public List<ToDoEntryDTO> getAllToDoEntries() {
-        // 使用 JPQL 查詢所有分錄，並預先載入關聯資料
-        String jpql = "SELECT DISTINCT je FROM JournalEntry je " +
-                     "LEFT JOIN FETCH je.details jd " +
-                     "LEFT JOIN FETCH jd.account " +
-                     "ORDER BY je.entryDate DESC, je.voucherNumber DESC";
+        // 使用原生 SQL 查詢以包含用戶資訊
+        String sql = """
+            SELECT DISTINCT 
+                je.entry_date,
+                je.voucher_number,
+                je.status,
+                u.account as input_user,
+                je.reason
+            FROM journal_entry je
+            LEFT JOIN user_info u ON je.user_id = u.id
+            WHERE je.status IN ('PENDING', 'APPROVED', 'REJECTED')
+            ORDER BY je.entry_date DESC, je.voucher_number DESC
+        """;
+
+        @SuppressWarnings("unchecked")
+        List<Object[]> results = entityManager.createNativeQuery(sql).getResultList();
         
-        List<JournalEntry> journalEntries = entityManager.createQuery(jpql, JournalEntry.class)
-                                                        .getResultList();
-        
-        // 按傳票編號分組
         Map<String, ToDoEntryDTO> groupedEntries = new LinkedHashMap<>();
         
-        for (JournalEntry entry : journalEntries) {
-            String voucherNumber = entry.getVoucherNumber();
+        for (Object[] row : results) {
+            String voucherNumber = (String) row[1];
             
-            // 如果該傳票編號還沒有被處理過
             if (!groupedEntries.containsKey(voucherNumber)) {
                 ToDoEntryDTO todoEntry = new ToDoEntryDTO();
-                todoEntry.setEntryDate(entry.getEntryDate());
+                todoEntry.setEntryDate(((Date) row[0]).toLocalDate());
                 todoEntry.setVoucherNumber(voucherNumber);
-                todoEntry.setStatus(getStatusDisplayText(entry.getStatus()));
+                todoEntry.setStatus(getStatusDisplayText((String) row[2]));
+                todoEntry.setInputUser((String) row[3]); // 輸入人員
+                todoEntry.setReason((String) row[4]);    // 審核原因
                 
-                // 處理該分錄的詳細資料
-                List<ToDoDetailDTO> details = new ArrayList<>();
+                // 獲取該傳票的詳細資料
+                todoEntry.setDetails(getDetailsForVoucher(voucherNumber));
                 
-                if (entry.getDetails() != null) {
-                    for (JournalDetail detail : entry.getDetails()) {
-                        ToDoDetailDTO detailDTO = new ToDoDetailDTO();
-                        detailDTO.setAccountCode(detail.getAccount().getCode());
-                        detailDTO.setAccountName(detail.getAccount().getName());
-                        detailDTO.setDebitAmount(detail.getDebit());
-                        detailDTO.setCreditAmount(detail.getCredit());
-                        detailDTO.setDescription(detail.getDescription());
-                        
-                        details.add(detailDTO);
-                    }
-                }
-                
-                todoEntry.setDetails(details);
                 groupedEntries.put(voucherNumber, todoEntry);
             }
         }
@@ -76,17 +72,56 @@ public class ToDoService {
     }
     
     /**
+     * 獲取指定傳票的詳細資料
+     */
+    private List<ToDoDetailDTO> getDetailsForVoucher(String voucherNumber) {
+        String detailSql = """
+            SELECT 
+                a.code,
+                a.name,
+                jd.debit,
+                jd.credit,
+                jd.description
+            FROM journal_detail jd
+            JOIN journal_entry je ON jd.journal_entry_id = je.id
+            JOIN account a ON jd.account_id = a.id
+            WHERE je.voucher_number = ?
+            ORDER BY jd.id
+        """;
+        
+        @SuppressWarnings("unchecked")
+        List<Object[]> detailResults = entityManager.createNativeQuery(detailSql)
+                .setParameter(1, voucherNumber)
+                .getResultList();
+        
+        List<ToDoDetailDTO> details = new ArrayList<>();
+        
+        for (Object[] row : detailResults) {
+            ToDoDetailDTO detail = new ToDoDetailDTO();
+            detail.setAccountCode((String) row[0]);
+            detail.setAccountName((String) row[1]);
+            detail.setDebitAmount((BigDecimal) row[2]);
+            detail.setCreditAmount((BigDecimal) row[3]);
+            detail.setDescription((String) row[4]);
+            
+            details.add(detail);
+        }
+        
+        return details;
+    }
+    
+    /**
      * 將資料庫狀態轉換為顯示文字
      */
-    private String getStatusDisplayText(EntryStatus status) {
+    private String getStatusDisplayText(String status) {
         if (status == null) return "未知狀態";
         
         switch (status) {
-            case PENDING:
+            case "PENDING":
                 return "已提交待審核";
-            case APPROVED:
+            case "APPROVED":
                 return "已審核通過";
-            case REJECTED:
+            case "REJECTED":
                 return "已退回";
             default:
                 return "未知狀態";

@@ -17,6 +17,7 @@ CREATE TABLE journal_entry (
   voucher_number VARCHAR(50) UNIQUE,
   user_id BIGINT NULL,
   status ENUM('PENDING','APPROVED','REJECTED') DEFAULT 'PENDING',
+  reason VARCHAR(500) NULL,                          -- 審核原因
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 

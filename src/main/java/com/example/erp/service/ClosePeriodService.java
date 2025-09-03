@@ -124,7 +124,7 @@ public class ClosePeriodService {
         }
 	}
 	
-	 private LocalDate determineStartDate(LocalDate endDate) {
+	 public LocalDate determineStartDate(LocalDate endDate) {
 	        LocalDate lastClosedDate = cpr.findLatestClosingTime();
 
 	        if (lastClosedDate == null || endDate.isBefore(lastClosedDate)) {

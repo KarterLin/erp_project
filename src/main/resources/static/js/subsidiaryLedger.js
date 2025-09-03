@@ -192,7 +192,7 @@ class AccountSelector {
 }
 
 // API 基礎 URL
-const API_BASE_URL = 'http://localhost:8080/api';
+const API_BASE_URL = 'https://127.0.0.1:8443/api';
 
 // 全域變數
 let currentLedgerData = [];

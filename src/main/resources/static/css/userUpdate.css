@@ -1,56 +1,9 @@
-.row {
-    display: flex;
-    flex-wrap: wrap;
-}
-.col {
-    padding-left: 10px;
-    box-sizing: border-box;
-    text-align: left;
-}
-.row .title {
-    flex: 3;
-    font-weight: bolder;
-}
-.row .form {
-    flex: 6;
-    position: relative;
-    margin-bottom: 20px;
-    margin-top: 25px;  /*先簡單修讓表格不高於表頭*/
-}
-.row .blank {
-    flex: 3;
-}
-form label {
-    font-size: small;
-    display: inline-block;
-    margin-top: 5px;
-}
-.required::after {
-    content: "*";
-    color: red;
-    margin-left: 2px;
-}
-input[ type="text"],
-input[ type="email"],
-form select {
-    width: 100%;
-    height: 20px;
-    box-sizing: border-box;
-}
-.radioName {
-    font-size: small;
-    display: inline-block;
-    margin-top: 5px;
-    margin-bottom: 0;
-}
-.radioGroup {
-    display: flex;
-}
-.radioGroup label {
-    margin-right: 10px;
-}
+
 .passwdBtn {
     background-color: #3498db;
+    font-weight: bold;
+    padding:8px 14px;
+    margin-top:-5px;
 }
 .endEdit {
     display: flex;
@@ -59,10 +12,4 @@ form select {
     gap: 20px;
     justify-content: right;
     width: 100%;
-}
-.cancelBtn {
-    background-color: lightgray;
-}
-.submitBtn {
-    background-color: #27ae60;
 }

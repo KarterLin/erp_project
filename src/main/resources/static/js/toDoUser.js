@@ -7,7 +7,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
 async function loadToDoEntries() {
     try {
-        const response = await fetch('http://localhost:8080/api/todo/entries');
+        const response = await fetch('https://127.0.0.1:8443/api/todo/entries');
         
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
@@ -35,7 +35,7 @@ function displayEntries(entries) {
   tbody.innerHTML = '';
 
   if (!entries || entries.length === 0) {
-    tbody.innerHTML = '<tr><td colspan="9" style="text-align:center;">目前沒有待辦事項</td></tr>';
+    tbody.innerHTML = '<tr><td colspan="11" style="text-align:center;">目前沒有待辦事項</td></tr>';
     table.style.display = 'table';
     return;
   }
@@ -70,7 +70,7 @@ function displayEntries(entries) {
       tr.appendChild(td(formatAmount(detail.creditAmount), 'right'));
       tr.appendChild(td(detail.description || ''));
 
-      // 第一列才放「輸入人員」「審核狀態」並跨列（傳票層級）
+      // 第一列才放「輸入人員」「審核狀態」「審核原因」並跨列（傳票層級）
       if (idx === 0) {
         const tdUser = document.createElement('td');
         // 後端欄位名稱可能不同，這裡多做幾個別名保險
@@ -83,6 +83,13 @@ function displayEntries(entries) {
         tdStatus.rowSpan = span;
         tdStatus.className = getStatusClass(entry.status);
         tr.appendChild(tdStatus);
+
+        // 新增：審核原因欄位
+        const tdReason = document.createElement('td');
+        tdReason.textContent = entry.reason || '';
+        tdReason.rowSpan = span;
+        tdReason.className = 'approval-reason';
+        tr.appendChild(tdReason);
       }
 
       tbody.appendChild(tr);
@@ -90,7 +97,7 @@ function displayEntries(entries) {
 
     // 群組間分隔線（可選）
     const sep = document.createElement('tr');
-    sep.innerHTML = `<td colspan="9" style="padding:0;border:0;height:6px;"></td>`;
+    sep.innerHTML = `<td colspan="11" style="padding:0;border:0;height:6px;"></td>`;
     tbody.appendChild(sep);
   });
 

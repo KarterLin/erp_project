@@ -31,20 +31,30 @@ public class RegistrationService {
 
 		if (userService.userExists(request.getuEmail())) {
 			throw new IllegalStateException("此信箱已使用");
-		}else {
-			if(companyService.taxIdExists(request.getTaxId())) {
+		}
+		if (request.getTaxId() != null && !request.getTaxId().isBlank()) {
+			if (companyService.taxIdExists(request.getTaxId())) {
 				throw new IllegalStateException("此統編已使用");
 			}
 		}
 
 		CompanyInfo company = new CompanyInfo();
 		company.setcName(request.getcName());
-		company.setTaxId(request.getTaxId());
 		company.setrName(request.getrName());
 		company.setrTel(request.getrTel());
 		company.setrEmail(request.getuEmail());
-		//CompanyInfo savedCompany = companyService.save(company); 
-		companyService.save(company);
+		// 統編
+				String taxId = request.getTaxId();
+				if (taxId == null || taxId.isBlank()) {
+					CompanyInfo savedCompany = companyService.save(company);
+					taxId = "A" + String.format("%07d", savedCompany.getId());
+					savedCompany.setTaxId(taxId);
+					companyService.save(savedCompany);
+					company = savedCompany;
+				} else {
+					company.setTaxId(request.getTaxId());
+					companyService.save(company);
+				}
 		
 		UserInfo user = new UserInfo();
 		user.setuEmail(request.getuEmail());
@@ -57,7 +67,7 @@ public class RegistrationService {
 		UserInfo savedUser = userService.save(user);
 		
 		// 發送驗證信
-		String token = emailService.sendVerificationEmail(user.getuEmail(),company.getId());
+		String token = emailService.sendVerificationEmail(user.getuEmail(),company.getId(), taxId);
 		
 		// 記錄Token
 		ConfirmationTokens cToken = new ConfirmationTokens();
@@ -70,6 +80,4 @@ public class RegistrationService {
 		return token;
 	}
 	
-	
-
 }

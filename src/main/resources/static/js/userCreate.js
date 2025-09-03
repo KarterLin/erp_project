@@ -45,7 +45,8 @@ document.getElementById("uForm").addEventListener("submit", async function (e) {
         let role = "";
         if(jobTitleEl.value == "2"){role="ADMIN"} else {role="USER"};
         const result = await addUser(uAccount, uEmail, role);
-        console.log("✅ 新增成功:", result);
+        //console.log("✅ 新增成功:", result);
+        alert("新增成功");
     } catch (error) {
         console.error("🚨 呼叫 API 發生錯誤:", error);
         alert("新增失敗");
