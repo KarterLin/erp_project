@@ -5,9 +5,7 @@
 
 /* ==== Design tokens (橘/綠 + 白底風格) ==== */
 :root{
-  --accent:#f97316;        /* 主橘 */
   --accent-hover:#ea580c;  /* 深橘 */
-  --accent-weak:#fff7ed;   /* 淡橘背景 */
   --accent-line:#fed7aa;   /* 橘色淡線 */
 
   --ok:#16a34a;            /* 綠（備用） */
@@ -174,4 +172,10 @@ body{
   .title-bar{ flex-direction:column; align-items:flex-start; gap:10px; }
   .subject-card{ max-width:100%; padding:14px; }
   .accordion-header{ font-size:18px; }
+}
+
+.page-wrapper{
+  --accent:#f97316;
+  --accent-weak:#fff7ed;
+  /* 其餘需要的變數 */
 }

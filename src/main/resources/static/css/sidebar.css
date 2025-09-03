@@ -102,3 +102,20 @@
   }
   .page-wrapper.shift{ margin-left: var(--sidebar-width); }
 }
+
+:root{
+  --font-sans: "Lato", system-ui, -apple-system, "Segoe UI", Roboto, "Noto Sans TC", sans-serif;
+}
+
+/* 鎖住側欄字體與大小（不被別頁 body 或 a 覆寫）*/
+.sidebar{
+  font-family: var(--font-sans);
+  font-size: 14.5px;
+  line-height: 1.6;
+}
+.sidebar a{
+  font: inherit;     /* 跟著 .sidebar */
+  font-weight: 600;  /* 需要粗一點就這裡定義 */
+}
+
+
