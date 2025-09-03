@@ -3,7 +3,7 @@
 const API_URL = "https://127.0.0.1:8443/api";
 
 
-// 啟用按鈕 
+// 提交按鈕 
 const submitBtn = document.getElementById("submitBtn");
 submitBtn.disabled = true;
 
@@ -75,7 +75,7 @@ function validateForm() {
   if (!rtelEl.value.trim()) return "負責人手機必填";
   if (!accountEl.value.trim()) return "帳號必填";
   if (!emailEl.value.trim()) return "Email 必填";
-  if(!pendingCheckbox.checked){if(!taxIdInput.value.trim())return "統編必填";};
+  if (!pendingCheckbox.checked) { if (!taxIdInput.value.trim()) return "統編必填"; };
   // 手機格式：台灣手機 09 開頭 + 8 碼
   const phoneRegex = /^09\d{8}$/;
   if (!phoneRegex.test(rtelEl.value.trim())) {
@@ -98,18 +98,37 @@ function validateForm() {
   return true;
 }
 
+// 啟用按鈕
+function checkInputs() {
+  const isValid =
+    cnameEl.value.trim() &&
+    rnameEl.value.trim() &&
+    rtelEl.value.trim() &&
+    accountEl.value.trim() &&
+    emailEl.value.trim() &&
+    password.value.trim() && // 確保密碼欄位有填
+    (pendingCheckbox.checked || taxIdInput.value.trim());
+
+  const passwordValid = validatePassword(password.value.trim());
+  if(isValid && passwordValid) {submitBtn.disabled = false;}
+}
+
+[cnameEl, rnameEl, rtelEl, accountEl, emailEl, password, taxIdInput, pendingCheckbox].forEach(el => {
+  el.addEventListener("input", checkInputs);
+  el.addEventListener("change", checkInputs);
+});
 
 // 註冊請求的 payload，對應後端的 RegistrationRequest
 submitBtn.addEventListener("click", async () => {
-const registrationData = {
-  cName: document.getElementById("cname").value,
+  const registrationData = {
+    cName: document.getElementById("cname").value,
     taxId: document.getElementById("taxId").value,
     rName: document.getElementById("rname").value,
     rTel: document.getElementById("rtel").value,
     uAccount: document.getElementById("account").value,
     uEmail: document.getElementById("email").value,
     password: document.getElementById("password").value,
-    role: "ADMIN" 
+    role: "ADMIN"
   };
 
   try {

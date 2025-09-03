@@ -99,12 +99,6 @@ function resetIdleTimer() {
 ["mousemove", "keydown", "click", "scroll"].forEach(evt => {
   document.addEventListener(evt, resetIdleTimer);
 });
-// function forceLogout() {
-//   console.warn("⚠️ 使用者閒置超過 15 分鐘，自動登出");
-//   window.location.href = "login.html";
-// }
-
-
 
 // refreshToken
 let refreshTimerStarted = false;
@@ -112,8 +106,6 @@ let refreshTimerStarted = false;
 function startTokenRefreshTimer() {
   if (refreshTimerStarted) return; // 已啟動過就跳過
   refreshTimerStarted = true;
-  // 14 分鐘自動刷新
-  //const refreshInterval = 14 * 60 * 1000;
   const checkInterval = 30 * 1000; // 每 30 秒檢查一次
 
   setInterval(async () => {
@@ -127,7 +119,7 @@ function startTokenRefreshTimer() {
     }
 
     if (idleTime > warningTime && !warningShown) {
-      // 閒置超過 14 分鐘，顯示警告
+      // 閒置超過14分鐘跳警告
       showIdleWarning();
       warningShown = true;
     }
@@ -145,7 +137,6 @@ function startTokenRefreshTimer() {
           console.warn("無法刷新，accessToken可能已過期");
           // refreshToken 失效，跳轉登入頁
           if (res.status === 401) {
-            //window.location.href = "login.html";
             logout();
           }
         }
