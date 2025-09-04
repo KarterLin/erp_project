@@ -1,0 +1,93 @@
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.header button {
+    margin-left: auto;
+    margin-right: 10px;
+}
+.addBtn {
+    background-color: #3498db;
+}
+
+.entryBtn {
+    background-color: #FFF;
+    border: 2px solid #3498db;
+    color: #3498db;
+    font-weight: bolder;
+    margin-top: 5px;
+    padding:5px 14px;
+}
+.endLine {
+    margin-bottom: 10px;
+}
+table {
+    margin-top: 20px;
+    overflow: hidden;
+}
+table input {
+    width: 100%;
+    height: 30px;
+}
+tbody .title {
+    background-color: 	#f97316;
+    color: #0f172a;
+    font-weight: bolder;
+}
+label {
+    color: 	#0f172a;
+}
+.inputGroup {
+    position: relative;
+    display: inline-block;
+    width: 100%;
+}
+.inputGroup input {
+    height: 30px;
+}
+.inputGroup button {
+    position: absolute;
+    right: 4px;
+    top: 30%;
+    transform: translateY(-50%);
+    background: #3498db;
+    color: #FFF;
+    padding:3px 8px;
+}
+
+
+/* 下拉選單（科目搜尋） */
+.accountSelector{ position:relative; }
+.accountDropdown{
+  position:absolute;
+  top:calc(100% + 4px);
+  left:0; right:0;
+  background:#fff;
+  border:1px solid #e5e7eb;
+  border-radius:8px;
+  box-shadow:0 8px 20px rgba(0,0,0,.12);
+  max-height:260px;
+  overflow-y:auto;
+  z-index:5000;
+  display:none;
+}
+.accountDropdown.show{ display:block; }
+.accountOption{
+  padding:10px 12px;
+  cursor:pointer;
+  font-size:13px;
+  text-align:left;
+  color:#0f172a;
+  border-bottom:1px solid #f1f5f9;
+}
+.accountOption:last-child{ border-bottom:none; }
+.accountOption:hover,
+.accountOption.highlighted{
+  background:#fff7ed;
+}
+.noResults{
+  padding:10px 12px;
+  color:#6b7280;
+  font-style:italic;
+}

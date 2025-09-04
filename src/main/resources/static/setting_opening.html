@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="./css/sidebar.css">
+    <link rel="stylesheet" href="./css/topnavbar.css">
+    <link rel="stylesheet" href="./css/main.css">
+    <link rel="stylesheet" href="./css/opening.css">
+</head>
+
+<body>
+    <!-- Topbar -->
+    <div id="topbar-container"></div>
+    <div id="sidebar-container"></div>
+    <div class="main page-wrapper">
+        <div class="header">
+            <h1>開帳設定</h1>
+            <span>
+                <!-- <button class="addBtn">+ 匯入帳務</button> -->
+                <button type="submit" class="submitBtn" id="submitBtn">完成開帳</button>
+                <!-- 完成開帳後跳轉至首頁 -->
+            </span>
+        </div>
+        <hr>
+        <form id="journalForm">
+            <table id="entriesTable">
+                <thead>
+                    <tr>
+                        <th>開帳分錄</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="title">
+                        <th>
+                            <label for="openDate">開帳日期</label>
+                        </th>
+                    </tr>
+                    <tr>
+                        <td><input type="date" id="openDate"></td>
+                    </tr>
+                    <tr class="title">
+                        <td>借方</td>
+                    </tr>
+                    <tr>
+                        <th><label >科目</label></th>
+                        <th><label for="debitAmount">金額</label></th>
+                    </tr>
+                    <tr class="journalRow debitRow">
+                        <td>
+                            <div class="accountSelector">
+                                <input type="text" class="accountInput" placeholder="搜尋科目編號..."
+                                    data-type="code" autocomplete="off">
+                                <div class="accountDropdown"></div>
+                            </div>
+                        </td>
+                        <td><input type="number" id="debitAmount" name="debitAmount"></td>
+                    </tr>
+                    <tr>
+                        <td><button type="button" class="entryBtn addDebitRow" onclick="addDebitRow()">新增借方項目</button></td>
+                    </tr>
+                    <tr class="title">
+                        <td>貸方</td>
+                    </tr>
+                    <tr>
+                        <th><label >科目</label></th>
+                        <th><label for="creditAmount">金額</label></th>
+                    </tr>
+                    <tr class="journalRow creditRow">
+                        <td>
+                            <div class="accountSelector">
+                                <input type="text" class="accountInput" placeholder="搜尋科目編號..."
+                                    data-type="code" autocomplete="off">
+                                <div class="accountDropdown"></div>
+                            </div>
+                        </td>
+                        <td><input type="number" id="creditAmount" name="creditAmount"></td>
+                    </tr>
+                    <tr class="endLine">
+                        <td><button type="button" class="entryBtn addCreditRow" onclick="addCreditRow()">新增貸方項目</button></td>
+                    </tr>
+                </tbody>
+            </table>
+        </form>
+
+    </div>
+
+    <script src="js/sidebar.js"></script>
+    <script src="js/topnavbar.js"></script>
+    <script src="js/opening.js"></script>
+</body>
+
+</html>
