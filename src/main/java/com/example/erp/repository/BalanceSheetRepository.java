@@ -43,6 +43,7 @@ public interface BalanceSheetRepository extends JpaRepository<JournalDetail, Lon
         JOIN account a ON j.account_id = a.id
         JOIN journal_entry e ON j.journal_entry_id = e.id
         WHERE a.is_active = 1
+          OR (a.id = 65 AND e.entry_date < :endDate)
           AND j.is_active = 1
           AND e.status = 'APPROVED'
           AND e.entry_date BETWEEN :startDate AND :endDate
