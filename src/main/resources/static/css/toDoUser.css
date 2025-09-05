@@ -20,8 +20,8 @@
   --w-memo:   26%;    /* 7 摘要（加寬） */
   --w-user:   10%;    /* 8 輸入人員 */
   --w-status: 10%;    /* 9 審核狀態 */
-  --w-reason: 10%;    /* 10 原因（縮窄） */
-  --w-action:  8%;    /* 11 操作 */
+  --w-reason: 12%;    /* 10 原因（稍微加寬） */
+  --w-action:  6%;    /* 11 操作 */
 }
 
 /* 🌐 全域 */
@@ -56,18 +56,20 @@ header{ padding:16px; font-size:40px; font-weight:bold; color:var(--text); }
   box-shadow:0 2px 10px rgba(0,0,0,.06);
 }
 
-/* 表單容器 */
+/* 表單容器 - 加入橫向捲軸 */
 .entry-form-container{
   background-color:transparent;
   padding:30px;
   border-radius:8px;
   box-shadow:none;
+  overflow-x:auto; /* 加入橫向捲軸 */
 }
 
 /* 表格（整合＋欄寬配置） */
 #entries-table,
 .entries-table{
   width:100%;
+  min-width:1200px; /* 設定最小寬度，確保不會壓縮過度 */
   border-collapse:collapse;
   margin-bottom:20px;
   font-size:14px;
@@ -99,7 +101,7 @@ header{ padding:16px; font-size:40px; font-weight:bold; color:var(--text); }
 #entries-table tbody tr:hover,
 .entries-table tbody tr:hover{ background-color:var(--accent-weak); }
 
-/* #entries-table 欄寬配置（1~11） */
+/* #entries-table 欄寬配置（1~10） */
 #entries-table th:nth-child(1),  #entries-table td:nth-child(1){  width:var(--w-date);  }
 #entries-table th:nth-child(2),  #entries-table td:nth-child(2){  width:var(--w-vno);   }
 #entries-table th:nth-child(3),  #entries-table td:nth-child(3){  width:var(--w-code);  }
@@ -110,7 +112,6 @@ header{ padding:16px; font-size:40px; font-weight:bold; color:var(--text); }
 #entries-table th:nth-child(8),  #entries-table td:nth-child(8){  width:var(--w-user);  }
 #entries-table th:nth-child(9),  #entries-table td:nth-child(9){  width:var(--w-status);}
 #entries-table th:nth-child(10), #entries-table td:nth-child(10){ width:var(--w-reason);}
-#entries-table th:nth-child(11), #entries-table td:nth-child(11){ width:var(--w-action);}
 
 /* —— 對齊改用 class，避免 rowSpan 造成 nth-child 對不到 —— */
 #entries-table td.col-name,
@@ -124,12 +125,97 @@ header{ padding:16px; font-size:40px; font-weight:bold; color:var(--text); }
   text-align:center !important;         /* 四欄一致置中 */
 }
 
-/* 若要把金額改回靠右，改成這樣（取消上面對 .col-debit/.col-credit 的置中）
-#entries-table td.col-debit,
-#entries-table td.col-credit,
-.entries-table  td.col-debit,
-.entries-table  td.col-credit{ text-align:right !important; }
-*/
+/* 審核原因欄位特殊處理 */
+#entries-table td.reason-cell,
+.entries-table td.reason-cell {
+  position: relative;
+  cursor: pointer;
+  padding-right: 25px; /* 為圖標留空間 */
+}
+
+#entries-table td.reason-cell:hover,
+.entries-table td.reason-cell:hover {
+  background-color: var(--accent-weak);
+}
+
+/* 審核原因展開圖標 */
+.reason-expand-icon {
+  position: absolute;
+  right: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 16px;
+  height: 16px;
+  background: var(--accent);
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-weight: bold;
+  opacity: 0.7;
+}
+
+#entries-table td.reason-cell:hover .reason-expand-icon,
+.entries-table td.reason-cell:hover .reason-expand-icon {
+  opacity: 1;
+}
+
+/* 彈出視窗樣式 */
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 1000;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+.modal-content {
+  background-color: var(--surface);
+  margin: 10% auto;
+  padding: 30px;
+  border-radius: 8px;
+  width: 60%;
+  max-width: 600px;
+  position: relative;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+.modal-content h3 {
+  margin-top: 0;
+  color: var(--accent);
+  border-bottom: 2px solid var(--accent);
+  padding-bottom: 10px;
+}
+
+.close {
+  color: var(--muted);
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+  position: absolute;
+  right: 20px;
+  top: 20px;
+  cursor: pointer;
+}
+
+.close:hover,
+.close:focus {
+  color: var(--accent);
+}
+
+#reasonModalText {
+  line-height: 1.6;
+  color: var(--text);
+  background: #f8f9fa;
+  padding: 15px;
+  border-radius: 4px;
+  border-left: 4px solid var(--accent);
+}
 
 /* 原因欄位的輸入框：跟著欄寬縮、不外溢 */
 #entries-table td:nth-child(10) .reason-input{ width:100%; max-width:360px; padding:8px; box-sizing:border-box; }
@@ -199,15 +285,18 @@ button[type="submit"]:hover{ background-color:var(--accent-hover); }
   #entries-table, .entries-table { font-size:12px; }
   #entries-table th, #entries-table td, .entries-table th, .entries-table td { padding:8px 4px; }
   .edit-button{ padding:6px 12px; font-size:12px; }
+  .modal-content { width: 80%; }
 }
 @media (max-width:700px){
   .main-content{ margin-left:0; }
   .entry-form-container{ padding:15px; }
-  #entries-table, .entries-table { font-size:11px; }
+  #entries-table, .entries-table { font-size:11px; min-width: 800px; }
   .edit-button{ padding:4px 8px; font-size:11px; }
+  .modal-content { width: 90%; margin: 5% auto; }
 }
 @media (max-width:400px){
   .entry-form-container{ padding:10px; }
   #entries-table, .entries-table { font-size:10px; }
   #entries-table th, #entries-table td, .entries-table th, .entries-table td { padding:6px 3px; }
+  .modal-content { width: 95%; }
 }

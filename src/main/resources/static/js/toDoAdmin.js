@@ -50,7 +50,9 @@ function displayEntries(entries) {
 
     details.forEach((detail, idx) => {
       const tr = document.createElement('tr');
+      // 📌 重要：為每一行都加上 voucher 標記，方便後續移除
       tr.dataset.voucher = voucher;
+      tr.classList.add('voucher-row');
 
       // 日期、傳票編號（第一列才顯示，跨列）
       if (idx === 0) {
@@ -111,9 +113,10 @@ function displayEntries(entries) {
       tbody.appendChild(tr);
     });
 
-    // 分隔線
+    // 分隔線 - 也要加上 voucher 標記
     const sep = document.createElement('tr');
     sep.dataset.voucher = voucher;
+    sep.classList.add('voucher-separator');
     sep.innerHTML = `<td colspan="11" style="padding:0;border:0;height:6px;"></td>`;
     tbody.appendChild(sep);
   });
@@ -127,8 +130,6 @@ function displayEntries(entries) {
     return td;
   }
 }
-
-
 
 async function confirmApproval(voucherNumber) {
     const statusSelect = document.querySelector(`.status-select[data-voucher="${voucherNumber}"]`);
@@ -176,8 +177,10 @@ async function confirmApproval(voucherNumber) {
             // 移除已處理的行
             removeVoucherRows(voucherNumber);
             
-            // 如果沒有更多待審核項目，重新載入
-            if (document.querySelectorAll('#entries-tbody tr').length === 0) {
+            // 檢查是否還有待審核項目
+            const remainingRows = document.querySelectorAll('#entries-tbody tr.voucher-row');
+            if (remainingRows.length === 0) {
+                // 如果沒有更多項目，重新載入以顯示 "目前沒有待審核的分錄"
                 loadPendingEntries();
             }
         } else {
@@ -191,32 +194,22 @@ async function confirmApproval(voucherNumber) {
     }
 }
 
+// 📌 修正版本的 removeVoucherRows 函數
 function removeVoucherRows(voucherNumber) {
-    // 找到有該傳票編號的主要行（第一行）
-    const allRows = document.querySelectorAll('#entries-tbody tr');
-    const rowsToRemove = [];
-    let foundVoucherRow = false;
+    console.log('移除傳票:', voucherNumber);
     
-    allRows.forEach(row => {
-        const voucherCell = row.cells[1]; // 傳票編號在第二欄
-        
-        // 如果找到傳票編號匹配的行
-        if (voucherCell && voucherCell.textContent.trim() === voucherNumber) {
-            foundVoucherRow = true;
-            rowsToRemove.push(row);
-        } 
-        // 如果之前找到了傳票行，且當前行的傳票編號欄位為空（表示是同一傳票的詳細資料）
-        else if (foundVoucherRow && voucherCell && voucherCell.textContent.trim() === '') {
-            rowsToRemove.push(row);
-        }
-        // 如果遇到下一個有傳票編號的行，停止收集
-        else if (foundVoucherRow && voucherCell && voucherCell.textContent.trim() !== '') {
-            foundVoucherRow = false;
-        }
+    // 使用 dataset.voucher 來找到所有相關的行
+    const rowsToRemove = document.querySelectorAll(`#entries-tbody tr[data-voucher="${voucherNumber}"]`);
+    
+    console.log('找到要移除的行數:', rowsToRemove.length);
+    
+    // 移除所有相關的行（包括明細行和分隔線）
+    rowsToRemove.forEach((row, index) => {
+        console.log(`移除第 ${index + 1} 行:`, row);
+        row.remove();
     });
     
-    // 移除收集到的所有行
-    rowsToRemove.forEach(row => row.remove());
+    console.log('移除完成');
 }
 
 function showError(message) {
