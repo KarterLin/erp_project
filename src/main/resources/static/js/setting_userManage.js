@@ -36,7 +36,7 @@ async function loadUsers() {
                 if (currentRoles.includes("ROLE_ADMIN") || user.email === currentEmail) {
                     editCell = `
                         <a href="setting_userUpdate.html?id=${encodeURIComponent(user.id)}">
-                            <img src="./img/icon1.png" alt="edit">
+                            <img src="./img/manageIcon.png" alt="edit">
                         </a>`;
                 } else {
                     // 不允許編輯 → 顯示灰色或空白
