@@ -17,37 +17,55 @@ public interface BalanceSheetRepository extends JpaRepository<JournalDetail, Lon
     // 使用字串比較，避免枚舉類型衝突問題
     @Query("SELECT DISTINCT a FROM Account a " +
            "JOIN JournalDetail jd ON jd.account = a " +
+           "JOIN jd.journalEntry je ON je.status = com.example.erp.entity.EntryStatus.APPROVED " +
            "WHERE CAST(a.type AS string) = 'asset'")
     List<Account> findUsedAssetAccounts();
 
     @Query("SELECT DISTINCT a FROM Account a " +
            "JOIN JournalDetail jd ON jd.account = a " +
+           "JOIN jd.journalEntry je ON je.status = com.example.erp.entity.EntryStatus.APPROVED " +
            "WHERE CAST(a.type AS string) = 'liability'")
     List<Account> findUsedLiabilityAccounts();
 
     @Query("SELECT DISTINCT a FROM Account a " +
            "JOIN JournalDetail jd ON jd.account = a " +
+           "JOIN jd.journalEntry je ON je.status = com.example.erp.entity.EntryStatus.APPROVED " +
            "WHERE CAST(a.type AS string) = 'equity'")
     List<Account> findUsedEquityAccounts();
 
     @Query("SELECT DISTINCT a FROM Account a " +
            "JOIN JournalDetail jd ON jd.account = a " +
+           "JOIN jd.journalEntry je ON je.status = com.example.erp.entity.EntryStatus.APPROVED " +
            "WHERE CAST(a.type AS string) IN ('revenue', 'expense')")
     List<Account> findUsedRevenueAndExpenseAccounts();
 
-    // 計算父科目餘額（native SQL）
+    // 修正的查詢：確保只取得 APPROVED 狀態的分錄
     @Query(value = """
         SELECT a.parent_id AS parentId,
-               SUM(j.debit) - SUM(j.credit) AS balance
+               SUM(CASE 
+                   WHEN a.type IN ('asset', 'expense') THEN j.debit - j.credit
+                   WHEN a.type IN ('liability', 'equity', 'revenue') THEN j.credit - j.debit
+                   ELSE j.debit - j.credit
+               END) AS balance
         FROM journal_detail j
-        JOIN account a ON j.account_id = a.id
-        JOIN journal_entry e ON j.journal_entry_id = e.id
+        INNER JOIN account a ON j.account_id = a.id
+        INNER JOIN journal_entry e ON j.journal_entry_id = e.id
         WHERE a.is_active = 1
-          OR (a.id = 65 AND e.entry_date < :endDate)
           AND j.is_active = 1
           AND e.status = 'APPROVED'
-          AND e.entry_date BETWEEN :startDate AND :endDate
+          AND (
+              -- 資產、負債、權益科目：累計到結束日期
+              (a.type IN ('asset', 'liability', 'equity') AND e.entry_date <= :endDate)
+              OR
+              -- 損益科目：只取指定期間內的資料
+              (a.type IN ('revenue', 'expense') AND e.entry_date BETWEEN :startDate AND :endDate)
+          )
         GROUP BY a.parent_id
+        HAVING ABS(SUM(CASE 
+                       WHEN a.type IN ('asset', 'expense') THEN j.debit - j.credit
+                       WHEN a.type IN ('liability', 'equity', 'revenue') THEN j.credit - j.debit
+                       ELSE j.debit - j.credit
+                   END)) > 0.01
         """, nativeQuery = true)
     List<Object[]> findParentBalancesByDateRange(
         @Param("startDate") LocalDate startDate,

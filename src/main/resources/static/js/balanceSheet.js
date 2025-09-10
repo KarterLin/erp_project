@@ -86,7 +86,7 @@ window.onSidebarLoaded = () => {
   handleResize();
   window.addEventListener('resize', handleResize);
 
-  // 重對兩個表格分別初始化
+  // 重新對兩個表格分別初始化
   const tables = document.querySelectorAll('.tableFixHead table');
 
   tables.forEach(table => {
@@ -150,14 +150,26 @@ flatpickr("#dateRange", {
 // 初始載入：年初 ~ 今天
 loadBalanceSheet(startOfYear, today);
 
-// 呼叫 API 並更新表格
+// 呼叫 API 並更新表格 - 只取已審核的資料
 function loadBalanceSheet(startDate, endDate) {
-    fetch(`https://127.0.0.1:8443/api/balance-sheet/summary?startDate=${startDate}&endDate=${endDate}`)
-        .then(res => res.json())
+    // API 端點已在 Repository 層確保只取 APPROVED 狀態的資料
+    const url = `https://127.0.0.1:8443/api/balance-sheet/summary?startDate=${startDate}&endDate=${endDate}`;
+    
+    fetch(url)
+        .then(res => {
+            if (!res.ok) {
+                throw new Error(`HTTP error! status: ${res.status}`);
+            }
+            return res.json();
+        })
         .then(data => {
+            console.log('資產負債表資料:', data);
             updateBalanceSheet(data);
         })
-        .catch(console.error);
+        .catch(error => {
+            console.error('載入資產負債表失敗:', error);
+            alert('載入資料失敗，請稍後再試');
+        });
 }
 
 function clearTable() {
@@ -382,7 +394,7 @@ function prepareBalanceSheetData(startDate, endDate) {
     addAccountData(data, [
         { id: '1600', name: '不動產、廠房及設備' },
         { id: '1780', name: '無形資產' },
-        { id: '1840', name: '遞延所得稅資產' },
+        { id: '1840', name: '非延所得稅資產' },
         { id: '1900', name: '其他非流動資產' }
     ]);
     
@@ -417,7 +429,7 @@ function prepareBalanceSheetData(startDate, endDate) {
     data.push(['非流動負債', '', '', '']);
     addAccountData(data, [
         { id: '2540', name: '長期借款' },
-        { id: '2570', name: '遞延所得稅負債' },
+        { id: '2570', name: '非延所得稅負債' },
         { id: '2600', name: '其他非流動負債' }
     ]);
     
