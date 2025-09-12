@@ -8,6 +8,8 @@
     <link rel="stylesheet" href="./css/property.css" />
     <link rel="stylesheet" href="./css/sidebar.css">
     <link rel="stylesheet" href="./css/topnavbar.css">
+    <!-- 引入 SheetJS 庫 -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 </head>
 
 <body>
@@ -22,10 +24,20 @@
             <a href="./assets.html" class="header-link">回到資產管理</a>
 
             <div class="entry-form-container">
-                <div class="form-group date-wrapper">
-                    <label for="entry-date">報表日期：</label>
-                    <input type="date" id="entry-date" name="entryDate" required>
-                    <button type="button" id="refresh-data" class="header-link" style="margin-left: 20px;">刷新資料</button>
+                <div class="header-controls">
+                    <div class="left-controls">
+                        <div class="form-group date-wrapper">
+                            <label for="entry-date">報表日期：</label>
+                            <input type="date" id="entry-date" name="entryDate" required>
+                            <button type="button" id="refresh-data" class="header-link" style="margin-left: 20px;">刷新資料</button>
+                        </div>
+                    </div>
+                    <div class="right-controls">
+                        <button type="button" id="export-excel" class="export-button">
+                            <span class="export-icon">📊</span>
+                            匯出 Excel
+                        </button>
+                    </div>
                 </div><br>
                 
                 <div id="fixed-asset-section">

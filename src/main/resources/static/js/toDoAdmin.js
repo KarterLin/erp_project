@@ -25,78 +25,110 @@ async function loadPendingEntries() {
 }
 
 function displayEntries(entries) {
-    const loadingDiv = document.getElementById('loading');
-    const errorDiv = document.getElementById('error');
-    const table = document.getElementById('entries-table');
-    const tbody = document.getElementById('entries-tbody');
+  const loadingDiv = document.getElementById('loading');
+  const errorDiv = document.getElementById('error');
+  const table = document.getElementById('entries-table');
+  const tbody = document.getElementById('entries-tbody');
 
-    // 隱藏載入中提示
-    loadingDiv.style.display = 'none';
-    errorDiv.style.display = 'none';
+  loadingDiv.style.display = 'none';
+  errorDiv.style.display = 'none';
+  tbody.innerHTML = '';
 
-    if (!entries || entries.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="11" style="text-align: center;">目前沒有待審核的分錄</td></tr>';
-        table.style.display = 'table';
-        return;
-    }
+  if (!entries || entries.length === 0) {
+    tbody.innerHTML = '<tr><td colspan="11" style="text-align:center;">目前沒有待審核的分錄</td></tr>';
+    table.style.display = 'table';
+    return;
+  }
 
-    tbody.innerHTML = '';
+  entries.forEach(entry => {
+    const details = entry.details || [];
+    if (details.length === 0) return;
 
-    entries.forEach(entry => {
-        const details = entry.details || [];
-        
-        // 為每個傳票的詳細資料生成行
-        details.forEach((detail, index) => {
-            const row = document.createElement('tr');
-            
-            // 為每一行添加 data 屬性以標識所屬的傳票
-            row.dataset.voucherNumber = entry.voucherNumber;
-            
-            // 如果是第一筆詳細資料，添加傳票分組樣式
-            if (index === 0) {
-                row.classList.add('voucher-group');
-            }
+    const span = details.length;
+    const voucher = entry.voucherNumber || '';
+    const dateText = formatDate(entry.entryDate);
 
-            const span = details.length; // 這張傳票有幾列分錄
+    details.forEach((detail, idx) => {
+      const tr = document.createElement('tr');
+      // 📌 重要：為每一行都加上 voucher 標記，方便後續移除
+      tr.dataset.voucher = voucher;
+      tr.classList.add('voucher-row');
 
-            row.innerHTML = `
-                ${index === 0 ? `<td rowspan="${span}">${formatDate(entry.entryDate)}</td>` : ''}
-                ${index === 0 ? `<td rowspan="${span}">${entry.voucherNumber || ''}</td>` : ''}
-                <td>${detail.accountCode || ''}</td>
-                <td>${detail.accountName || ''}</td>
-                <td style="text-align: right;">${formatAmount(detail.debitAmount)}</td>
-                <td style="text-align: right;">${formatAmount(detail.creditAmount)}</td>
-                <td>${detail.description || ''}</td>
-                ${index === 0 ? `<td rowspan="${span}" class="input-user">${entry.inputUser || entry.createdBy || entry.enteredBy || ''}</td>` : ''}
-                ${index === 0 ? `
-                    <td rowspan="${span}">
-                        <select class="status-select" data-voucher="${entry.voucherNumber}">
-                            <option value="" disabled selected>請選擇</option>
-                            <option value="approved">核准</option>
-                            <option value="rejected">退回</option>
-                        </select>
-                    </td>
-                ` : ''}
-                ${index === 0 ? `
-                    <td rowspan="${span}">
-                        <input type="text" class="reason-input" data-voucher="${entry.voucherNumber}" 
-                               placeholder="請輸入原因" />
-                    </td>
-                ` : ''}
-                ${index === 0 ? `
-                    <td rowspan="${span}">
-                        <button class="edit-button" onclick="confirmApproval('${entry.voucherNumber}')">
-                            確認
-                        </button>
-                    </td>
-                ` : ''}
-            `;
-            
-            tbody.appendChild(row);
-        });
+      // 日期、傳票編號（第一列才顯示，跨列）
+      if (idx === 0) {
+        const tdDate = document.createElement('td');
+        tdDate.textContent = dateText;
+        tdDate.rowSpan = span;
+        tr.appendChild(tdDate);
+
+        const tdVoucher = document.createElement('td');
+        tdVoucher.textContent = voucher;
+        tdVoucher.rowSpan = span;
+        tr.appendChild(tdVoucher);
+      }
+
+      // 明細欄位
+      tr.appendChild(cell(detail.accountCode || ''));
+      tr.appendChild(cell(detail.accountName || ''));
+      tr.appendChild(cell(formatAmount(detail.debitAmount), 'right'));
+      tr.appendChild(cell(formatAmount(detail.creditAmount), 'right'));
+      tr.appendChild(cell(detail.description || ''));
+
+      // 👉 新增：輸入人員（第一列顯示，跨列）
+      if (idx === 0) {
+        const tdUser = document.createElement('td');
+        tdUser.textContent = entry.inputUser || entry.createdBy || entry.enteredBy || '';
+        tdUser.rowSpan = span;
+        tr.appendChild(tdUser);
+      }
+
+      // 第一列才顯示審核欄位（跨列）
+      if (idx === 0) {
+        const tdStatus = document.createElement('td');
+        tdStatus.rowSpan = span;
+        tdStatus.innerHTML = `
+          <select class="status-select" data-voucher="${voucher}">
+            <option value="" disabled selected>請選擇</option>
+            <option value="approved">核准</option>
+            <option value="rejected">退回</option>
+          </select>
+        `;
+        tr.appendChild(tdStatus);
+
+        const tdReason = document.createElement('td');
+        tdReason.rowSpan = span;
+        tdReason.innerHTML = `
+          <input type="text" class="reason-input" data-voucher="${voucher}" placeholder="請輸入原因" />
+        `;
+        tr.appendChild(tdReason);
+
+        const tdAction = document.createElement('td');
+        tdAction.rowSpan = span;
+        tdAction.innerHTML = `
+          <button class="edit-button" onclick="confirmApproval('${voucher}')">確認</button>
+        `;
+        tr.appendChild(tdAction);
+      }
+
+      tbody.appendChild(tr);
     });
 
-    table.style.display = 'table';
+    // 分隔線 - 也要加上 voucher 標記
+    const sep = document.createElement('tr');
+    sep.dataset.voucher = voucher;
+    sep.classList.add('voucher-separator');
+    sep.innerHTML = `<td colspan="11" style="padding:0;border:0;height:6px;"></td>`;
+    tbody.appendChild(sep);
+  });
+
+  table.style.display = 'table';
+
+  function cell(text, align) {
+    const td = document.createElement('td');
+    td.textContent = text ?? '';
+    if (align === 'right') td.style.textAlign = 'right';
+    return td;
+  }
 }
 
 async function confirmApproval(voucherNumber) {
@@ -145,8 +177,10 @@ async function confirmApproval(voucherNumber) {
             // 移除已處理的行
             removeVoucherRows(voucherNumber);
             
-            // 如果沒有更多待審核項目，重新載入
-            if (document.querySelectorAll('#entries-tbody tr').length === 0) {
+            // 檢查是否還有待審核項目
+            const remainingRows = document.querySelectorAll('#entries-tbody tr.voucher-row');
+            if (remainingRows.length === 0) {
+                // 如果沒有更多項目，重新載入以顯示 "目前沒有待審核的分錄"
                 loadPendingEntries();
             }
         } else {
@@ -160,10 +194,22 @@ async function confirmApproval(voucherNumber) {
     }
 }
 
-// 修正後的移除函數 - 使用 data 屬性來識別要移除的行
+// 📌 修正版本的 removeVoucherRows 函數
 function removeVoucherRows(voucherNumber) {
-    const rowsToRemove = document.querySelectorAll(`#entries-tbody tr[data-voucher-number="${voucherNumber}"]`);
-    rowsToRemove.forEach(row => row.remove());
+    console.log('移除傳票:', voucherNumber);
+    
+    // 使用 dataset.voucher 來找到所有相關的行
+    const rowsToRemove = document.querySelectorAll(`#entries-tbody tr[data-voucher="${voucherNumber}"]`);
+    
+    console.log('找到要移除的行數:', rowsToRemove.length);
+    
+    // 移除所有相關的行（包括明細行和分隔線）
+    rowsToRemove.forEach((row, index) => {
+        console.log(`移除第 ${index + 1} 行:`, row);
+        row.remove();
+    });
+    
+    console.log('移除完成');
 }
 
 function showError(message) {

@@ -1,6 +1,10 @@
 // API 端點配置
 const API_BASE_URL = 'https://127.0.0.1:8443/api';
 
+// 全域變數儲存資料
+let fixedAssetsData = [];
+let intangibleAssetsData = [];
+
 // 獲取當前日期
 function getCurrentDate() {
     const today = new Date();
@@ -45,13 +49,16 @@ async function loadFixedAssets() {
         
         if (response.ok) {
             const data = await response.json();
+            fixedAssetsData = data; // 儲存到全域變數
             populateFixedAssetTable(data);
         } else {
             console.error('載入固定資產失敗:', response.statusText);
+            fixedAssetsData = [];
             showEmptyTable('fixed-asset-table', '無固定資產資料');
         }
     } catch (error) {
         console.error('載入固定資產網路錯誤:', error);
+        fixedAssetsData = [];
         showEmptyTable('fixed-asset-table', '載入失敗，請檢查網路連接');
     }
 }
@@ -68,13 +75,16 @@ async function loadIntangibleAssets() {
         
         if (response.ok) {
             const data = await response.json();
+            intangibleAssetsData = data; // 儲存到全域變數
             populateIntangibleAssetTable(data);
         } else {
             console.error('載入無形資產失敗:', response.statusText);
+            intangibleAssetsData = [];
             showEmptyTable('intangible-asset-table', '無無形資產資料');
         }
     } catch (error) {
         console.error('載入無形資產網路錯誤:', error);
+        intangibleAssetsData = [];
         showEmptyTable('intangible-asset-table', '載入失敗，請檢查網路連接');
     }
 }
@@ -187,6 +197,115 @@ async function refreshAllData() {
     }
 }
 
+// ===== Excel 匯出功能 =====
+
+// 準備固定資產 Excel 資料
+function prepareFixedAssetExcelData() {
+    if (!fixedAssetsData || fixedAssetsData.length === 0) {
+        return [
+            ['類型', '取得日期', '財產編號', '財產名稱', '原始取得成本', '預計殘值', '累計折舊', '帳面淨額'],
+            ['暫無資料', '', '', '', '', '', '', '']
+        ];
+    }
+
+    const headers = ['類型', '取得日期', '財產編號', '財產名稱', '原始取得成本', '預計殘值', '累計折舊', '帳面淨額'];
+    const rows = fixedAssetsData.map(item => [
+        item.type || '',
+        formatDate(item.entryDate),
+        item.assetCode || '',
+        item.assetName || '',
+        item.totalAmount || 0,
+        item.salvageValue || 0,
+        item.accumulateAmount || 0,
+        item.netAmount || 0
+    ]);
+
+    return [headers, ...rows];
+}
+
+// 準備無形資產 Excel 資料
+function prepareIntangibleAssetExcelData() {
+    if (!intangibleAssetsData || intangibleAssetsData.length === 0) {
+        return [
+            ['類型', '取得日期', '財產編號', '財產名稱', '原始取得成本', '預計殘值', '累計攤銷', '帳面淨額'],
+            ['暫無資料', '', '', '', '', '', '', '']
+        ];
+    }
+
+    const headers = ['類型', '取得日期', '財產編號', '財產名稱', '原始取得成本', '預計殘值', '累計攤銷', '帳面淨額'];
+    const rows = intangibleAssetsData.map(item => [
+        item.type || '',
+        formatDate(item.entryDate),
+        item.assetCode || '',
+        item.assetName || '',
+        item.totalAmount || 0,
+        item.salvageValue || 0,
+        item.accumulateAmount || 0,
+        item.netAmount || 0
+    ]);
+
+    return [headers, ...rows];
+}
+
+// 匯出 Excel 檔案
+function exportToExcel() {
+    const exportButton = document.getElementById('export-excel');
+    if (exportButton) {
+        exportButton.textContent = '匯出中...';
+        exportButton.disabled = true;
+    }
+
+    try {
+        // 建立新的工作簿
+        const workbook = XLSX.utils.book_new();
+
+        // 準備固定資產工作表資料
+        const fixedAssetData = prepareFixedAssetExcelData();
+        const fixedAssetWorksheet = XLSX.utils.aoa_to_sheet(fixedAssetData);
+
+        // 準備無形資產工作表資料
+        const intangibleAssetData = prepareIntangibleAssetExcelData();
+        const intangibleAssetWorksheet = XLSX.utils.aoa_to_sheet(intangibleAssetData);
+
+        // 設置列寬
+        const columnWidths = [
+            { wch: 12 }, // 類型
+            { wch: 12 }, // 取得日期
+            { wch: 15 }, // 財產編號
+            { wch: 25 }, // 財產名稱
+            { wch: 15 }, // 原始取得成本
+            { wch: 12 }, // 預計殘值
+            { wch: 12 }, // 累計折舊/攤銷
+            { wch: 12 }  // 帳面淨額
+        ];
+
+        fixedAssetWorksheet['!cols'] = columnWidths;
+        intangibleAssetWorksheet['!cols'] = columnWidths;
+
+        // 加入工作表到工作簿
+        XLSX.utils.book_append_sheet(workbook, fixedAssetWorksheet, '固定資產');
+        XLSX.utils.book_append_sheet(workbook, intangibleAssetWorksheet, '無形資產');
+
+        // 產生檔案名稱（包含當前日期）
+        const today = new Date();
+        const dateString = today.toISOString().split('T')[0];
+        const fileName = `資產清單_${dateString}.xlsx`;
+
+        // 寫出檔案
+        XLSX.writeFile(workbook, fileName);
+
+        console.log('Excel 檔案已匯出:', fileName);
+    } catch (error) {
+        console.error('匯出 Excel 時發生錯誤:', error);
+        alert('匯出失敗，請稍後重試');
+    } finally {
+        if (exportButton) {
+            exportButton.innerHTML = '<span class="export-icon">📊</span>匯出 Excel';
+            exportButton.disabled = false;
+        }
+    }
+}
+
 // 頁面載入完成後的初始化
 document.addEventListener('DOMContentLoaded', function () {
     // 設置預設日期
@@ -196,6 +315,12 @@ document.addEventListener('DOMContentLoaded', function () {
     const refreshButton = document.getElementById('refresh-data');
     if (refreshButton) {
         refreshButton.addEventListener('click', refreshAllData);
+    }
+
+    // 綁定匯出按鈕事件
+    const exportButton = document.getElementById('export-excel');
+    if (exportButton) {
+        exportButton.addEventListener('click', exportToExcel);
     }
     
     // 初始載入資料

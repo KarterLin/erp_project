@@ -16,12 +16,16 @@ window.addEventListener("DOMContentLoaded", () => {
     if (savedEmail) emailInput.value = savedEmail;
 });
 
-// 啟用登入按鈕
+// 提交按鈕 
+const submitBtn = document.getElementById("loginBtn");
+submitBtn.disabled = true;
+
+// 啟用按鈕
 function checkInputs() {
     if (emailInput.value.trim() && passwordInput.value.trim()) {
-        loginBtn.disabled = false;
+        submitBtn.disabled = false;
     } else {
-        loginBtn.disabled = true;
+        submitBtn.disabled = true;
     }
 }
 emailInput.addEventListener("input", checkInputs);

@@ -11,7 +11,6 @@
   <link rel="stylesheet" href="./css/subsidiaryLedger.css">
 
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 </head>
 
 <body>
@@ -23,10 +22,6 @@
         <div class="d1">
             <div class="left-group">
                 <h1 class="title">明細分類帳</h1>
-                <div class="field">
-                    <label for="dateRange" class="l1">日期區間：</label>
-                    <input type="text" id="dateRange" placeholder="請選擇日期區間">
-                </div>
             </div>
             <div class="d2">
                 <button class="btn1" id="exportBtn">匯出檔案</button>
@@ -37,6 +32,10 @@
             <fieldset class="query-box">
                 <legend class="query-title">查詢條件</legend>
                 <div class="ds">
+                    <div class="field">
+                        <label for="dateRange" class="l1">日期區間：</label>
+                        <input type="text" id="dateRange" placeholder="請選擇日期區間">
+                    </div>
                     <div class="field">
                         <label for="suject" class="l1">科目名稱：</label>
                         <div class="account-selector">
@@ -89,7 +88,7 @@
             查無資料
         </div>
     </div>
-
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
     <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/zh.js"></script>
     <script src="js/sidebar.js"></script>

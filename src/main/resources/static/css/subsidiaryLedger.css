@@ -1,11 +1,21 @@
 /* ===== 明細分類帳：白底＋橘色品牌（參考 entriesManagement.css 樣式） ===== */
-:root {
-  --accent: #f97316;        /* 主橘 */
-  --accent-weak: #fff7ed;   /* 淡橘（hover/底） */
-  --text: #0f172a;          /* 主文字 */
-  --muted: #6b7280;         /* 次文字 */
-  --surface: #ffffff;       /* 白底 */
-  --border: #e5e7eb;        /* 邊線 */
+:root{
+  --accent-hover:#ea580c;  /* 深橘 */
+  --accent-line:#fed7aa;   /* 橘色淡線 */
+
+  --ok:#16a34a;            /* 綠（備用） */
+  --ok-weak:#ecfdf5;       /* 淡綠背景 */
+
+  --text:#0f172a;          /* 主文字 */
+  --muted:#6b7280;         /* 次文字 */
+
+  --bg:#f5f7fa;            /* 頁面淺灰底 */
+  --surface:#ffffff;       /* 卡片白底 */
+  --border:#e5e7eb;        /* 卡片邊線 */
+  --shadow:0 10px 25px rgba(15,23,42,.08);
+
+  --radius:16px;           /* 大圓角 */
+  --card-max:980px;        /* 內容最大寬 */
 }
 
 /* 🌐 全域設定 */
@@ -302,4 +312,10 @@ body {
   border-radius: 6px;
   padding: 15px;
   margin: 10px 0;
+}
+
+.page-wrapper{
+  --accent:#f97316;
+  --accent-weak:#fff7ed;
+  /* 其餘需要的變數 */
 }

@@ -313,35 +313,36 @@ function setupAmountInputs(debitInput, creditInput) {
     debitInput.removeAttribute('data-events-bound');
     creditInput.removeAttribute('data-events-bound');
     
-    if (!debitInput.hasAttribute('data-events-bound')) {
-        debitInput.addEventListener('input', () => {
-            if (debitInput.value && parseFloat(debitInput.value) > 0) {
-                creditInput.disabled = true;
-                creditInput.value = '0';
-                creditInput.style.backgroundColor = '#f5f5f5';
-            } else {
-                creditInput.disabled = false;
-                creditInput.style.backgroundColor = '';
-            }
-            updateBalanceSummary();
-        });
-        debitInput.setAttribute('data-events-bound', 'true');
-    }
+    // 清除舊的事件監聽器（透過克隆節點的方式）
+    const newDebitInput = debitInput.cloneNode(true);
+    const newCreditInput = creditInput.cloneNode(true);
+    debitInput.parentNode.replaceChild(newDebitInput, debitInput);
+    creditInput.parentNode.replaceChild(newCreditInput, creditInput);
+    
+    // 使用新的節點添加事件監聽器
+    newDebitInput.addEventListener('input', () => {
+        if (newDebitInput.value && parseFloat(newDebitInput.value) > 0) {
+            newCreditInput.disabled = true;
+            newCreditInput.value = '0';
+            newCreditInput.style.backgroundColor = '#f5f5f5';
+        } else {
+            newCreditInput.disabled = false;
+            newCreditInput.style.backgroundColor = '';
+        }
+        updateBalanceSummary();
+    });
 
-    if (!creditInput.hasAttribute('data-events-bound')) {
-        creditInput.addEventListener('input', () => {
-            if (creditInput.value && parseFloat(creditInput.value) > 0) {
-                debitInput.disabled = true;
-                debitInput.value = '0';
-                debitInput.style.backgroundColor = '#f5f5f5';
-            } else {
-                debitInput.disabled = false;
-                debitInput.style.backgroundColor = '';
-            }
-            updateBalanceSummary();
-        });
-        creditInput.setAttribute('data-events-bound', 'true');
-    }
+    newCreditInput.addEventListener('input', () => {
+        if (newCreditInput.value && parseFloat(newCreditInput.value) > 0) {
+            newDebitInput.disabled = true;
+            newDebitInput.value = '0';
+            newDebitInput.style.backgroundColor = '#f5f5f5';
+        } else {
+            newDebitInput.disabled = false;
+            newDebitInput.style.backgroundColor = '';
+        }
+        updateBalanceSummary();
+    });
 }
 
 function formatAmount(num) {

@@ -1,4 +1,4 @@
-/* ===== 白底＋橘色品牌：只改色、不動排版 ===== */
+/* ===== 白底＋橘色品牌（含表格欄寬與置中設定）===== */
 :root{
   --accent:#f97316;        /* 橘 */
   --accent-hover:#ea580c;  /* 深橘 */
@@ -7,6 +7,21 @@
   --muted:#6b7280;         /* 次文字 */
   --surface:#ffffff;       /* 白底 */
   --border:#e5e7eb;        /* 邊線 */
+
+  /* 表格欄寬（依你目前欄位順序 1~11，可自行調整） */
+  --w-date:   100px;  /* 1 日期   */
+  --w-vno:    130px;  /* 2 傳票編號 */
+  --w-code:   110px;  /* 3 科目代碼 */
+
+  /* 以下為百分比欄（4~11），總和約 100% */
+  --w-name:   18%;    /* 4 科目名稱  */
+  --w-debit:   9%;    /* 5 借方金額  */
+  --w-credit:  9%;    /* 6 貸方金額  */
+  --w-memo:   26%;    /* 7 摘要（加寬） */
+  --w-user:   10%;    /* 8 輸入人員  */
+  --w-status: 10%;    /* 9 審核狀態  */
+  --w-reason: 10%;    /* 10 原因（縮窄） */
+  --w-action:  8%;    /* 11 操作     */
 }
 
 /* 🌐 全域 */
@@ -14,357 +29,139 @@
 body{
   margin:0;
   font-family:"Lato","Noto Sans TC","Microsoft JhengHei",sans-serif;
-  background-color:var(--surface);   /* 原 #f5f7fa → 白 */
+  background:var(--surface);
   color:var(--text);
 }
 
-/* 頁首（保持你的尺寸，只換字色） */
+/* 頁首 */
 header{ padding:16px; font-size:40px; font-weight:bold; color:var(--text); }
-
-.page-header{
-  display:flex; justify-content:space-between; align-items:center; padding:16px 24px;
-}
+.page-header{ display:flex; justify-content:space-between; align-items:center; padding:16px 24px; }
 .page-title{ font-size:40px; font-weight:800; margin:0; color:var(--text); }
 .page-header-right .info-text{ font-size:16px; color:var(--muted); }
 
-/* 主要內容區域（不動間距） */
+/* 主要內容 */
 .main-content{ padding:20px; min-height:100vh; }
 
-/* 回上一頁連結：改成白底橘框 */
+/* 回上一頁 */
 .header-link{
-  display:inline-block;
-  margin-bottom:20px;
-  padding:10px 20px;
-  background-color:#fff;
-  color:var(--text);
-  text-decoration:none;
-  border-radius:5px;
+  display:inline-block; margin-bottom:20px; padding:10px 20px;
+  background:#fff; color:var(--text); text-decoration:none; border-radius:5px;
   border:1px solid var(--border);
-  transition: background-color .2s ease, border-color .2s ease, color .2s ease, box-shadow .2s ease;
+  transition: background-color .2s, border-color .2s, color .2s, box-shadow .2s;
 }
 .header-link:hover{
-  background-color:var(--accent-weak);
-  border-color:var(--accent);
-  color:var(--text);
+  background:var(--accent-weak); border-color:var(--accent);
   box-shadow:0 2px 10px rgba(0,0,0,.06);
 }
 
-/* 表單容器：維持透明/無陰影 */
-.entry-form-container{
-  background-color:transparent;
-  padding:30px;
-  border-radius:8px;
-  box-shadow:none;
-}
+/* 表單容器 */
+.entry-form-container{ background:transparent; padding:30px; border-radius:8px; box-shadow:none; }
 
-/* 表格：只改色，不動排版 */
-#entries-table{
+/* 表格（整合＋欄寬配置） */
+#entries-table, .entries-table{
   width:100%;
   border-collapse:collapse;
   margin-bottom:20px;
   font-size:14px;
+  table-layout:fixed; /* 依欄寬配置，不被內容撐開 */
 }
 
-/* 頂部連結 */
-.header-link {
-    display: inline-block;
-    margin-bottom: 20px;
-    padding: 10px 20px;
-    background-color: #3498db;
-    color: white;
-    text-decoration: none;
-    border-radius: 5px;
-    transition: background-color 0.3s;
+#entries-table th, #entries-table td,
+.entries-table th, .entries-table td{
+  border:1px solid #ddd;
+  padding:12px 8px;
+  text-align:center;      /* 預設置中 */
+  overflow:hidden;
+  white-space:nowrap;
+  text-overflow:ellipsis;
 }
 
-.header-link:hover {
-    background-color: #2980b9;
+/* 表頭色 */
+#entries-table th, .entries-table th{
+  background:#34495e; color:#fff; font-weight:700;
 }
 
-/* 表單容器 */
-.entry-form-container {
-    background-color: transparent;
-    padding: 30px;
-    border-radius: 8px;
-    box-shadow: none;
+/* 斑馬紋與 hover */
+#entries-table tbody tr:nth-child(even){ background:#f9f9f9; }
+#entries-table tbody tr:hover{ background:var(--accent-weak); }
+
+/* 欄寬配置（1~11） */
+#entries-table th:nth-child(1),  #entries-table td:nth-child(1){  width:var(--w-date);  }
+#entries-table th:nth-child(2),  #entries-table td:nth-child(2){  width:var(--w-vno);   }
+#entries-table th:nth-child(3),  #entries-table td:nth-child(3){  width:var(--w-code);  }
+#entries-table th:nth-child(4),  #entries-table td:nth-child(4){  width:var(--w-name);  }
+#entries-table th:nth-child(5),  #entries-table td:nth-child(5){  width:var(--w-debit); }
+#entries-table th:nth-child(6),  #entries-table td:nth-child(6){  width:var(--w-credit);}
+#entries-table th:nth-child(7),  #entries-table td:nth-child(7){  width:var(--w-memo);  }
+#entries-table th:nth-child(8),  #entries-table td:nth-child(8){  width:var(--w-user);  }
+#entries-table th:nth-child(9),  #entries-table td:nth-child(9){  width:var(--w-status);}
+#entries-table th:nth-child(10), #entries-table td:nth-child(10){ width:var(--w-reason);}
+#entries-table th:nth-child(11), #entries-table td:nth-child(11){ width:var(--w-action);}
+
+/* ★ 強制置中科目名稱(4)、借方(5)、貸方(6)、摘要(7)（覆蓋任何 left/right 設定） */
+#entries-table th:nth-child(4),  #entries-table td:nth-child(4),
+#entries-table th:nth-child(5),  #entries-table td:nth-child(5),
+#entries-table th:nth-child(6),  #entries-table td:nth-child(6),
+#entries-table th:nth-child(7),  #entries-table td:nth-child(7){
+  text-align:center !important;
 }
 
-/* 表格樣式 */
-#entries-table,
-.entries-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-bottom: 20px;
-    font-size: 14px;
+/* 原因欄位內的輸入框：跟著欄寬縮、不外溢 */
+#entries-table td:nth-child(10) .reason-input{
+  width:100%; max-width:360px; padding:8px; box-sizing:border-box;
 }
 
-#entries-table th,
-#entries-table td,
-.entries-table th,
-.entries-table td {
-    border: 1px solid #ddd;
-    padding: 12px 8px;
-    text-align: center;
+/* 輸入欄位 */
+input[type="text"], input[type="number"], input[type="date"], select{
+  width:100%; padding:8px; border:1px solid var(--border); border-radius:4px;
+  font-size:14px; background:#fff; color:var(--text);
 }
+input[type="text"]:focus, input[type="number"]:focus, input[type="date"]:focus, select:focus{
+  outline:none; border-color:var(--accent);
+  box-shadow:0 0 0 3px rgba(249,115,22,.15);
+}
+input[type="number"]:disabled{ background:#f5f5f5; color:#999; cursor:not-allowed; }
 
-#entries-table th,
-.entries-table th {
-    background-color: #34495e;
-    color: white;
-    font-weight: bold;
+/* 按鈕 */
+button{ padding:10px 20px; margin:5px; border:none; border-radius:5px; cursor:pointer; font-size:14px;
+  transition: background-color .2s, border-color .2s, box-shadow .2s, color .2s;
 }
-#entries-table tr:nth-child(even){ background-color:#fafafa; }
-#entries-table tr:hover{ background-color:var(--accent-weak); }
-
-#entries-table tr:nth-child(even),
-.entries-table tbody tr:nth-child(even) {
-    background-color: #f9f9f9;
-}
-
-#entries-table tr:hover,
-.entries-table tbody tr:hover {
-    background-color: #f1f1f1;
-}
-
-/* 輸入欄位樣式 */
-input[type="text"],
-input[type="number"],
-input[type="date"],
-select{
-  width:100%;
-  padding:8px;
-  border:1px solid var(--border);
-  border-radius:4px;
-  font-size:14px;
-  background:#fff;
-  color:var(--text);
-}
-input[type="text"]:focus,
-input[type="number"]:focus,
-input[type="date"]:focus,
-select:focus{
-  outline:none;
-  border-color:var(--accent);
-  box-shadow:0 0 0 3px rgba(249,115,22,.15); /* 橘色 focus */
-}
-input[type="number"]:disabled{
-  background-color:#f5f5f5;
-  color:#999;
-  cursor:not-allowed;
-}
-
-/* 按鈕：保留大小，只換色 */
-button{
-  padding:10px 20px;
-  margin:5px;
-  border:none;
-  border-radius:5px;
-  cursor:pointer;
-  font-size:14px;
-  transition: background-color .2s ease, border-color .2s ease, box-shadow .2s ease, color .2s ease;
-}
-
-/* 若頁面有新增列/送出按鈕，可沿用這兩條（沒有就無視） */
-#add-row{ background-color:#16a34a; color:#fff; }
-#add-row:hover{ background-color:#15803d; }
-
-button[type="submit"]{ background-color:var(--accent); color:#fff; }
-button[type="submit"]:hover{ background-color:var(--accent-hover); }
+#add-row{ background:#16a34a; color:#fff; }  #add-row:hover{ background:#15803d; }
+button[type="submit"]{ background:var(--accent); color:#fff; } button[type="submit"]:hover{ background:var(--accent-hover); }
 
 /* 刪除圓鈕（若有） */
-.remove-row{
-  background-color:#ef4444; color:#fff;
-  width:30px; height:30px; border-radius:50%;
-  padding:0; margin:0;
-}
-.remove-row:hover{ background-color:#dc2626; }
+.remove-row{ background:#ef4444; color:#fff; width:30px; height:30px; border-radius:50%; padding:0; margin:0; }
+.remove-row:hover{ background:#dc2626; }
 
-/* RWD（沿用你的原設定） */
-@media screen and (max-width:700px){
+/* 管理員專用 */
+.loading{ text-align:center; padding:20px; color:#666; font-size:16px; }
+.error{ text-align:center; padding:20px; color:#d32f2f; background:#ffebee; border-radius:4px; margin:20px; border:1px solid #f8bbd9; }
+.voucher-group{ border-top:2px solid #3498db; }
+
+/* 狀態選擇器 */
+.status-select{ width:100%; padding:8px; border:1px solid #ddd; border-radius:4px; font-size:14px; background:#fff; }
+.status-select:focus{ border-color:#3498db; box-shadow:0 0 5px rgba(52,152,219,.3); }
+.status-select option[value="approved"]{ color:#27ae60; }
+.status-select option[value="rejected"]{ color:#e74c3c; }
+
+/* 原因輸入框（一般） */
+.reason-input{ width:100%; padding:8px; border:1px solid #ddd; border-radius:4px; font-size:14px; }
+.reason-input:focus{ border-color:#f39c12; box-shadow:0 0 5px rgba(243,156,18,.3); }
+
+/* RWD */
+@media (max-width:1200px){
+  #entries-table, .entries-table { font-size:12px; }
+  #entries-table th, #entries-table td, .entries-table th, .entries-table td { padding:8px 4px; }
+  .edit-button{ padding:6px 12px; font-size:12px; }
+}
+@media (max-width:700px){
   .main-content{ margin-left:0; }
+  .entry-form-container{ padding:15px; }
+  #entries-table, .entries-table { font-size:11px; }
+  .edit-button{ padding:4px 8px; font-size:11px; }
 }
-
-#add-row:hover {
-    background-color: #219a52;
-}
-
-button[type="submit"] {
-    background-color: #3498db;
-    color: white;
-}
-
-button[type="submit"]:hover {
-    background-color: #2980b9;
-}
-
-.remove-row {
-    background-color: #e74c3c;
-    color: white;
-    width: 30px;
-    height: 30px;
-    border-radius: 50%;
-    padding: 0;
-    margin: 0;
-}
-
-.remove-row:hover {
-    background-color: #c0392b;
-}
-
-/* 管理員專用樣式 */
-.loading {
-    text-align: center;
-    padding: 20px;
-    color: #666;
-    font-size: 16px;
-}
-
-.error {
-    text-align: center;
-    padding: 20px;
-    color: #d32f2f;
-    background-color: #ffebee;
-    border-radius: 4px;
-    margin: 20px;
-    border: 1px solid #f8bbd9;
-}
-
-.voucher-group {
-    border-top: 2px solid #3498db;
-}
-
-/* 狀態選擇器樣式 */
-.status-select {
-    width: 100%;
-    padding: 8px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    font-size: 14px;
-    background-color: white;
-}
-
-.status-select:focus {
-    border-color: #3498db;
-    box-shadow: 0 0 5px rgba(52, 152, 219, 0.3);
-}
-
-.status-select option[value="approved"] {
-    color: #27ae60;
-}
-
-.status-select option[value="rejected"] {
-    color: #e74c3c;
-}
-
-/* 原因輸入框樣式 */
-.reason-input {
-    width: 100%;
-    padding: 8px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    font-size: 14px;
-}
-
-.reason-input:focus {
-    border-color: #f39c12;
-    box-shadow: 0 0 5px rgba(243, 156, 18, 0.3);
-}
-
-/* 確認按鈕樣式 */
-.edit-button {
-    background-color: #2c3e50;
-    color: white;
-    padding: 8px 16px;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 13px;
-    transition: all 0.3s ease;
-}
-
-.edit-button:hover {
-    background-color: #34495e;
-    transform: translateY(-1px);
-    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
-}
-
-.edit-button:active {
-    transform: translateY(0);
-    box-shadow: none;
-}
-
-/* 響應式設計 */
-@media screen and (max-width: 1200px) {
-    #entries-table,
-    .entries-table {
-        font-size: 12px;
-    }
-    
-    #entries-table th,
-    #entries-table td,
-    .entries-table th,
-    .entries-table td {
-        padding: 8px 4px;
-    }
-    
-    .edit-button {
-        padding: 6px 12px;
-        font-size: 12px;
-    }
-}
-
-@media screen and (max-width: 700px) {
-    .main-content {
-        margin-left: 0;
-    }
-    
-    .entry-form-container {
-        padding: 15px;
-    }
-    
-    #entries-table,
-    .entries-table {
-        font-size: 11px;
-    }
-    
-    .edit-button {
-        padding: 4px 8px;
-        font-size: 11px;
-    }
-}
-
-@media screen and (max-width: 400px) {
-    .entry-form-container {
-        padding: 10px;
-    }
-
-    #entries-table,
-    .entries-table {
-        font-size: 10px;
-    }
-
-    #entries-table th,
-    #entries-table td,
-    .entries-table th,
-    .entries-table td {
-        padding: 6px 3px;
-    }
-}
-
-.page-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 16px 24px;
-}
-
-.page-title {
-    font-size: 40px;
-    font-weight: 800;
-    margin: 0;
-}
-
-.page-header-right .info-text {
-    font-size: 16px;
-    color: #555;
+@media (max-width:400px){
+  .entry-form-container{ padding:10px; }
+  #entries-table, .entries-table { font-size:10px; }
+  #entries-table th, #entries-table td, .entries-table th, .entries-table td { padding:6px 3px; }
 }

@@ -3,7 +3,131 @@ document.addEventListener("DOMContentLoaded", function () {
   let accounts = [];
   let currentDeleteId = null;
 
-  // 折疊效果
+  // 父科目選項按類型分類
+  const parentSubjectsByType = {
+    asset: {
+      label: '資產',
+      options: [
+        { group: '流動資產', items: [
+          { id: '1100', name: '現金及約當現金' },
+          { id: '1132', name: '按攤銷後成本衡量之金融資產-流動' },
+          { id: '1150', name: '應收票據' },
+          { id: '1170', name: '應收帳款' },
+          { id: '1180', name: '應收帳款-關係人' },
+          { id: '1210', name: '其他應收款-關係人淨額' },
+          { id: '1220', name: '本期所得稅資產' },
+          { id: '1300', name: '存貨' },
+          { id: '1410', name: '預付款項' }
+        ]},
+        { group: '非流動資產', items: [
+          { id: '1600', name: '不動產、廠房及設備' },
+          { id: '1780', name: '無形資產' },
+          { id: '1840', name: '遞延所得稅資產' },
+          { id: '1900', name: '其他非流動資產' }
+        ]}
+      ]
+    },
+    liability: {
+      label: '負債',
+      options: [
+        { group: '流動負債', items: [
+          { id: '2100', name: '銀行借款' },
+          { id: '2170', name: '應付帳款' },
+          { id: '2200', name: '其他應付款' },
+          { id: '2220', name: '其他應付款-關係人' },
+          { id: '2300', name: '其他流動負債' }
+        ]},
+        { group: '非流動負債', items: [
+          { id: '2540', name: '長期借款' },
+          { id: '2570', name: '遞延所得稅負債' },
+          { id: '2600', name: '其他非流動負債' }
+        ]}
+      ]
+    },
+    equity: {
+      label: '股東權益',
+      options: [
+        { group: '股本', items: [
+          { id: '3100', name: '股本' }
+        ]},
+        { group: '保留盈餘', items: [
+          { id: '3300', name: '保留盈餘及累積盈虧' },
+          { id: '3600', name: '本期盈餘及盈虧' },
+          { id: '3310', name: '法定盈餘公積' }
+        ]}
+      ]
+    },
+    revenue: {
+      label: '營業收入',
+      options: [
+        { group: '', items: [
+          { id: '4000', name: '營業收入' }
+        ]}
+      ]
+    },
+    cost: {
+      label: '營業成本',
+      options: [
+        { group: '', items: [
+          { id: '5000', name: '營業成本' }
+        ]}
+      ]
+    },
+    expense: {
+      label: '營業費用',
+      options: [
+        { group: '', items: [
+          { id: '6100', name: '推銷費用' },
+          { id: '6200', name: '管理費用' },
+          { id: '6300', name: '研究發展費用' },
+          { id: '7950', name: '所得稅費用' },
+          { id: '7100', name: '其他收入' },
+          { id: '7230', name: '其他利益及損失' },
+          { id: '7050', name: '財務成本' }
+        ]}
+      ]
+    }
+  };
+
+  // 父科目對照表
+  const parentSubjectMap = {
+    '1100': '現金及約當現金',
+    '1132': '按攤銷後成本衡量之金融資產-流動',
+    '1150': '應收票據',
+    '1170': '應收帳款',
+    '1180': '應收帳款-關係人',
+    '1210': '其他應收款-關係人淨額',
+    '1220': '本期所得稅資產',
+    '1300': '存貨',
+    '1410': '預付款項',
+    '1600': '不動產、廠房及設備',
+    '1780': '無形資產',
+    '1840': '遞延所得稅資產',
+    '1900': '其他非流動資產',
+    '2100': '銀行借款',
+    '2170': '應付帳款',
+    '2200': '其他應付款',
+    '2220': '其他應付款-關係人',
+    '2300': '其他流動負債',
+    '2540': '長期借款',
+    '2570': '遞延所得稅負債',
+    '2600': '其他非流動負債',
+    '3100': '股本',
+    '3300': '保留盈餘及累積盈虧',
+    '3600': '本期盈餘及盈虧',
+    '3310': '法定盈餘公積',
+    '4000': '營業收入',
+    '5000': '營業成本',
+    '6100': '推銷費用',
+    '6200': '管理費用',
+    '6300': '研究發展費用',
+    '7950': '所得稅費用',
+    '7100': '其他收入',
+    '7230': '其他利益及損失',
+    '7050': '財務成本'
+  };
+
+  // 摺疊效果
   headers.forEach(header => {
     header.addEventListener("click", function () {
       const item = this.parentElement;
@@ -22,6 +146,44 @@ document.addEventListener("DOMContentLoaded", function () {
   const deleteCloseBtn = deleteModal.querySelector('.close');
   const confirmDeleteBtn = document.getElementById('confirmDeleteBtn');
   const cancelDeleteBtn = document.getElementById('cancelDeleteBtn');
+
+  // 科目類型變更事件 - 聯動父科目選項
+  document.getElementById('subjectType').addEventListener('change', function() {
+    const selectedType = this.value;
+    const parentSelect = document.getElementById('parentSelect');
+    
+    // 清空父科目選項
+    parentSelect.innerHTML = '<option value="">請選擇父科目</option>';
+    
+    if (selectedType && parentSubjectsByType[selectedType]) {
+      const typeData = parentSubjectsByType[selectedType];
+      
+      typeData.options.forEach(groupData => {
+        if (groupData.group) {
+          // 有群組標題
+          const optgroup = document.createElement('optgroup');
+          optgroup.label = groupData.group;
+          
+          groupData.items.forEach(item => {
+            const option = document.createElement('option');
+            option.value = item.id;
+            option.textContent = `${item.id} - ${item.name}`;
+            optgroup.appendChild(option);
+          });
+          
+          parentSelect.appendChild(optgroup);
+        } else {
+          // 沒有群組標題，直接加入選項
+          groupData.items.forEach(item => {
+            const option = document.createElement('option');
+            option.value = item.id;
+            option.textContent = `${item.id} - ${item.name}`;
+            parentSelect.appendChild(option);
+          });
+        }
+      });
+    }
+  });
 
   // 新增科目 Modal 事件
   addBtn.addEventListener('click', function (e) {
@@ -64,9 +226,9 @@ document.addEventListener("DOMContentLoaded", function () {
     const code = document.getElementById('subjectCode').value.trim();
     const name = document.getElementById('subjectName').value.trim();
     const type = document.getElementById('subjectType').value;
-    const parentId = document.getElementById('parentId').value.trim();
+    const parentId = document.getElementById('parentSelect').value;
 
-    if (!code || !name || !type) {
+    if (!code || !name || !type || !parentId) {
       alert('請填寫所有必填欄位');
       return;
     }
@@ -78,7 +240,7 @@ document.addEventListener("DOMContentLoaded", function () {
       code: code,
       name: name,
       type: backendType,
-      parentId: parentId === '' ? null : parseInt(parentId),
+      parentId: parentId,
       isActive: true
     };
 
@@ -206,13 +368,16 @@ document.addEventListener("DOMContentLoaded", function () {
       displayType = '成本';
     }
     
+    // 取得父科目名稱
+    const parentName = parentSubjectMap[account.parentId] || '';
+    const parentDisplay = parentName ? ` (${parentName})` : '';
+    
     li.innerHTML = `
       <span class="account-info">
         <span class="account-code">${account.code}</span>
         <span class="account-name">${account.name}</span>
         <span class="account-type">[${displayType}]</span>
-        <span class="parent-info">父科目ID: ${account.parentId || '無'}</span>
-        ${account.parentName ? `<span class="parent-name">(${account.parentName})</span>` : ''}
+        <span class="parent-info">父科目ID: ${account.parentId || '無'}${parentDisplay}</span>
       </span>
       <button class="delete-btn" onclick="showDeleteConfirm(${account.id}, '${account.name.replace(/'/g, "\\'")}')">刪除</button>
     `;
@@ -242,7 +407,7 @@ document.addEventListener("DOMContentLoaded", function () {
     document.getElementById('subjectCode').value = '';
     document.getElementById('subjectName').value = '';
     document.getElementById('subjectType').value = '';
-    document.getElementById('parentId').value = '';
+    document.getElementById('parentSelect').innerHTML = '<option value="">請選擇父科目</option>';
   }
 
   // 初始載入

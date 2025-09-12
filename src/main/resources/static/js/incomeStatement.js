@@ -170,8 +170,10 @@ function updateIncomeStatement(data) {
     // 判斷 group 類型
     const groupClass = Array.from(tr.classList).find(c => c.startsWith('group'));
     let type = "income"; // 預設收入
-    if (groupClass && groupClass !== "group1" && groupClass !== "group2") {
-      type = "expense"; // 費用或支出
+    if (groupClass === "group2") {
+      type = "expense"; // 營業成本顯示為費用格式（括號）
+    } else if (groupClass && groupClass !== "group1" && groupClass !== "group2") {
+      type = "expense"; // 其他費用或支出
     }
     groupTypes[groupClass] = type;
 
@@ -334,7 +336,13 @@ function addIncomeAccountData(data, accounts) {
             const percent = tr.children[3].textContent;
             data.push(['', account.name, amount, percent]);
         } else {
-            data.push(['', account.name, '0.00', '']);
+            // 如果沒有資料，根據科目性質決定顯示格式
+            let defaultAmount = '0.00';
+            if (account.id === '5000') {
+                // 營業成本預設也要用括號格式
+                defaultAmount = '(0.00)';
+            }
+            data.push(['', account.name, defaultAmount, '']);
         }
     });
 }
@@ -380,7 +388,7 @@ function calculateNonOperatingTotal() {
             // 根據科目性質調整符號
             if (id === '7100') { // 其他收入 - 正數
                 total += amount;
-            } else if (id === '7230') { // 其他利益及損失 - 可能正負 
+            } else if (id === '7230') { // 其他利益及損失 - 可能正負  
                 total += amount;
             } else if (id === '7050') { // 財務成本 - 負數
                 total -= Math.abs(amount);

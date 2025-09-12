@@ -1,9 +1,28 @@
-
-// API endpointlogo
+// API endpoint
 const API_URL = "https://127.0.0.1:8443/api";
 
 
-// 啟用按鈕 
+// Cloudflare Turnstile
+let captchaToken = null;
+window.onCaptchaSuccess = function (token) {
+  captchaToken = token;
+  submitBtn.disabled = false;
+};
+
+// 逾期重新驗證
+window.onCaptchaExpired = function () {
+  captchaToken = null;
+  submitBtn.disabled = true;
+};
+
+// 發生錯誤（例如網路問題）
+window.onCaptchaError = function () {
+  captchaToken = null;
+  submitBtn.disabled = true;
+  alert("機器人驗證失敗，請重試。");
+};
+
+// 按鈕 
 const submitBtn = document.getElementById("submitBtn");
 submitBtn.disabled = true;
 
@@ -75,7 +94,7 @@ function validateForm() {
   if (!rtelEl.value.trim()) return "負責人手機必填";
   if (!accountEl.value.trim()) return "帳號必填";
   if (!emailEl.value.trim()) return "Email 必填";
-  if(!pendingCheckbox.checked){if(!taxIdInput.value.trim())return "統編必填";};
+
   // 手機格式：台灣手機 09 開頭 + 8 碼
   const phoneRegex = /^09\d{8}$/;
   if (!phoneRegex.test(rtelEl.value.trim())) {
@@ -98,22 +117,46 @@ function validateForm() {
   return true;
 }
 
-
-// 註冊請求的 payload，對應後端的 RegistrationRequest
+// Enter 鍵送出
+document.addEventListener("keydown", (event) => {
+  if (event.key === "Enter") {
+    event.preventDefault();
+    submitBtn.click();
+  }
+});
+// 提交
 submitBtn.addEventListener("click", async () => {
-const registrationData = {
-  cName: document.getElementById("cname").value,
-    taxId: document.getElementById("taxId").value,
-    rName: document.getElementById("rname").value,
-    rTel: document.getElementById("rtel").value,
-    uAccount: document.getElementById("account").value,
-    uEmail: document.getElementById("email").value,
-    password: document.getElementById("password").value,
-    role: "ADMIN" 
+  if (!captchaToken) {
+    alert("請先完成機器人驗證");
+    return;
+  }
+  const passwordValue = document.getElementById("password").value.trim();
+  const validationError = validateForm();
+  if (validationError !== true) {
+    alert(validationError);
+    return;
+  }
+  if (!validatePassword(passwordValue)) {
+    alert("密碼需至少 8 碼，且必須包含英文與數字！");
+    return;
+  }
+
+  let taxIdValue = taxIdInput.disabled ? null : taxIdInput.value.trim();
+
+  const registrationData = {
+    cName: cnameEl.value.trim(),
+    taxId: taxIdValue,
+    rName: rnameEl.value.trim(),
+    rTel: rtelEl.value,
+    uAccount: accountEl.value.trim(),
+    uEmail: emailEl.value.trim(),
+    password: passwordValue,
+    role: "ADMIN",
+    captchaToken: captchaToken,
   };
 
   try {
-    const response = await fetch(API_URL, {
+    const response = await fetch(API_URL + "/register", {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
@@ -122,18 +165,28 @@ const registrationData = {
     });
 
     // 解析回應
-    const result = await response.json();
+    const result = await response.json().catch(() => ({}));
 
     if (response.ok) {
-      alert("註冊成功: " + result.message); // 註冊成功，請查收驗證信。
-      console.log("✅ 註冊成功:", result);
+      alert(result.message); // 註冊成功，請查收驗證信。
+      console.log("註冊成功:", result);
+      // 重置驗證
+      if (typeof turnstile !== "undefined") turnstile.reset();
+      captchaToken = null;
+      submitBtn.disabled = true;
     } else {
       alert("註冊失敗: " + result.message);
-      console.error("❌ 註冊失敗:", result);
+      console.error("註冊失敗:", result);
+      if (typeof turnstile !== "undefined") turnstile.reset();
+      captchaToken = null;
+      submitBtn.disabled = true;
     }
+
   } catch (error) {
-    console.error("🚨 呼叫 API 發生錯誤:", error);
+    console.error("呼叫 API 發生錯誤:", error);
+    if (typeof turnstile !== "undefined") turnstile.reset();
+    captchaToken = null;
+    submitBtn.disabled = true;
   }
 });
-
 

@@ -3,6 +3,7 @@
 // 頁面載入時獲取待辦事項
 document.addEventListener('DOMContentLoaded', function() {
     loadToDoEntries();
+    setupModalEvents();
 });
 
 async function loadToDoEntries() {
@@ -35,7 +36,7 @@ function displayEntries(entries) {
   tbody.innerHTML = '';
 
   if (!entries || entries.length === 0) {
-    tbody.innerHTML = '<tr><td colspan="11" style="text-align:center;">目前沒有待辦事項</td></tr>';
+    tbody.innerHTML = '<tr><td colspan="10" style="text-align:center;">目前沒有待辦事項</td></tr>';
     table.style.display = 'table';
     return;
   }
@@ -84,11 +85,31 @@ function displayEntries(entries) {
         tdStatus.className = getStatusClass(entry.status);
         tr.appendChild(tdStatus);
 
-        // 新增：審核原因欄位
+        // 修改：審核原因欄位 - 支援點擊展開
         const tdReason = document.createElement('td');
-        tdReason.textContent = entry.reason || '';
+        const reason = entry.reason || '';
+        
+        if (reason && reason.length > 0) {
+          tdReason.className = 'approval-reason reason-cell';
+          tdReason.title = '點擊查看完整內容';
+          
+          // 顯示截斷的文字
+          const displayText = reason.length > 15 ? reason.substring(0, 15) + '...' : reason;
+          tdReason.innerHTML = `
+            <span class="reason-text">${displayText}</span>
+            <span class="reason-expand-icon">⊕</span>
+          `;
+          
+          // 添加點擊事件
+          tdReason.addEventListener('click', function() {
+            showReasonModal(reason);
+          });
+        } else {
+          tdReason.className = 'approval-reason';
+          tdReason.textContent = '';
+        }
+        
         tdReason.rowSpan = span;
-        tdReason.className = 'approval-reason';
         tr.appendChild(tdReason);
       }
 
@@ -97,7 +118,7 @@ function displayEntries(entries) {
 
     // 群組間分隔線（可選）
     const sep = document.createElement('tr');
-    sep.innerHTML = `<td colspan="11" style="padding:0;border:0;height:6px;"></td>`;
+    sep.innerHTML = `<td colspan="10" style="padding:0;border:0;height:6px;"></td>`;
     tbody.appendChild(sep);
   });
 
@@ -111,6 +132,39 @@ function displayEntries(entries) {
   }
 }
 
+// 設置彈出視窗事件
+function setupModalEvents() {
+  const modal = document.getElementById('reasonModal');
+  const closeBtn = document.querySelector('.close');
+  
+  // 點擊 X 關閉彈出視窗
+  closeBtn.addEventListener('click', function() {
+    modal.style.display = 'none';
+  });
+  
+  // 點擊彈出視窗外部關閉
+  window.addEventListener('click', function(event) {
+    if (event.target === modal) {
+      modal.style.display = 'none';
+    }
+  });
+  
+  // ESC 鍵關閉彈出視窗
+  document.addEventListener('keydown', function(event) {
+    if (event.key === 'Escape') {
+      modal.style.display = 'none';
+    }
+  });
+}
+
+// 顯示審核原因詳細內容彈出視窗
+function showReasonModal(reason) {
+  const modal = document.getElementById('reasonModal');
+  const modalText = document.getElementById('reasonModalText');
+  
+  modalText.textContent = reason || '無審核原因';
+  modal.style.display = 'block';
+}
 
 function showError(message) {
     const loadingDiv = document.getElementById('loading');

@@ -53,7 +53,7 @@ function highlightActiveLink() {
 
     "balanceSheet.html":"reports.html",
     "incomeStatement.html":"reports.html",
-    "subsidiaryLedger.html":"reports.html",
+    "subsidiaryLedger.html":"accountbooks.html",
     "trialBalance.html":"reports.html",
 
     "entriesManagement.html":"management.html",
