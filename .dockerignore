@@ -1,0 +1,49 @@
+# Git / Metadata
+.git
+.gitignore
+.gitattributes
+
+# IDE
+.idea/
+.vscode/
+*.iml
+*.ipr
+*.iws
+
+# Build
+target/
+build/
+out/
+bin/
+
+# Logs
+*.log
+logs/
+hs_err_pid*
+
+# Dependencies
+node_modules/
+.m2/
+.gradle/
+
+# Env / Secrets (general). Be careful with certs needed at runtime.
+.env
+*.env
+# Global ignore of cert/key types (we re-allow specific ones below)
+*.p12
+*.jks
+*.crt
+*.key
+*.pem
+
+# --- Explicit allow for runtime SSL keystore (needed for HTTPS) ---
+!src/main/resources/certs/keystore.p12
+# If you need other certs, whitelist similarly:
+!src/main/resources/certs/keystore_old.p12
+!src/main/resources/certs/cert.pem
+!src/main/resources/certs/key.pem
+
+# Misc
+*.jar
+*.war
+*.ear
